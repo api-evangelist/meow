@@ -1,0 +1,3378 @@
+openapi: 3.1.0
+info:
+  title: Meow Accounts Entities API
+  description: '## Overview
+
+
+    The Meow API provides financial services and billing capabilities for your business.
+
+
+    ### Core Features
+
+
+    - **Financial data access**: access account information, transactions, balances, and payment networks.
+
+    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
+
+
+    ### Billing API
+
+
+    The Billing API lets you create and manage invoices and collect payments:
+
+
+    - **Product management**: create and manage products with custom pricing.
+
+    - **Customer management**: maintain invoicing customers with their addresses.
+
+    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
+
+    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
+
+    - **Collection accounts**: configure accounts for payment collection.
+
+
+    ### Getting Started
+
+
+    Authenticate by sending your API key in the `x-api-key` request header.
+
+
+    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
+
+
+    ### Error Responses
+
+
+    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
+
+
+    Common error codes:
+
+
+    - `500`: Internal server error
+
+    - `501`: Subsystem unavailable
+
+    - `503`: Scheduled maintenance
+
+    - `601`: Data not found
+
+    - `602`: Customer not authorized
+
+    - `701`: Account not found
+
+    - `703`: Invalid input (including invalid date ranges)
+
+    - `704`: Account type not supported
+
+    - `705`: Account is closed
+
+    - `801`: Transaction not found
+
+    '
+  contact:
+    name: Meow
+    url: https://meow.com/
+    email: support@meow.com
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.meow.com/terms-of-service
+servers:
+- url: https://api.meow.com/v1
+  description: Meow API Production
+- url: https://api.sandbox.meow.com/v1
+  description: Meow API Sandbox
+security:
+- apiKeyAuth: []
+tags:
+- name: Entities
+paths:
+  /entities:
+    post:
+      tags:
+      - Entities
+      summary: Create Business Entity
+      description: 'Creates a new business entity owned by your API key''s user. Send an empty body to create a bare not-started entity, or seed any KYB business details up front: legal name, incorporation, the registered legal and (optional) physical address, and the business profile fields (phone, tax ID, website, description, industry, account purpose, and digital-currency questions). The creating user is granted admin on the new entity, so the same API key can immediately act on it by passing the returned entity ID in the `x-entity-id` header. Anything you omit can be added later with Update Business Details. The entity still completes KYB (beneficial owners and any remaining details) before it can be approved or open bank accounts.'
+      operationId: create_business_entity_entities_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/CreateBusinessEntityRequest'
+              - type: 'null'
+              title: Request
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBusinessEntityResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+    get:
+      tags:
+      - Entities
+      summary: List Onboarding Entities
+      description: Lists the business entities being onboarded by your API key's user.
+      operationId: list_entity_onboarding_entities_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 100
+          - type: 'null'
+          description: Opaque offset identifier for pagination. Use the nextOffset from a previous response.
+          title: Offset
+        description: Opaque offset identifier for pagination. Use the nextOffset from a previous response.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityOnboardingListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:read
+  /entities/{entity_id}:
+    get:
+      tags:
+      - Entities
+      summary: Get Entity Onboarding Status
+      description: Returns the onboarding status of a business entity, including uploaded documents and each representative's KYC status in the `representatives` array. The top-level `kyc_status` reflects the primary representative.
+      operationId: get_entity_onboarding_entities__entity_id__get
+      parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityOnboardingStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:read
+  /entities/{entity_id}/business-details:
+    patch:
+      tags:
+      - Entities
+      summary: Update Business Details
+      description: Update a business entity's KYB details before its application is submitted. Send only the fields you want to change; anything you omit keeps its current value. Use this to fill in the business phone, tax ID, website, description, industry, account purpose, and digital-currency questions, and the registered legal and physical addresses, or to correct details captured at creation. Send `physical_address` together with `business_address`; omitting it keeps any physical address already on file, or uses the legal address when none is set. Returns the refreshed onboarding status, including what is still required next.
+      operationId: update_entity_business_details_entities__entity_id__business_details_patch
+      parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityUpdateBusinessDetailsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityOnboardingStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+  /entities/{entity_id}/representatives:
+    post:
+      tags:
+      - Entities
+      summary: Add Entity Representative
+      description: Add a representative (a beneficial owner or officer) to a business entity. Set `is_primary` to mark the primary representative (signer); exactly one primary is required before the application can be submitted. Verify the representative separately by submitting their KYC data or minting a self-serve verification link. This is allowed only before the application is submitted for review.
+      operationId: create_representative_entities__entity_id__representatives_post
+      parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityCreateRepresentativeRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityRepresentativeResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+    get:
+      tags:
+      - Entities
+      summary: List Entity Representatives
+      description: List the representatives (beneficial owners and officers) on a business entity's application, each with their identity verification (KYC) status. The primary representative (signer) is returned first. Use each `representative_id` to submit KYC, mint a verification link, or make it primary.
+      operationId: list_representatives_entities__entity_id__representatives_get
+      parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityRepresentativeListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:read
+  /entities/{entity_id}/representatives/{representative_id}/kyc:
+    post:
+      tags:
+      - Entities
+      summary: Submit Representative KYC Data
+      description: Submit identity (KYC) data for a representative you added. Verification runs server-side; poll the entity onboarding status endpoint for the result. Use this when you hold the representative's identity details; otherwise mint a verification link for them to self-verify.
+      operationId: submit_representative_kyc_data_entities__entity_id__representatives__representative_id__kyc_post
+      parameters:
+      - name: representative_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Representative Id
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingKycIdentity'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityRepresentativeKycResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+  /entities/{entity_id}/representatives/{representative_id}/verification-link:
+    post:
+      tags:
+      - Entities
+      summary: Create Representative Verification Link
+      description: Mint a shareable identity-verification link the representative opens to complete KYC themselves. The alternative to submitting their KYC data directly.
+      operationId: create_representative_verification_link_entities__entity_id__representatives__representative_id__verification_link_post
+      parameters:
+      - name: representative_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Representative Id
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityRepresentativeVerificationLinkResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+  /entities/{entity_id}/representatives/{representative_id}/make-primary:
+    post:
+      tags:
+      - Entities
+      summary: Make Representative Primary
+      description: Make an existing representative the primary representative (signer). Any current primary is demoted, so exactly one remains. Allowed only before the application is submitted for review. Returns the updated onboarding status.
+      operationId: set_primary_representative_entities__entity_id__representatives__representative_id__make_primary_post
+      parameters:
+      - name: representative_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Representative Id
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityOnboardingStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+  /entities/{entity_id}/documents/upload-url:
+    post:
+      tags:
+      - Entities
+      summary: Get Entity Document Upload URL
+      description: Get a pre-signed URL to upload a KYB document. Use HTTP PUT to upload the file to the returned URL, then confirm it. For a document that belongs to a specific representative (e.g. their ID or proof of address), pass their `representative_id` here and again on the confirm call, which records the link.
+      operationId: upload_document_entities__entity_id__documents_upload_url_post
+      parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityDocumentUploadRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerDocumentUploadResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+  /entities/{entity_id}/documents/confirm:
+    post:
+      tags:
+      - Entities
+      summary: Confirm Entity Document Upload
+      description: Confirm that a KYB document was uploaded successfully. Pass the same `representative_id` given when the upload URL was generated (if any) to record which representative the document belongs to; it is echoed back on the entity's onboarding status under `documents`.
+      operationId: confirm_document_entities__entity_id__documents_confirm_post
+      parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityDocumentConfirmRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerDocumentConfirmResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+  /entities/{entity_id}/submit:
+    post:
+      tags:
+      - Entities
+      summary: Submit Entity Application
+      description: 'Submit a fully prepared business entity for review. Choose the checking account product to open. The application must have everything it needs first (check `next_step.can_submit` on the onboarding status); otherwise this returns the outstanding requirements. Once submitted, the application moves to review and can no longer be edited. Pass `product_features` to request additional products alongside the checking account (for example `stablecoins` for USDC access); they are enabled once the application is approved. Returns the updated onboarding status, including a `consent_url`: share it with the primary representative so they can review and accept the required agreements, disclosures, and attestations in their browser (no login needed). The same link is also returned on `GET /entities/{entity_id}` after submission.'
+      operationId: submit_entity_application_entities__entity_id__submit_post
+      parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntitySubmitApplicationRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityOnboardingStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+  /entities/{entity_id}/due-diligence:
+    post:
+      tags:
+      - Entities
+      summary: Submit Due Diligence Form
+      description: Submit an enhanced due diligence form for a business entity. Some industries require additional due diligence before the application can be submitted (check `next_step.missing` on the onboarding status). Only forms that collect plain data are accepted here; forms that require document uploads must be completed in the web app. Returns the updated onboarding status.
+      operationId: submit_entity_due_diligence_entities__entity_id__due_diligence_post
+      parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/InvestmentsEddFormRequest'
+              - $ref: '#/components/schemas/HoldingsEddFormRequest'
+              - $ref: '#/components/schemas/MpmEddFormRequest'
+              - $ref: '#/components/schemas/RealEstateEddFormRequest'
+              - $ref: '#/components/schemas/NoWebsiteEddFormRequest'
+              discriminator:
+                propertyName: form_type
+                mapping:
+                  investments: '#/components/schemas/InvestmentsEddFormRequest'
+                  holdings: '#/components/schemas/HoldingsEddFormRequest'
+                  mpm: '#/components/schemas/MpmEddFormRequest'
+                  real_estate: '#/components/schemas/RealEstateEddFormRequest'
+                  no_website: '#/components/schemas/NoWebsiteEddFormRequest'
+              title: Request
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityOnboardingStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - entity:create
+    get:
+      tags:
+      - Entities
+      summary: Get Due Diligence Requirements
+      description: List the enhanced due diligence forms required for a business entity, each with its completion status and whether it must be completed in the web app (forms that collect document uploads cannot be submitted through the API). Fetch each submittable form's schema, then submit it.
+      operationId: get_entity_due_diligence_entities__entity_id__due_diligence_get
+      parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityDueDiligenceStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:read
+  /entities/{entity_id}/due-diligence/schema/{form_type}:
+    get:
+      tags:
+      - Entities
+      summary: Get Due Diligence Form Schema
+      description: 'Get the field schema for a due diligence form: its pages and elements with types, choices, validation, and conditional visibility. Use it to build a valid submission body. Only forms submittable through the API have a schema; others must be completed in the web app.'
+      operationId: get_entity_due_diligence_schema_entities__entity_id__due_diligence_schema__form_type__get
+      parameters:
+      - name: form_type
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomerApiEddFormType'
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Entity Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DDFormSchema'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:read
+components:
+  schemas:
+    EntityRepresentativeVerificationLinkResponse:
+      properties:
+        representative_id:
+          type: string
+          format: uuid
+          title: Representative Id
+          description: ID of the representative the link is for.
+        identity_verification_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Identity Verification Url
+          description: Shareable identity-verification link the representative opens to complete KYC themselves, or null if one could not be generated (e.g. verification has already started).
+      type: object
+      required:
+      - representative_id
+      - identity_verification_url
+      title: EntityRepresentativeVerificationLinkResponse
+    DateString:
+      type: string
+      format: date
+      title: DateString
+      description: ISO 8601 full-date in the format `YYYY-MM-DD` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    LoanType:
+      type: string
+      enum:
+      - bridge_short_term_financing
+      - construction_loans
+      - property_rehab_loans
+      - other
+      title: LoanType
+    HoldingsDueDiligence:
+      properties:
+        holding_type:
+          $ref: '#/components/schemas/HoldingType-Input'
+        holding_entity_type:
+          items:
+            $ref: '#/components/schemas/HoldingEntityType'
+          type: array
+          title: Holding Entity Type
+        real_estate:
+          anyOf:
+          - $ref: '#/components/schemas/RealEstateHoldingDueDiligence'
+          - type: 'null'
+        investors:
+          anyOf:
+          - $ref: '#/components/schemas/InvestorsDueDiligence'
+          - type: 'null'
+      type: object
+      required:
+      - holding_type
+      - holding_entity_type
+      title: HoldingsDueDiligence
+    EntityCreateRepresentativeRequest:
+      properties:
+        is_beneficial_owner:
+          type: boolean
+          title: Is Beneficial Owner
+          description: Whether this person owns 25% or more of the business.
+          default: false
+        percent_ownership:
+          anyOf:
+          - type: number
+            maximum: 100.0
+            minimum: 25.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          - type: 'null'
+          title: Percent Ownership
+          description: Ownership percentage; required when `is_beneficial_owner` is true.
+          examples:
+          - '50'
+        email:
+          type: string
+          format: email
+          title: Email
+          description: Email address of the representative.
+          examples:
+          - felix@catnipcoffee.com
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: Legal first name.
+          examples:
+          - Felix
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: Legal last name.
+          examples:
+          - Whiskers
+        title_id:
+          $ref: '#/components/schemas/RepresentativeTitle'
+          description: The representative's job title.
+        is_primary:
+          type: boolean
+          title: Is Primary
+          description: Whether this representative is the primary representative (signer) for the application. Setting this demotes any existing primary; exactly one primary is required before the application can be submitted.
+          default: false
+      type: object
+      required:
+      - email
+      - title_id
+      title: EntityCreateRepresentativeRequest
+    RealEstateEddFormRequest:
+      properties:
+        form_type:
+          type: string
+          const: real_estate
+          title: Form Type
+        form_data:
+          $ref: '#/components/schemas/RealEstateDueDiligence'
+      type: object
+      required:
+      - form_type
+      - form_data
+      title: RealEstateEddFormRequest
+    OnboardingKycStatus:
+      type: string
+      enum:
+      - not_started
+      - pending
+      - action_required
+      - approved
+      - rejected
+      title: OnboardingKycStatus
+      x-enum-varnames:
+      - not_started
+      - pending
+      - action_required
+      - approved
+      - rejected
+    CountryCodeAlpha2:
+      type: string
+      enum:
+      - AW
+      - AF
+      - AO
+      - AI
+      - AX
+      - AL
+      - AD
+      - AE
+      - AR
+      - AM
+      - AS
+      - AQ
+      - TF
+      - AG
+      - AU
+      - AT
+      - AZ
+      - BI
+      - BE
+      - BJ
+      - BQ
+      - BF
+      - BD
+      - BG
+      - BH
+      - BS
+      - BA
+      - BL
+      - BY
+      - BZ
+      - BM
+      - BO
+      - BR
+      - BB
+      - BN
+      - BT
+      - BV
+      - BW
+      - CF
+      - CA
+      - CC
+      - CH
+      - CL
+      - CN
+      - CI
+      - CM
+      - CD
+      - CG
+      - CK
+      - CO
+      - KM
+      - CV
+      - CR
+      - CU
+      - CW
+      - CX
+      - KY
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DM
+      - DK
+      - DO
+      - DZ
+      - EC
+      - EG
+      - ER
+      - EH
+      - ES
+      - EE
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FR
+      - FO
+      - FM
+      - GA
+      - GB
+      - GE
+      - GG
+      - GH
+      - GI
+      - GN
+      - GP
+      - GM
+      - GW
+      - GQ
+      - GR
+      - GD
+      - GL
+      - GT
+      - GF
+      - GU
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IM
+      - IN
+      - IO
+      - IE
+      - IR
+      - IQ
+      - IS
+      - IL
+      - IT
+      - JM
+      - JE
+      - JO
+      - JP
+      - KZ
+      - KE
+      - KG
+      - KH
+      - KI
+      - KN
+      - KR
+      - KW
+      - LA
+      - LB
+      - LR
+      - LY
+      - LC
+      - LI
+      - LK
+      - LS
+      - LT
+      - LU
+      - LV
+      - MO
+      - MF
+      - MA
+      - MC
+      - MD
+      - MG
+      - MV
+      - MX
+      - MH
+      - MK
+      - ML
+      - MT
+      - MM
+      - ME
+      - MN
+      - MP
+      - MZ
+      - MR
+      - MS
+      - MQ
+      - MU
+      - MW
+      - MY
+      - YT
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NU
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NZ
+      - OM
+      - PK
+      - PA
+      - PN
+      - PE
+      - PH
+      - PW
+      - PG
+      - PL
+      - PR
+      - KP
+      - PT
+      - PY
+      - PS
+      - PF
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - SA
+      - SD
+      - SN
+      - SG
+      - GS
+      - SH
+      - SJ
+      - SB
+      - SL
+      - SV
+      - SM
+      - SO
+      - PM
+      - RS
+      - SS
+      - ST
+      - SR
+      - SK
+      - SI
+      - SE
+      - SZ
+      - SX
+      - SC
+      - SY
+      - TC
+      - TD
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TM
+      - TL
+      - TO
+      - TT
+      - TN
+      - TR
+      - TV
+      - TW
+      - TZ
+      - UG
+      - UA
+      - UM
+      - UY
+      - US
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - XK
+      - YE
+      - ZA
+      - ZM
+      - ZW
+      title: CountryCodeAlpha2
+      x-enum-varnames:
+      - AW
+      - AF
+      - AO
+      - AI
+      - AX
+      - AL
+      - AD
+      - AE
+      - AR
+      - AM
+      - AS
+      - AQ
+      - TF
+      - AG
+      - AU
+      - AT
+      - AZ
+      - BI
+      - BE
+      - BJ
+      - BQ
+      - BF
+      - BD
+      - BG
+      - BH
+      - BS
+      - BA
+      - BL
+      - BY
+      - BZ
+      - BM
+      - BO
+      - BR
+      - BB
+      - BN
+      - BT
+      - BV
+      - BW
+      - CF
+      - CA
+      - CC
+      - CH
+      - CL
+      - CN
+      - CI
+      - CM
+      - CD
+      - CG
+      - CK
+      - CO
+      - KM
+      - CV
+      - CR
+      - CU
+      - CW
+      - CX
+      - KY
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DM
+      - DK
+      - DO
+      - DZ
+      - EC
+      - EG
+      - ER
+      - EH
+      - ES
+      - EE
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FR
+      - FO
+      - FM
+      - GA
+      - GB
+      - GE
+      - GG
+      - GH
+      - GI
+      - GN
+      - GP
+      - GM
+      - GW
+      - GQ
+      - GR
+      - GD
+      - GL
+      - GT
+      - GF
+      - GU
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IM
+      - IN
+      - IO
+      - IE
+      - IR
+      - IQ
+      - IS
+      - IL
+      - IT
+      - JM
+      - JE
+      - JO
+      - JP
+      - KZ
+      - KE
+      - KG
+      - KH
+      - KI
+      - KN
+      - KR
+      - KW
+      - LA
+      - LB
+      - LR
+      - LY
+      - LC
+      - LI
+      - LK
+      - LS
+      - LT
+      - LU
+      - LV
+      - MO
+      - MF
+      - MA
+      - MC
+      - MD
+      - MG
+      - MV
+      - MX
+      - MH
+      - MK
+      - ML
+      - MT
+      - MM
+      - ME
+      - MN
+      - MP
+      - MZ
+      - MR
+      - MS
+      - MQ
+      - MU
+      - MW
+      - MY
+      - YT
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NU
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NZ
+      - OM
+      - PK
+      - PA
+      - PN
+      - PE
+      - PH
+      - PW
+      - PG
+      - PL
+      - PR
+      - KP
+      - PT
+      - PY
+      - PS
+      - PF
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - SA
+      - SD
+      - SN
+      - SG
+      - GS
+      - SH
+      - SJ
+      - SB
+      - SL
+      - SV
+      - SM
+      - SO
+      - PM
+      - RS
+      - SS
+      - ST
+      - SR
+      - SK
+      - SI
+      - SE
+      - SZ
+      - SX
+      - SC
+      - SY
+      - TC
+      - TD
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TM
+      - TL
+      - TO
+      - TT
+      - TN
+      - TR
+      - TV
+      - TW
+      - TZ
+      - UG
+      - UA
+      - UM
+      - UY
+      - US
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - XK
+      - YE
+      - ZA
+      - ZM
+      - ZW
+    DDPage:
+      properties:
+        name:
+          type: string
+          title: Name
+        title:
+          type: string
+          title: Title
+        elements:
+          items:
+            $ref: '#/components/schemas/DDElement'
+          type: array
+          title: Elements
+      type: object
+      required:
+      - name
+      - title
+      - elements
+      title: DDPage
+    HoldingsEddFormRequest:
+      properties:
+        form_type:
+          type: string
+          const: holdings
+          title: Form Type
+        form_data:
+          $ref: '#/components/schemas/HoldingsDueDiligence'
+      type: object
+      required:
+      - form_type
+      - form_data
+      title: HoldingsEddFormRequest
+    CustomerApiEddFormType:
+      type: string
+      enum:
+      - investments
+      - holdings
+      - mpm
+      - real_estate
+      - no_website
+      title: CustomerApiEddFormType
+      x-enum-varnames:
+      - investments
+      - holdings
+      - mpm
+      - real_estate
+      - no_website
+    DDFileUploadConfig:
+      properties:
+        accepted_types:
+          items:
+            type: string
+          type: array
+          title: Accepted Types
+        proof_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Proof Type
+        max_files:
+          type: integer
+          title: Max Files
+          default: 1
+      type: object
+      required:
+      - accepted_types
+      title: DDFileUploadConfig
+    OnboardingPhase:
+      type: string
+      enum:
+      - business_info
+      - ready_to_submit
+      - submitted
+      title: OnboardingPhase
+    RealEstateHoldingDueDiligence:
+      properties:
+        property_types:
+          items:
+            $ref: '#/components/schemas/PropertyType'
+          type: array
+          title: Property Types
+        restricted_purpose:
+          type: boolean
+          title: Restricted Purpose
+          default: false
+      type: object
+      required:
+      - property_types
+      title: RealEstateHoldingDueDiligence
+    OnboardingDocumentStatus:
+      properties:
+        proof_type:
+          $ref: '#/components/schemas/PublicKybProofType'
+          description: Type of KYB document on file.
+        file_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Name
+          description: Uploaded file name, or null if not yet uploaded.
+        representative_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Representative Id
+          description: The representative this document belongs to, or null for business-level documents.
+      type: object
+      required:
+      - proof_type
+      - file_name
+      title: OnboardingDocumentStatus
+    DDOperator:
+      type: string
+      enum:
+      - eq
+      - neq
+      - contains
+      - contains_any
+      - not_empty
+      title: DDOperator
+    Industry:
+      type: string
+      enum:
+      - accounting_bookkeeping
+      - accounting_bookkeeping_tax_preparation
+      - advertising
+      - art
+      - art_theater
+      - art_painting
+      - art_sculpting
+      - beauty_cosmetic_services
+      - biotech
+      - business_management
+      - cafeterias_grill_buffets_buffets
+      - caterers
+      - cleaning_services
+      - construction
+      - consulting
+      - consulting_strategy
+      - consulting_business
+      - consulting_financial
+      - crypto
+      - crypto_exchange
+      - crypto_investments
+      - crypto_daos
+      - crypto_nfts
+      - crypto_mining
+      - saas
+      - design
+      - design_web
+      - design_digital
+      - design_interior
+      - design_fashion
+      - drinking_places_alcoholic_beverages
+      - ecommerce
+      - ecommerce_amazon
+      - ecommerce_ebay
+      - ecommerce_shopify
+      - education
+      - education_university
+      - education_financial
+      - energy
+      - energy_solar
+      - energy_wind
+      - energy_refining
+      - energy_fuel
+      - entertainment
+      - entertainment_television
+      - entertainment_film
+      - entertainment_music
+      - entertainment_print
+      - financial_services
+      - financial_services_money_services_business
+      - financial_services_payment_processor
+      - financial_services_fintech
+      - financial_services_consumer_commercial_lending
+      - fitness
+      - food
+      - food_restaurant_food_truck
+      - food_manufacturing
+      - food_service_contractors
+      - full_service_restaurants
+      - hardware
+      - health_services
+      - health_services_clinic
+      - health_services_telehealth
+      - health_services_holistic_services
+      - health_services_healthcare_tech
+      - holding
+      - insurance
+      - investment
+      - investment_venture_capital
+      - legal
+      - legal_attorney
+      - legal_paralegal
+      - limited_service_restaurants
+      - marketing
+      - marketplace
+      - merchant_banking
+      - merges_and_acquisitions
+      - mining
+      - mobile_food_services
+      - nonprofit
+      - other
+      - private_equity
+      - professional_services
+      - professional_services_architect
+      - professional_services_attorney
+      - professional_services_doctor
+      - professional_services_engineer
+      - professional_services_paralegal
+      - real_estate
+      - real_estate_short_term_rental
+      - real_estate_development
+      - real_estate_investing
+      - real_estate_property_management
+      - recruiting
+      - research
+      - research_medical
+      - research_scientific
+      - research_market
+      - retail_wholesale
+      - security
+      - security_private
+      - security_infosec
+      - shipping_warehousing
+      - sports_team
+      - support_services
+      - snack_and_nonalcoholic_beverage_bars
+      - software
+      - software_b2b
+      - software_developer_tools
+      - software_enterprise_software
+      - technology
+      - technology_agriculture
+      - technology_artificial_intelligence
+      - technology_augmented_reality
+      - technology_community
+      - technology_consumer
+      - technology_drones
+      - technology_government
+      - technology_it_telecom
+      - technology_robotics
+      - technology_virtual_reality
+      - transportation
+      - transportation_limo_car_service
+      - transportation_ride_share
+      - travel
+      - travel_agency
+      - travel_hotel_reservations
+      - waste_management
+      - cannabis
+      title: Industry
+    MpmDueDiligence:
+      properties:
+        overview:
+          type: string
+          title: Overview
+        services_offered:
+          items:
+            $ref: '#/components/schemas/MpmServicesOffered'
+          type: array
+          title: Services Offered
+        international_businesses:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: International Businesses
+        other_countries_operations:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CountryCodeAlpha2'
+            type: array
+          - type: 'null'
+          title: Other Countries Operations
+        works_with_investors:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Works With Investors
+        investors:
+          anyOf:
+          - $ref: '#/components/schemas/InvestorsDueDiligence'
+          - type: 'null'
+      type: object
+      required:
+      - overview
+      - services_offered
+      title: MpmDueDiligence
+    EntityDocumentConfirmRequest:
+      properties:
+        object_key:
+          type: string
+          title: Object Key
+          description: Object key returned from the upload-url endpoint.
+        proof_type:
+          $ref: '#/components/schemas/PublicKybProofType'
+          description: Type of KYB document being confirmed. Use the same `proof_type` you passed when requesting the upload URL.
+        representative_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Representative Id
+          description: The representative this document belongs to; must match the value passed when the upload URL was generated. Omit for business-level documents.
+      type: object
+      required:
+      - object_key
+      - proof_type
+      title: EntityDocumentConfirmRequest
+    EntityRepresentativeListResponse:
+      properties:
+        representatives:
+          items:
+            $ref: '#/components/schemas/OnboardingRepresentativeKyc'
+          type: array
+          title: Representatives
+          description: Every representative on the entity's application with their identity verification (KYC) status, primary representative first. Deleted representatives are omitted.
+      type: object
+      required:
+      - representatives
+      title: EntityRepresentativeListResponse
+    RealEstateDueDiligence:
+      properties:
+        overview:
+          type: string
+          title: Overview
+        collects_rent_payments:
+          type: boolean
+          title: Collects Rent Payments
+        property_types:
+          items:
+            $ref: '#/components/schemas/PropertyType'
+          type: array
+          title: Property Types
+        restricted_purpose:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Restricted Purpose
+        other_countries_invested:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CountryCodeAlpha2'
+            type: array
+          - type: 'null'
+          title: Other Countries Invested
+        works_with_investors:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Works With Investors
+        investors:
+          anyOf:
+          - $ref: '#/components/schemas/InvestorsDueDiligence'
+          - type: 'null'
+        loan_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/LoanType'
+            type: array
+          - type: 'null'
+          title: Loan Types
+        other_loan_types:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Other Loan Types
+      type: object
+      required:
+      - overview
+      - collects_rent_payments
+      - property_types
+      title: RealEstateDueDiligence
+    DDCondition:
+      properties:
+        field:
+          type: string
+          title: Field
+        operator:
+          $ref: '#/components/schemas/DDOperator'
+        value:
+          anyOf:
+          - type: string
+          - type: boolean
+          - type: integer
+          - type: number
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Value
+      type: object
+      required:
+      - field
+      - operator
+      title: DDCondition
+    NoWebsiteEddFormRequest:
+      properties:
+        form_type:
+          type: string
+          const: no_website
+          title: Form Type
+        form_data:
+          $ref: '#/components/schemas/NoWebsiteDueDiligence'
+      type: object
+      required:
+      - form_type
+      - form_data
+      title: NoWebsiteEddFormRequest
+    AccountPurpose:
+      type: string
+      enum:
+      - additional_yield
+      - business_operations
+      - other
+      title: AccountPurpose
+    DDCompoundCondition:
+      properties:
+        logical_operator:
+          $ref: '#/components/schemas/DDLogicalOperator'
+        conditions:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/DDCondition'
+            - $ref: '#/components/schemas/DDCompoundCondition'
+          type: array
+          title: Conditions
+      type: object
+      required:
+      - logical_operator
+      - conditions
+      title: DDCompoundCondition
+    OnboardingProductFeature:
+      type: string
+      enum:
+      - stablecoins
+      title: OnboardingProductFeature
+      x-enum-varnames:
+      - stablecoins
+    EntityDueDiligenceForm:
+      properties:
+        form_type:
+          $ref: '#/components/schemas/DueDiligenceFormType'
+          description: The required due diligence form.
+        complete:
+          type: boolean
+          title: Complete
+          description: Whether this form has been submitted for the entity.
+        requires_webapp:
+          type: boolean
+          title: Requires Webapp
+          description: Whether this form must be completed in the web app. Forms that collect document uploads cannot be submitted through the API; the others can be fetched and submitted via the due-diligence endpoints.
+      type: object
+      required:
+      - form_type
+      - complete
+      - requires_webapp
+      title: EntityDueDiligenceForm
+    DDValidation:
+      properties:
+        min_length:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Min Length
+        max_length:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Length
+        min_value:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Min Value
+        max_value:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Value
+      type: object
+      title: DDValidation
+    CreateBusinessEntityRequest:
+      properties:
+        business_phone:
+          anyOf:
+          - type: string
+            maxLength: 20
+            minLength: 10
+          - type: 'null'
+          title: Business Phone
+          description: Business phone number.
+          examples:
+          - '+14155550123'
+        business_taxid:
+          anyOf:
+          - type: string
+            maxLength: 50
+            minLength: 0
+          - type: 'null'
+          title: Business Taxid
+          description: 'Business tax ID: the EIN for US businesses, or the local registration/tax number elsewhere (e.g. UEN in Singapore, UTR in the UK).'
+          examples:
+          - 12-3456789
+        business_website:
+          anyOf:
+          - type: string
+            maxLength: 400
+            minLength: 0
+          - type: 'null'
+          title: Business Website
+          description: Public website of the business.
+          examples:
+          - https://catnipcoffee.com
+        business_description:
+          anyOf:
+          - type: string
+            maxLength: 400
+            minLength: 0
+          - type: 'null'
+          title: Business Description
+          description: Short description of what the business does.
+          examples:
+          - Specialty coffee roaster and cafe
+        industry:
+          anyOf:
+          - $ref: '#/components/schemas/Industry'
+          - type: 'null'
+          description: The industry the business operates in.
+        account_purpose:
+          anyOf:
+          - $ref: '#/components/schemas/AccountPurpose'
+          - type: 'null'
+          description: Why the business needs the account.
+        account_purpose_description:
+          anyOf:
+          - type: string
+            maxLength: 400
+            minLength: 0
+          - type: 'null'
+          title: Account Purpose Description
+          description: Free-text detail for the account purpose, when relevant.
+        provides_blockchain_or_digital_currency_services:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Provides Blockchain Or Digital Currency Services
+          description: Whether the business provides blockchain or digital currency services.
+        transacts_in_digital_currency:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Transacts In Digital Currency
+          description: Whether the business transacts in digital currency.
+        develops_governs_supports_blockchain_protocol:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Develops Governs Supports Blockchain Protocol
+          description: Whether the business develops, governs, or supports a blockchain protocol.
+        business_name:
+          anyOf:
+          - type: string
+            maxLength: 400
+            minLength: 1
+          - type: 'null'
+          title: Business Name
+          description: Legal business name.
+          examples:
+          - Catnip Coffee Co
+        business_date_of_incorporation:
+          anyOf:
+          - $ref: '#/components/schemas/DateString'
+          - type: 'null'
+          description: Date the business was incorporated.
+        incorporation_state:
+          anyOf:
+          - $ref: '#/components/schemas/StateCode'
+          - type: 'null'
+          description: US state of incorporation. Required for businesses incorporated in the US; omit for businesses incorporated elsewhere.
+          examples:
+          - DE
+        legal_structure:
+          anyOf:
+          - $ref: '#/components/schemas/LegalStructure'
+          - type: 'null'
+          description: Legal structure of the business (e.g. `llc`, `corp`). Businesses incorporated outside the US use `foreign_entity`.
+        business_address:
+          anyOf:
+          - $ref: '#/components/schemas/OnboardingAddress'
+          - type: 'null'
+          description: Registered legal business address. Must be in a country where Meow supports business onboarding; unsupported countries are rejected with the full supported list.
+        physical_address:
+          anyOf:
+          - $ref: '#/components/schemas/OnboardingAddress'
+          - type: 'null'
+          description: Primary operating address, sent together with `business_address`. Provide it only when it differs from the legal address; omitting it keeps a physical address already on file, or uses the legal address when none is set yet.
+        reference_id:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 1
+          - type: 'null'
+          title: Reference Id
+          description: 'Your own identifier for this entity. Pass the same value to retry safely: a create reusing a `reference_id` you already used returns the original entity instead of creating a duplicate.'
+          examples:
+          - order-2026-04-001
+      type: object
+      title: CreateBusinessEntityRequest
+    EntityOnboardingStatusResponse:
+      properties:
+        entity_id:
+          type: string
+          format: uuid
+          title: Entity Id
+          description: Public ID of the onboarded business entity, stable across the onboarding lifecycle and matching the `entity_id` used in the Customer API, MCP, and webhook payloads.
+        status:
+          $ref: '#/components/schemas/OnboardingApplicationStatus'
+          description: Current onboarding status.
+        business_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Business Name
+          description: Legal business name.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when the entity was created.
+        updated_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when onboarding was last updated.
+        documents:
+          items:
+            $ref: '#/components/schemas/OnboardingDocumentStatus'
+          type: array
+          title: Documents
+          description: Documents uploaded during onboarding.
+        kyc_status:
+          $ref: '#/components/schemas/OnboardingKycStatus'
+          description: 'Identity verification status of the primary representative. After you submit KYC data or they complete verification, this moves to `pending` and resolves on its own; poll it to track progress. `action_required` means their verification needs another step from them (for example, a document): create a link with `POST /entities/{entity_id}/representatives/{representative_id}/verification-link` and share it so they can finish. See `representatives` for every representative''s status.'
+        onboarding_type:
+          $ref: '#/components/schemas/PublicOnboardingType'
+          description: How this entity was onboarded (e.g. `api`, `smb`, `partner`).
+        next_step:
+          $ref: '#/components/schemas/OnboardingNextStep'
+          description: 'What you must do next: the current onboarding step, the items still missing for it, and whether the application is ready to be submitted for review.'
+        representatives:
+          items:
+            $ref: '#/components/schemas/OnboardingRepresentativeKyc'
+          type: array
+          title: Representatives
+          description: Every representative on the application with their identity verification (KYC) status. The top-level `kyc_status` reflects the primary representative; the application can only be approved once every representative is approved.
+        consent_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Consent Url
+          description: Link where the primary representative reviews and accepts the required agreements and disclosures in their browser. Populated once the application has been submitted; share it with the primary representative. The link needs no login and anyone holding it can accept on the business's behalf, so treat it as a secret.
+      type: object
+      required:
+      - entity_id
+      - status
+      - business_name
+      - created_at
+      - updated_at
+      - documents
+      - kyc_status
+      - onboarding_type
+      - next_step
+      - representatives
+      - consent_url
+      title: EntityOnboardingStatusResponse
+    EntityDocumentUploadRequest:
+      properties:
+        proof_type:
+          $ref: '#/components/schemas/PublicKybProofType'
+          description: Type of KYB document being uploaded. Common values are `incorporation` (certificate of incorporation or formation document), `address` (proof of business address), and `bank_statement`. Non-US businesses also upload `shareholder_registry` (your shareholder registry, also called the register of members) and `officer_registry` (your register of directors and officers). The onboarding status response lists exactly what an entity owes in `next_step.required_proof_types`.
+        file_name:
+          type: string
+          title: File Name
+          description: Original file name including extension.
+        content_type:
+          type: string
+          title: Content Type
+          description: MIME type of the file (e.g. `application/pdf`, `image/png`).
+          default: application/pdf
+        representative_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Representative Id
+          description: Attach this document to a representative (e.g. their ID or proof of address). Pass the `representative_id` returned when the representative was added or listed; omit for business-level documents. Pass the same value again when confirming the upload — the confirm call is what records the link.
+      type: object
+      required:
+      - proof_type
+      - file_name
+      title: EntityDocumentUploadRequest
+    MpmServicesOffered:
+      type: string
+      enum:
+      - fundraising
+      - portfolio_management
+      - fractional_executive_services
+      - financing
+      - loan_syndication
+      - underwriting
+      - advisory_services
+      title: MpmServicesOffered
+    EntitySubmitApplicationRequest:
+      properties:
+        banking_account_product_type:
+          $ref: '#/components/schemas/EntityCheckingAccountProduct'
+          description: The checking account product to open for this entity once it is approved.
+        product_features:
+          items:
+            $ref: '#/components/schemas/OnboardingProductFeature'
+          type: array
+          title: Product Features
+          description: Additional products to request for this entity alongside the checking account. `stablecoins` requests USDC stablecoin access. The primary representative accepts each requested product's terms on the `consent_url` page; the product is enabled once they have accepted and the application is approved.
+      type: object
+      required:
+      - banking_account_product_type
+      title: EntitySubmitApplicationRequest
+    PartnerDocumentConfirmResponse:
+      properties:
+        confirmed:
+          type: boolean
+          title: Confirmed
+          description: Whether the document was successfully confirmed.
+        file_name:
+          type: string
+          title: File Name
+          description: Confirmed file name.
+      type: object
+      required:
+      - confirmed
+      - file_name
+      title: PartnerDocumentConfirmResponse
+    PublicKybProofType:
+      type: string
+      enum:
+      - accredited
+      - address
+      - articles_of_organization
+      - bank_statement
+      - client_contract
+      - client_invoice
+      - beneficial_owner_address
+      - beneficial_owner_id
+      - beneficial_owner_id_back
+      - beneficial_ownership_register
+      - bylaws
+      - certificate_of_good_standing
+      - corporate_resolution
+      - drivers_license
+      - due_diligence
+      - ein
+      - final_edd_report
+      - government_issued_business_license
+      - hemp_cultivator_state_license
+      - incorporation
+      - industry_related_license
+      - lease_agreement
+      - llc_resolution
+      - money_service_business_license
+      - money_transmitter_registration
+      - mortgage_statement
+      - national_id
+      - org_chart
+      - partnership_agreement
+      - partnership_agreement_due_diligence
+      - partnership_resolution
+      - personal_address
+      - remote_employees_due_diligence
+      - signed_ss4
+      - tax_exemption_certificate
+      - uk_officer_passport
+      - officer_registry
+      - uk_registry
+      - shareholder_registry
+      - uk_w8_en
+      - utility_bill
+      - us_based_office_proof_of_address_due_diligence
+      - pitch_deck
+      - active_business_registration
+      - proof_of_ownership_or_banking_authorization
+      - non_profit_bylaws
+      - operating_agreement
+      - flow_of_funds
+      - aml_sanction
+      - registration_or_license
+      - sec_filing
+      - legal_opinion
+      - certificate_of_formation_master_llc
+      - series_operating_agreement
+      - share_subscription_agreement
+      - fund_subscription_agreement
+      - safe_agreement
+      - convertible_note_agreement
+      - loan_promissory_note
+      - token_purchase_agreement
+      - saft_agreement
+      - deal_memo_hybrid_agreement
+      - issuer_due_diligence_report
+      - protocol_ecosystem_questionnaire
+      - investment_company_due_diligence_form
+      - us_based_operations_due_diligence_form
+      - register_of_directors
+      - articles_of_association
+      - memorandum_of_association
+      - non_profit_status
+      - ofac_sanctions_screening_policy
+      - aml_kyc_policy
+      - w8_bene
+      - corporate_structure_chart
+      - sanctions_vendor_service_agreement
+      - contractual_fund_flow_agreements
+      title: PublicKybProofType
+      x-enum-varnames:
+      - accredited
+      - address
+      - articles_of_organization
+      - bank_statement
+      - client_contract
+      - client_invoice
+      - beneficial_owner_address
+      - beneficial_owner_id
+      - beneficial_owner_id_back
+      - beneficial_ownership_register
+      - bylaws
+      - certificate_of_good_standing
+      - corporate_resolution
+      - drivers_license
+      - due_diligence
+      - ein
+      - final_edd_report
+      - government_issued_business_license
+      - hemp_cultivator_state_license
+      - incorporation
+      - industry_related_license
+      - lease_agreement
+      - llc_resolution
+      - money_service_business_license
+      - money_transmitter_registration
+      - mortgage_statement
+      - national_id
+      - org_chart
+      - partnership_agreement
+      - partnership_agreement_due_diligence
+      - partnership_resolution
+      - personal_address
+      - remote_employees_due_diligence
+      - signed_ss4
+      - tax_exemption_certificate
+      - uk_officer_passport
+      - officer_registry
+      - uk_registry
+      - shareholder_registry
+      - uk_w8_en
+      - utility_bill
+      - us_based_office_proof_of_address_due_diligence
+      - pitch_deck
+      - active_business_registration
+      - proof_of_ownership_or_banking_authorization
+      - non_profit_bylaws
+      - operating_agreement
+      - flow_of_funds
+      - aml_sanction
+      - registration_or_license
+      - sec_filing
+      - legal_opinion
+      - certificate_of_formation_master_llc
+      - series_operating_agreement
+      - share_subscription_agreement
+      - fund_subscription_agreement
+      - safe_agreement
+      - convertible_note_agreement
+      - loan_promissory_note
+      - token_purchase_agreement
+      - saft_agreement
+      - deal_memo_hybrid_agreement
+      - issuer_due_diligence_report
+      - protocol_ecosystem_questionnaire
+      - investment_company_due_diligence_form
+      - us_based_operations_due_diligence_form
+      - register_of_directors
+      - articles_of_association
+      - memorandum_of_association
+      - non_profit_status
+      - ofac_sanctions_screening_policy
+      - aml_kyc_policy
+      - w8_bene
+      - corporate_structure_chart
+      - sanctions_vendor_service_agreement
+      - contractual_fund_flow_agreements
+    InvestmentsEddFormRequest:
+      properties:
+        form_type:
+          type: string
+          const: investments
+          title: Form Type
+        form_data:
+          $ref: '#/components/schemas/InvestmentsDueDiligence'
+      type: object
+      required:
+      - form_type
+      - form_data
+      title: InvestmentsEddFormRequest
+    PublicOnboardingType:
+      type: string
+      enum:
+      - api
+      - smb
+      - mcp
+      - partner
+      title: PublicOnboardingType
+      x-enum-varnames:
+      - api
+      - smb
+      - mcp
+      - partner
+    RepresentativeTitle:
+      type: string
+      enum:
+      - chief executive officer
+      - chief financial officer
+      - chief operating officer
+      - finance manager
+      - general partner
+      - managing member
+      - president
+      title: RepresentativeTitle
+      x-enum-varnames:
+      - chief_executive_officer
+      - chief_financial_officer
+      - chief_operating_officer
+      - finance_manager
+      - general_partner
+      - managing_member
+      - president
+    DueDiligenceFormType:
+      type: string
+      enum:
+      - cannabis
+      - crypto
+      - investments
+      - holdings
+      - mpm
+      - mrb
+      - no_website
+      - real_estate
+      - non_us_ubos
+      - allocations_partner
+      - seedlabs_partner
+      - protocol_ecosystem
+      title: DueDiligenceFormType
+    LegalStructure:
+      type: string
+      enum:
+      - ccorp
+      - corp
+      - estate
+      - foreign_entity
+      - llc
+      - llp
+      - lp
+      - nonprofit
+      - partnership
+      - scheme
+      - scorp
+      - soleprop
+      - trust
+      title: LegalStructure
+    DDChoice:
+      properties:
+        value:
+          type: string
+          title: Value
+        label:
+          type: string
+          title: Label
+      type: object
+      required:
+      - value
+      - label
+      title: DDChoice
+    AcceptedPaymentMethods:
+      type: string
+      enum:
+      - cash
+      - check
+      - credit_card
+      - electronic_transfer
+      title: AcceptedPaymentMethods
+    OnboardingApplicationStatus:
+      type: string
+      enum:
+      - pending_document_upload
+      - pending_user_action
+      - submitted
+      - under_review
+      - approved
+      - rejected
+      title: OnboardingApplicationStatus
+    PropertyType:
+      type: string
+      enum:
+      - residential
+      - single_family
+      - commercial_use
+      title: PropertyType
+    StateCode:
+      type: string
+      enum:
+      - AL
+      - AK
+      - AZ
+      - AR
+      - CA
+      - CO
+      - CT
+      - DC
+      - DE
+      - FL
+      - GA
+      - HI
+      - ID
+      - IL
+      - IN
+      - IA
+      - KS
+      - KY
+      - LA
+      - ME
+      - MD
+      - MA
+      - MI
+      - MN
+      - MS
+      - MO
+      - MT
+      - NE
+      - NV
+      - NH
+      - NJ
+      - NM
+      - NY
+      - NC
+      - ND
+      - OH
+      - OK
+      - OR
+      - PA
+      - RI
+      - SC
+      - SD
+      - TN
+      - TX
+      - UT
+      - VT
+      - VA
+      - WA
+      - WV
+      - WI
+      - WY
+      - PR
+      title: StateCode
+      x-enum-varnames:
+      - AL
+      - AK
+      - AZ
+      - AR
+      - CA
+      - CO
+      - CT
+      - DC
+      - DE
+      - FL
+      - GA
+      - HI
+      - ID
+      - IL
+      - IN
+      - IA
+      - KS
+      - KY
+      - LA
+      - ME
+      - MD
+      - MA
+      - MI
+      - MN
+      - MS
+      - MO
+      - MT
+      - NE
+      - NV
+      - NH
+      - NJ
+      - NM
+      - NY
+      - NC
+      - ND
+      - OH
+      - OK
+      - OR
+      - PA
+      - RI
+      - SC
+      - SD
+      - TN
+      - TX
+      - UT
+      - VT
+      - VA
+      - WA
+      - WV
+      - WI
+      - WY
+      - PR
+    DDElementType:
+      type: string
+      enum:
+      - text
+      - comment
+      - boolean
+      - dropdown
+      - checkbox
+      - number
+      - date
+      - country_select
+      - state_select
+      - text_list
+      - group
+      - repeat
+      - file_upload
+      - confirm
+      title: DDElementType
+    OnboardingAddress:
+      properties:
+        address:
+          type: string
+          maxLength: 900
+          minLength: 1
+          title: Address
+          description: Street address line 1.
+          examples:
+          - 9 Whisker Way
+        address_2:
+          anyOf:
+          - type: string
+            maxLength: 900
+          - type: 'null'
+          title: Address 2
+          description: Street address line 2.
+          examples:
+          - Suite 9
+        city:
+          type: string
+          maxLength: 300
+          minLength: 1
+          title: City
+          description: City name.
+          examples:
+          - San Francisco
+        state:
+          anyOf:
+          - type: string
+            maxLength: 300
+          - type: 'null'
+          title: State
+          description: State or province code.
+          examples:
+          - CA
+        zip:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Zip
+          description: Postal or ZIP code.
+          examples:
+          - '94105'
+        country:
+          $ref: '#/components/schemas/CountryCodeAlpha2'
+          description: ISO 3166-1 alpha-2 country code.
+      type: object
+      required:
+      - address
+      - city
+      - zip
+      - country
+      title: OnboardingAddress
+    ExtPlaidIDNumberType:
+      type: string
+      enum:
+      - ar_dni
+      - au_drivers_license
+      - au_passport
+      - br_cpf
+      - ca_sin
+      - cl_run
+      - cn_resident_card
+      - co_nit
+      - dk_cpr
+      - eg_national_id
+      - es_dni
+      - es_nie
+      - hk_hkid
+      - in_pan
+      - in_epic
+      - it_cf
+      - jo_civil_id
+      - jp_my_number
+      - ke_huduma_namba
+      - kw_civil_id
+      - mx_curp
+      - mx_rfc
+      - my_nric
+      - ng_nin
+      - nz_drivers_license
+      - om_civil_id
+      - ph_psn
+      - pl_pesel
+      - ro_cnp
+      - sa_national_id
+      - se_pin
+      - sg_nric
+      - tr_tc_kimlik
+      - us_ssn
+      - us_ssn_last_4
+      - za_smart_id
+      title: ExtPlaidIDNumberType
+      x-enum-varnames:
+      - ar_dni
+      - au_drivers_license
+      - au_passport
+      - br_cpf
+      - ca_sin
+      - cl_run
+      - cn_resident_card
+      - co_nit
+      - dk_cpr
+      - eg_national_id
+      - es_dni
+      - es_nie
+      - hk_hkid
+      - in_pan
+      - in_epic
+      - it_cf
+      - jo_civil_id
+      - jp_my_number
+      - ke_huduma_namba
+      - kw_civil_id
+      - mx_curp
+      - mx_rfc
+      - my_nric
+      - ng_nin
+      - nz_drivers_license
+      - om_civil_id
+      - ph_psn
+      - pl_pesel
+      - ro_cnp
+      - sa_national_id
+      - se_pin
+      - sg_nric
+      - tr_tc_kimlik
+      - us_ssn
+      - us_ssn_last_4
+      - za_smart_id
+    DDFormSchema:
+      properties:
+        title:
+          type: string
+          title: Title
+        pages:
+          items:
+            $ref: '#/components/schemas/DDPage'
+          type: array
+          title: Pages
+      type: object
+      required:
+      - title
+      - pages
+      title: DDFormSchema
+    DDLogicalOperator:
+      type: string
+      enum:
+      - and
+      - or
+      title: DDLogicalOperator
+    EntityDueDiligenceStatusResponse:
+      properties:
+        complete:
+          type: boolean
+          title: Complete
+          description: Whether all required due diligence for the entity is complete.
+        forms:
+          items:
+            $ref: '#/components/schemas/EntityDueDiligenceForm'
+          type: array
+          title: Forms
+          description: The due diligence forms required for the entity, with status.
+      type: object
+      required:
+      - complete
+      - forms
+      title: EntityDueDiligenceStatusResponse
+    PageMetadata:
+      properties:
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
+      type: object
+      title: PageMetadata
+    CreateBusinessEntityResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Public ID of the new business entity. Use it as the `entity_id` path parameter on the onboarding endpoints, and in the `x-entity-id` header for entity-scoped requests once the entity is onboarded.
+        business_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Business Name
+          description: Legal business name.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when the entity was created.
+      type: object
+      required:
+      - id
+      - business_name
+      - created_at
+      title: CreateBusinessEntityResponse
+    OnboardingKycIdentity:
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          title: First Name
+          description: Legal first name.
+          examples:
+          - Felix
+        last_name:
+          type: string
+          minLength: 1
+          title: Last Name
+          description: Legal last name.
+          examples:
+          - Whiskers
+        date_of_birth:
+          $ref: '#/components/schemas/DateString'
+          description: Date of birth (`YYYY-MM-DD`).
+        id_number:
+          type: string
+          format: password
+          title: Id Number
+          description: Government ID number matching `id_type`. For `us_ssn` use nine digits, with or without dashes (123-45-6789 or 123456789); for `us_ssn_last_4` use the last four digits; for non-US ID types provide the number as issued. Formatting characters are stripped before verification.
+          writeOnly: true
+          examples:
+          - 123-45-6789
+        id_type:
+          $ref: '#/components/schemas/ExtPlaidIDNumberType'
+          description: Type of government ID. Defaults to `us_ssn`; non-US representatives pass their country-specific type (e.g. `sg_nric`, `au_passport`, `ca_sin`).
+          default: us_ssn
+        address:
+          $ref: '#/components/schemas/OnboardingAddress'
+          description: Residential address.
+        phone_number:
+          anyOf:
+          - type: string
+            pattern: ^\+[1-9]\d{1,14}$
+          - type: 'null'
+          title: Phone Number
+          description: Phone number in E.164 format (e.g. +14155550123).
+          examples:
+          - '+14155550123'
+        ip:
+          type: string
+          format: ipvanyaddress
+          title: Ip
+          description: IPv4 or IPv6 address of the end user submitting this verification. Forwarded to the identity-verification provider as a fraud signal.
+          examples:
+          - 203.0.113.42
+      type: object
+      required:
+      - first_name
+      - last_name
+      - date_of_birth
+      - id_number
+      - address
+      - ip
+      title: OnboardingKycIdentity
+    EntityRepresentativeResponse:
+      properties:
+        representative_id:
+          type: string
+          format: uuid
+          title: Representative Id
+          description: ID of the created representative. Use it to submit the representative's KYC or mint a verification link.
+        email:
+          type: string
+          title: Email
+          description: Representative's email address.
+        title_id:
+          $ref: '#/components/schemas/RepresentativeTitle'
+          description: The representative's job title.
+        is_beneficial_owner:
+          type: boolean
+          title: Is Beneficial Owner
+          description: Whether they are a beneficial owner.
+        percent_ownership:
+          anyOf:
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Percent Ownership
+          description: Ownership percentage, if any.
+        is_primary:
+          type: boolean
+          title: Is Primary
+          description: Whether they are the primary representative (signer).
+      type: object
+      required:
+      - representative_id
+      - email
+      - title_id
+      - is_beneficial_owner
+      - percent_ownership
+      - is_primary
+      title: EntityRepresentativeResponse
+    EntityOnboardingSummary:
+      properties:
+        entity_id:
+          type: string
+          format: uuid
+          title: Entity Id
+          description: Public ID of the onboarded business entity, stable across the onboarding lifecycle and matching the `entity_id` used in the Customer API, MCP, and webhook payloads.
+        status:
+          $ref: '#/components/schemas/OnboardingApplicationStatus'
+          description: Current onboarding status.
+        business_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Business Name
+          description: Legal business name.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when the entity was created.
+        updated_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when onboarding was last updated.
+        onboarding_type:
+          $ref: '#/components/schemas/PublicOnboardingType'
+          description: How this entity was onboarded (e.g. `api`, `smb`, `partner`).
+      type: object
+      required:
+      - entity_id
+      - status
+      - business_name
+      - created_at
+      - updated_at
+      - onboarding_type
+      title: EntityOnboardingSummary
+    PartnerDocumentUploadResponse:
+      properties:
+        upload_url:
+          type: string
+          title: Upload Url
+          description: Pre-signed URL to upload the file via HTTP PUT.
+        object_key:
+          type: string
+          title: Object Key
+          description: Object key, required when confirming the upload.
+        max_bytes:
+          type: integer
+          title: Max Bytes
+          description: Maximum allowed file size in bytes.
+        expires_in_seconds:
+          type: integer
+          title: Expires In Seconds
+          description: Number of seconds until the upload URL expires.
+      type: object
+      required:
+      - upload_url
+      - object_key
+      - max_bytes
+      - expires_in_seconds
+      title: PartnerDocumentUploadResponse
+    EntityUpdateBusinessDetailsRequest:
+      properties:
+        business_phone:
+          anyOf:
+          - type: string
+            maxLength: 20
+            minLength: 10
+          - type: 'null'
+          title: Business Phone
+          description: Business phone number.
+          examples:
+          - '+14155550123'
+        business_taxid:
+          anyOf:
+          - type: string
+            maxLength: 50
+            minLength: 0
+          - type: 'null'
+          title: Business Taxid
+          description: 'Business tax ID: the EIN for US businesses, or the local registration/tax number elsewhere (e.g. UEN in Singapore, UTR in the UK).'
+          examples:
+          - 12-3456789
+        business_website:
+          anyOf:
+          - type: string
+            maxLength: 400
+            minLength: 0
+          - type: 'null'
+          title: Business Website
+          description: Public website of the business.
+          examples:
+          - https://catnipcoffee.com
+        business_description:
+          anyOf:
+          - type: string
+            maxLength: 400
+            minLength: 0
+          - type: 'null'
+          title: Business Description
+          description: Short description of what the business does.
+          examples:
+          - Specialty coffee roaster and cafe
+        industry:
+          anyOf:
+          - $ref: '#/components/schemas/Industry'
+          - type: 'null'
+          description: The industry the business operates in.
+        account_purpose:
+          anyOf:
+          - $ref: '#/components/schemas/AccountPurpose'
+          - type: 'null'
+          description: Why the business needs the account.
+        account_purpose_description:
+          anyOf:
+          - type: string
+            maxLength: 400
+            minLength: 0
+          - type: 'null'
+          title: Account Purpose Description
+          description: Free-text detail for the account purpose, when relevant.
+        provides_blockchain_or_digital_currency_services:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Provides Blockchain Or Digital Currency Services
+          description: Whether the business provides blockchain or digital currency services.
+        transacts_in_digital_currency:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Transacts In Digital Currency
+          description: Whether the business transacts in digital currency.
+        develops_governs_supports_blockchain_protocol:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Develops Governs Supports Blockchain Protocol
+          description: Whether the business develops, governs, or supports a blockchain protocol.
+        business_name:
+          anyOf:
+          - type: string
+            maxLength: 400
+            minLength: 1
+          - type: 'null'
+          title: Business Name
+          description: Legal business name.
+          examples:
+          - Catnip Coffee Co
+        business_date_of_incorporation:
+          anyOf:
+          - $ref: '#/components/schemas/DateString'
+          - type: 'null'
+          description: Date the business was incorporated.
+        incorporation_state:
+          anyOf:
+          - $ref: '#/components/schemas/StateCode'
+          - type: 'null'
+          description: US state of incorporation. Required for businesses incorporated in the US; omit for businesses incorporated elsewhere.
+          examples:
+          - DE
+        legal_structure:
+          anyOf:
+          - $ref: '#/components/schemas/LegalStructure'
+          - type: 'null'
+          description: Legal structure of the business (e.g. `llc`, `corp`). Businesses incorporated outside the US use `foreign_entity`.
+        business_address:
+          anyOf:
+          - $ref: '#/components/schemas/OnboardingAddress'
+          - type: 'null'
+          description: Registered legal business address. Must be in a country where Meow supports business onboarding; unsupported countries are rejected with the full supported list.
+        physical_address:
+          anyOf:
+          - $ref: '#/components/schemas/OnboardingAddress'
+          - type: 'null'
+          description: Primary operating address, sent together with `business_address`. Provide it only when it differs from the legal address; omitting it keeps a physical address already on file, or uses the legal address when none is set yet.
+      type: object
+      title: EntityUpdateBusinessDetailsRequest
+    EntityCheckingAccountProduct:
+      type: string
+      enum:
+      - grasshopper
+      - crb
+      title: EntityCheckingAccountProduct
+      x-enum-varnames:
+      - grasshopper
+      - crb
+    HoldingType-Input:
+      type: string
+      enum:
+      - investor
+      - real_estate
+      title: HoldingType
+    EntityOnboardingListResponse:
+      properties:
+        entities:
+          items:
+            $ref: '#/components/schemas/EntityOnboardingSummary'
+          type: array
+          title: Entities
+          description: Business entities being onboarded by your API key's user.
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+          description: Pagination metadata.
+      type: object
+      required:
+      - entities
+      title: EntityOnboardingListResponse
+    OnboardingRepresentativeKyc:
+      properties:
+        representative_id:
+          type: string
+          format: uuid
+          title: Representative Id
+          description: ID of the representative.
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: Legal first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: Legal last name.
+        email:
+          type: string
+          title: Email
+          description: Representative's email address.
+        is_primary:
+          type: boolean
+          title: Is Primary
+          description: Whether they are the primary representative (signer).
+        is_beneficial_owner:
+          type: boolean
+          title: Is Beneficial Owner
+          description: Whether they are a beneficial owner.
+        percent_ownership:
+          anyOf:
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Percent Ownership
+          description: Ownership percentage, if any.
+        kyc_status:
+          $ref: '#/components/schemas/OnboardingKycStatus'
+          description: 'This representative''s identity verification status, kept consistent with the `identity_verification.*` webhook events. `action_required` means their verification needs another step from them (for example, a document or selfie): create a link with `POST /entities/{entity_id}/representatives/{representative_id}/verification-link` and share it so they can finish.'
+      type: object
+      required:
+      - representative_id
+      - first_name
+      - last_name
+      - email
+      - is_primary
+      - is_beneficial_owner
+      - percent_ownership
+      - kyc_status
+      title: OnboardingRepresentativeKyc
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    HoldingEntityType:
+      type: string
+      enum:
+      - businesses
+      - individuals
+      - investors
+      title: HoldingEntityType
+    OnboardingNextStep:
+      properties:
+        step:
+          $ref: '#/components/schemas/OnboardingStep'
+          description: The onboarding step the application is currently on.
+        phase:
+          $ref: '#/components/schemas/OnboardingPhase'
+          description: Coarse onboarding phase (collecting info, ready to submit, or submitted).
+        missing:
+          items:
+            type: string
+          type: array
+          title: Missing
+          description: Items you still need to provide to advance past the current step. Empty once the step is satisfied.
+        required_proof_types:
+          items:
+            $ref: '#/components/schemas/PublicKybProofType'
+          type: array
+          title: Required Proof Types
+          description: KYB documents you still owe, as `proof_type` values to pass to the document upload endpoint. For a non-US business this usually includes `incorporation`, `shareholder_registry` (your shareholder registry or register of members), and `officer_registry` (your register of directors). Empty once every required document is on file.
+        can_submit:
+          type: boolean
+          title: Can Submit
+          description: Whether all requirements are met and the application is ready to be submitted for review.
+      type: object
+      required:
+      - step
+      - phase
+      - missing
+      - can_submit
+      title: OnboardingNextStep
+    InvestmentsDueDiligence:
+      properties:
+        overview:
+          type: string
+          title: Overview
+        international_investments:
+          type: boolean
+          title: International Investments
+        countries_invested:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CountryCodeAlpha2'
+            type: array
+          - type: 'null'
+          title: Countries Invested
+        registered_sec:
+          type: boolean
+          title: Registered Sec
+        current_portfolio_value:
+          anyOf:
+          - type: number
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Current Portfolio Value
+        works_with_investors:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Works With Investors
+        investors:
+          anyOf:
+          - $ref: '#/components/schemas/InvestorsDueDiligence'
+          - type: 'null'
+      type: object
+      required:
+      - overview
+      - international_investments
+      - registered_sec
+      - current_portfolio_value
+      title: InvestmentsDueDiligence
+    InvestorsDueDiligence:
+      properties:
+        type_of_investors:
+          items:
+            $ref: '#/components/schemas/InvestorType'
+          type: array
+          title: Type Of Investors
+        international_investors:
+          type: boolean
+          title: International Investors
+        investor_countries:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CountryCodeAlpha2'
+            type: array
+          - type: 'null'
+          title: Investor Countries
+        investor_verification_process:
+          type: string
+          title: Investor Verification Process
+        additional_investors_due_diligence:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Additional Investors Due Diligence
+      type: object
+      required:
+      - type_of_investors
+      - international_investors
+      - investor_verification_process
+      title: InvestorsDueDiligence
+    NoWebsiteDueDiligence:
+      properties:
+        previous_experience:
+          type: string
+          title: Previous Experience
+        industry_certs_licenses:
+          type: boolean
+          title: Industry Certs Licenses
+        product_service_revenue:
+          type: string
+          title: Product Service Revenue
+        accepted_payment_methods:
+          items:
+            $ref: '#/components/schemas/AcceptedPaymentMethods'
+          type: array
+          title: Accepted Payment Methods
+        customer_base:
+          type: string
+          title: Customer Base
+      type: object
+      required:
+      - previous_experience
+      - industry_certs_licenses
+      - product_service_revenue
+      - accepted_payment_methods
+      - customer_base
+      title: NoWebsiteDueDiligence
+    DDElement:
+      properties:
+        type:
+          $ref: '#/components/schemas/DDElementType'
+        name:
+          type: string
+          title: Name
+        title:
+          type: string
+          title: Title
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        required:
+          type: boolean
+          title: Required
+          default: false
+        default_value:
+          anyOf:
+          - type: string
+          - type: boolean
+          - type: integer
+          - type: number
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Default Value
+        choices:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DDChoice'
+            type: array
+          - type: 'null'
+          title: Choices
+        visible_when:
+          anyOf:
+          - $ref: '#/components/schemas/DDCondition'
+          - $ref: '#/components/schemas/DDCompoundCondition'
+          - type: 'null'
+          title: Visible When
+        required_when:
+          anyOf:
+          - $ref: '#/components/schemas/DDCondition'
+          - $ref: '#/components/schemas/DDCompoundCondition'
+          - type: 'null'
+          title: Required When
+        validation:
+          anyOf:
+          - $ref: '#/components/schemas/DDValidation'
+          - type: 'null'
+        multiple:
+          type: boolean
+          title: Multiple
+          default: false
+        elements:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/DDElement'
+            type: array
+          - type: 'null'
+          title: Elements
+        min_items:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Min Items
+        max_items:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Items
+        file_upload_config:
+          anyOf:
+          - $ref: '#/components/schemas/DDFileUploadConfig'
+          - type: 'null'
+        input_format:
+          anyOf:
+          - type: string
+            enum:
+            - currency
+            - percentage
+          - type: 'null'
+          title: Input Format
+        component:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Component
+        exclude_countries:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Exclude Countries
+      type: object
+      required:
+      - type
+      - name
+      - title
+      title: DDElement
+    EntityRepresentativeKycResponse:
+      properties:
+        representative_id:
+          type: string
+          format: uuid
+          title: Representative Id
+          description: ID of the representative whose KYC was submitted.
+        kyc_status:
+          $ref: '#/components/schemas/OnboardingKycStatus'
+          description: This representative's identity verification status right after submission. It completes asynchronously; track this representative's status in the `representatives` array on `GET /entities/{entity_id}` or via the `identity_verification.*` webhooks. The entity's top-level `kyc_status` reflects only the primary representative, and `next_step` advances once every representative has started verification (not once they pass) — so neither confirms this representative's outcome.
+      type: object
+      required:
+      - representative_id
+      - kyc_status
+      title: EntityRepresentativeKycResponse
+    MpmEddFormRequest:
+      properties:
+        form_type:
+          type: string
+          const: mpm
+          title: Form Type
+        form_data:
+          $ref: '#/components/schemas/MpmDueDiligence'
+      type: object
+      required:
+      - form_type
+      - form_data
+      title: MpmEddFormRequest
+    InvestorType:
+      type: string
+      enum:
+      - accredited_investors
+      - qualified_purchasers
+      - institutional_firms
+      title: InvestorType
+    OnboardingStep:
+      type: string
+      enum:
+      - gather_business_context
+      - collect_user_info
+      - collect_business_addresses
+      - collect_business_details
+      - collect_additional_details
+      - complete_due_diligence
+      - upload_documents
+      - manage_representatives
+      - complete_identity_verification
+      - accept_terms
+      - submit_application
+      - monitor_review
+      - resolve_info_requests
+      title: OnboardingStep
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your Meow API key, sent in the `x-api-key` header for authentication.
+      x-scopes:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+x-tagGroups:
+- name: Core API
+  tags:
+  - API Keys
+  - Contacts
+  - Accounts
+  - Transactions
+  - Balances
+  - Payment Networks
+  - Transfers
+  - Routing Numbers
+  - Cards
+  - Tax Forms
+  - Webhooks
+- name: Bill Pay
+  tags:
+  - Bills
+- name: Billing
+  tags:
+  - Products
+  - Customers
+  - Invoices
+  - Line Items
+  - Payment Methods
+  - Collection Accounts
+- name: Partner Onboarding
+  tags:
+  - Partner Onboarding
+- name: Sandbox
+  tags:
+  - Simulations

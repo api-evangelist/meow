@@ -1,0 +1,330 @@
+openapi: 3.1.0
+info:
+  title: Meow Accounts Security Policies API
+  description: '## Overview
+
+
+    The Meow API provides financial services and billing capabilities for your business.
+
+
+    ### Core Features
+
+
+    - **Financial data access**: access account information, transactions, balances, and payment networks.
+
+    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
+
+
+    ### Billing API
+
+
+    The Billing API lets you create and manage invoices and collect payments:
+
+
+    - **Product management**: create and manage products with custom pricing.
+
+    - **Customer management**: maintain invoicing customers with their addresses.
+
+    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
+
+    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
+
+    - **Collection accounts**: configure accounts for payment collection.
+
+
+    ### Getting Started
+
+
+    Authenticate by sending your API key in the `x-api-key` request header.
+
+
+    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
+
+
+    ### Error Responses
+
+
+    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
+
+
+    Common error codes:
+
+
+    - `500`: Internal server error
+
+    - `501`: Subsystem unavailable
+
+    - `503`: Scheduled maintenance
+
+    - `601`: Data not found
+
+    - `602`: Customer not authorized
+
+    - `701`: Account not found
+
+    - `703`: Invalid input (including invalid date ranges)
+
+    - `704`: Account type not supported
+
+    - `705`: Account is closed
+
+    - `801`: Transaction not found
+
+    '
+  contact:
+    name: Meow
+    url: https://meow.com/
+    email: support@meow.com
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.meow.com/terms-of-service
+servers:
+- url: https://api.meow.com/v1
+  description: Meow API Production
+- url: https://api.sandbox.meow.com/v1
+  description: Meow API Sandbox
+security:
+- apiKeyAuth: []
+tags:
+- name: Security Policies
+paths:
+  /security-policies:
+    get:
+      tags:
+      - Security Policies
+      summary: List Security Policies
+      description: Returns the security policies configured for your entity, including the required approvers and quorum for each.
+      operationId: list_security_policies_security_policies_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 100
+          - type: 'null'
+          description: Opaque offset identifier for pagination. Use the nextOffset from a previous response.
+          title: Offset
+        description: Opaque offset identifier for pagination. Use the nextOffset from a previous response.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerApiSecurityPoliciesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:read
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PageMetadata:
+      properties:
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
+      type: object
+      title: PageMetadata
+    CustomerApiSecurityPoliciesResponse:
+      properties:
+        security_policies:
+          items:
+            $ref: '#/components/schemas/CustomerApiSecurityPolicyResponse'
+          type: array
+          title: Security Policies
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - security_policies
+      title: CustomerApiSecurityPoliciesResponse
+    ActionType:
+      type: string
+      enum:
+      - manage_users_and_policies
+      - send_money
+      title: ActionType
+    CustomerApiSecurityPolicyResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        action_type:
+          $ref: '#/components/schemas/ActionType'
+        quorum:
+          type: integer
+          title: Quorum
+        minimum_amount:
+          anyOf:
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Minimum Amount
+        approver_user_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Approver User Ids
+        initiator_user_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Initiator User Ids
+        created_time:
+          type: integer
+          title: Created Time
+        updated_time:
+          type: integer
+          title: Updated Time
+      type: object
+      required:
+      - id
+      - action_type
+      - quorum
+      - approver_user_ids
+      - initiator_user_ids
+      - created_time
+      - updated_time
+      title: CustomerApiSecurityPolicyResponse
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your Meow API key, sent in the `x-api-key` header for authentication.
+      x-scopes:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+x-tagGroups:
+- name: Core API
+  tags:
+  - API Keys
+  - Contacts
+  - Accounts
+  - Transactions
+  - Balances
+  - Payment Networks
+  - Transfers
+  - Routing Numbers
+  - Cards
+  - Tax Forms
+  - Webhooks
+- name: Bill Pay
+  tags:
+  - Bills
+- name: Billing
+  tags:
+  - Products
+  - Customers
+  - Invoices
+  - Line Items
+  - Payment Methods
+  - Collection Accounts
+- name: Partner Onboarding
+  tags:
+  - Partner Onboarding
+- name: Sandbox
+  tags:
+  - Simulations

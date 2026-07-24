@@ -1,0 +1,2058 @@
+openapi: 3.1.0
+info:
+  title: Meow Accounts Contacts API
+  description: '## Overview
+
+
+    The Meow API provides financial services and billing capabilities for your business.
+
+
+    ### Core Features
+
+
+    - **Financial data access**: access account information, transactions, balances, and payment networks.
+
+    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
+
+
+    ### Billing API
+
+
+    The Billing API lets you create and manage invoices and collect payments:
+
+
+    - **Product management**: create and manage products with custom pricing.
+
+    - **Customer management**: maintain invoicing customers with their addresses.
+
+    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
+
+    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
+
+    - **Collection accounts**: configure accounts for payment collection.
+
+
+    ### Getting Started
+
+
+    Authenticate by sending your API key in the `x-api-key` request header.
+
+
+    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
+
+
+    ### Error Responses
+
+
+    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
+
+
+    Common error codes:
+
+
+    - `500`: Internal server error
+
+    - `501`: Subsystem unavailable
+
+    - `503`: Scheduled maintenance
+
+    - `601`: Data not found
+
+    - `602`: Customer not authorized
+
+    - `701`: Account not found
+
+    - `703`: Invalid input (including invalid date ranges)
+
+    - `704`: Account type not supported
+
+    - `705`: Account is closed
+
+    - `801`: Transaction not found
+
+    '
+  contact:
+    name: Meow
+    url: https://meow.com/
+    email: support@meow.com
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.meow.com/terms-of-service
+servers:
+- url: https://api.meow.com/v1
+  description: Meow API Production
+- url: https://api.sandbox.meow.com/v1
+  description: Meow API Sandbox
+security:
+- apiKeyAuth: []
+tags:
+- name: Contacts
+  description: Manage contacts for crypto and USDC transfers.
+paths:
+  /contacts:
+    post:
+      tags:
+      - Contacts
+      summary: Create Contact
+      description: Creates a new contact with either ACH, wire, or check payment details or a USDC crypto address.
+      operationId: create_contact_contacts_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContactRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerApiContact'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - contacts:write
+      parameters:
+      - $ref: '#/components/parameters/EntityIdHeader'
+    get:
+      tags:
+      - Contacts
+      summary: List Contacts
+      description: Returns a paginated list of contacts, ordered by nickname. Use the `limit` and `offset` query parameters to page through results.
+      operationId: list_contacts_contacts_get
+      parameters:
+      - name: nickname_query
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional filter to search contacts by nickname.
+          title: Nickname Query
+        description: Optional filter to search contacts by nickname.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 100
+          - type: 'null'
+          description: Opaque offset identifier for pagination. Use the nextOffset from a previous response.
+          title: Offset
+        description: Opaque offset identifier for pagination. Use the nextOffset from a previous response.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerApiContactsList'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - contacts:read
+  /contacts/{contact_id}:
+    delete:
+      tags:
+      - Contacts
+      summary: Delete Contact
+      description: Deletes a contact.
+      operationId: delete_contact_contacts__contact_id__delete
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the contact.
+          title: Contact Id
+        description: The unique identifier of the contact.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - contacts:write
+    patch:
+      tags:
+      - Contacts
+      summary: Update Contact
+      description: Updates an existing contact and optionally adds new payment methods.
+      operationId: update_contact_contacts__contact_id__patch
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the contact.
+          title: Contact Id
+        description: The unique identifier of the contact.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContactRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerApiContact'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - contacts:write
+    get:
+      tags:
+      - Contacts
+      summary: Get Contact
+      description: Returns details of a specific contact.
+      operationId: get_contact_contacts__contact_id__get
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Contact Id
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerApiContact'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - contacts:read
+components:
+  schemas:
+    MeowApiAddress:
+      properties:
+        street_line_1:
+          type: string
+          maxLength: 300
+          minLength: 1
+          title: Street Line 1
+        street_line_2:
+          anyOf:
+          - type: string
+            maxLength: 300
+            minLength: 0
+          - type: 'null'
+          title: Street Line 2
+        city:
+          type: string
+          maxLength: 21
+          minLength: 0
+          title: City
+        state:
+          anyOf:
+          - type: string
+            maxLength: 3
+            minLength: 0
+          - type: 'null'
+          title: State
+        country:
+          $ref: '#/components/schemas/CountryCodeAlpha2'
+        postal_code:
+          type: string
+          maxLength: 20
+          minLength: 1
+          title: Postal Code
+      type: object
+      required:
+      - street_line_1
+      - city
+      - country
+      - postal_code
+      title: MeowApiAddress
+    MeowAddressRequest:
+      properties:
+        street_line_1:
+          type: string
+          maxLength: 300
+          minLength: 1
+          title: Street Line 1
+        street_line_2:
+          anyOf:
+          - type: string
+            maxLength: 300
+            minLength: 0
+          - type: 'null'
+          title: Street Line 2
+        city:
+          type: string
+          maxLength: 50
+          minLength: 0
+          title: City
+        state:
+          anyOf:
+          - type: string
+            maxLength: 200
+            minLength: 0
+          - type: 'null'
+          title: State
+        country:
+          $ref: '#/components/schemas/CountryCodeAlpha2'
+        postal_code:
+          anyOf:
+          - type: string
+            maxLength: 20
+            minLength: 1
+          - type: 'null'
+          title: Postal Code
+      type: object
+      required:
+      - street_line_1
+      - city
+      - country
+      title: MeowAddressRequest
+    MeowApiCrNowSubobject:
+      properties:
+        account_number:
+          type: string
+          maxLength: 18
+          minLength: 1
+          title: Account Number
+        account_type:
+          $ref: '#/components/schemas/TreasuryPrimeAccountType'
+        routing_number:
+          type: string
+          maxLength: 9
+          minLength: 9
+          title: Routing Number
+        address_on_account:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiAddress'
+          - type: 'null'
+      type: object
+      required:
+      - account_number
+      - account_type
+      - routing_number
+      title: MeowApiCrNowSubobject
+    TreasuryPrimeAccountType:
+      type: string
+      enum:
+      - checking
+      - savings
+      title: TreasuryPrimeAccountType
+    MeowApiCheckSubobject:
+      properties:
+        address:
+          $ref: '#/components/schemas/MeowApiAddress'
+        created_time:
+          type: string
+          format: date-time
+          title: Created Time
+        updated_time:
+          type: string
+          format: date-time
+          title: Updated Time
+      type: object
+      required:
+      - address
+      - created_time
+      - updated_time
+      title: MeowApiCheckSubobject
+    Iso4217Code:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BOV
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHE
+      - CHF
+      - CHW
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - COU
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SLE
+      - SEK
+      - SGD
+      - SHP
+      - SLL
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UYW
+      - UZS
+      - VED
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWG
+      - ZWL
+      title: Iso4217Code
+    CountryCodeAlpha2:
+      type: string
+      enum:
+      - AW
+      - AF
+      - AO
+      - AI
+      - AX
+      - AL
+      - AD
+      - AE
+      - AR
+      - AM
+      - AS
+      - AQ
+      - TF
+      - AG
+      - AU
+      - AT
+      - AZ
+      - BI
+      - BE
+      - BJ
+      - BQ
+      - BF
+      - BD
+      - BG
+      - BH
+      - BS
+      - BA
+      - BL
+      - BY
+      - BZ
+      - BM
+      - BO
+      - BR
+      - BB
+      - BN
+      - BT
+      - BV
+      - BW
+      - CF
+      - CA
+      - CC
+      - CH
+      - CL
+      - CN
+      - CI
+      - CM
+      - CD
+      - CG
+      - CK
+      - CO
+      - KM
+      - CV
+      - CR
+      - CU
+      - CW
+      - CX
+      - KY
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DM
+      - DK
+      - DO
+      - DZ
+      - EC
+      - EG
+      - ER
+      - EH
+      - ES
+      - EE
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FR
+      - FO
+      - FM
+      - GA
+      - GB
+      - GE
+      - GG
+      - GH
+      - GI
+      - GN
+      - GP
+      - GM
+      - GW
+      - GQ
+      - GR
+      - GD
+      - GL
+      - GT
+      - GF
+      - GU
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IM
+      - IN
+      - IO
+      - IE
+      - IR
+      - IQ
+      - IS
+      - IL
+      - IT
+      - JM
+      - JE
+      - JO
+      - JP
+      - KZ
+      - KE
+      - KG
+      - KH
+      - KI
+      - KN
+      - KR
+      - KW
+      - LA
+      - LB
+      - LR
+      - LY
+      - LC
+      - LI
+      - LK
+      - LS
+      - LT
+      - LU
+      - LV
+      - MO
+      - MF
+      - MA
+      - MC
+      - MD
+      - MG
+      - MV
+      - MX
+      - MH
+      - MK
+      - ML
+      - MT
+      - MM
+      - ME
+      - MN
+      - MP
+      - MZ
+      - MR
+      - MS
+      - MQ
+      - MU
+      - MW
+      - MY
+      - YT
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NU
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NZ
+      - OM
+      - PK
+      - PA
+      - PN
+      - PE
+      - PH
+      - PW
+      - PG
+      - PL
+      - PR
+      - KP
+      - PT
+      - PY
+      - PS
+      - PF
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - SA
+      - SD
+      - SN
+      - SG
+      - GS
+      - SH
+      - SJ
+      - SB
+      - SL
+      - SV
+      - SM
+      - SO
+      - PM
+      - RS
+      - SS
+      - ST
+      - SR
+      - SK
+      - SI
+      - SE
+      - SZ
+      - SX
+      - SC
+      - SY
+      - TC
+      - TD
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TM
+      - TL
+      - TO
+      - TT
+      - TN
+      - TR
+      - TV
+      - TW
+      - TZ
+      - UG
+      - UA
+      - UM
+      - UY
+      - US
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - XK
+      - YE
+      - ZA
+      - ZM
+      - ZW
+      title: CountryCodeAlpha2
+      x-enum-varnames:
+      - AW
+      - AF
+      - AO
+      - AI
+      - AX
+      - AL
+      - AD
+      - AE
+      - AR
+      - AM
+      - AS
+      - AQ
+      - TF
+      - AG
+      - AU
+      - AT
+      - AZ
+      - BI
+      - BE
+      - BJ
+      - BQ
+      - BF
+      - BD
+      - BG
+      - BH
+      - BS
+      - BA
+      - BL
+      - BY
+      - BZ
+      - BM
+      - BO
+      - BR
+      - BB
+      - BN
+      - BT
+      - BV
+      - BW
+      - CF
+      - CA
+      - CC
+      - CH
+      - CL
+      - CN
+      - CI
+      - CM
+      - CD
+      - CG
+      - CK
+      - CO
+      - KM
+      - CV
+      - CR
+      - CU
+      - CW
+      - CX
+      - KY
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DM
+      - DK
+      - DO
+      - DZ
+      - EC
+      - EG
+      - ER
+      - EH
+      - ES
+      - EE
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FR
+      - FO
+      - FM
+      - GA
+      - GB
+      - GE
+      - GG
+      - GH
+      - GI
+      - GN
+      - GP
+      - GM
+      - GW
+      - GQ
+      - GR
+      - GD
+      - GL
+      - GT
+      - GF
+      - GU
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IM
+      - IN
+      - IO
+      - IE
+      - IR
+      - IQ
+      - IS
+      - IL
+      - IT
+      - JM
+      - JE
+      - JO
+      - JP
+      - KZ
+      - KE
+      - KG
+      - KH
+      - KI
+      - KN
+      - KR
+      - KW
+      - LA
+      - LB
+      - LR
+      - LY
+      - LC
+      - LI
+      - LK
+      - LS
+      - LT
+      - LU
+      - LV
+      - MO
+      - MF
+      - MA
+      - MC
+      - MD
+      - MG
+      - MV
+      - MX
+      - MH
+      - MK
+      - ML
+      - MT
+      - MM
+      - ME
+      - MN
+      - MP
+      - MZ
+      - MR
+      - MS
+      - MQ
+      - MU
+      - MW
+      - MY
+      - YT
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NU
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NZ
+      - OM
+      - PK
+      - PA
+      - PN
+      - PE
+      - PH
+      - PW
+      - PG
+      - PL
+      - PR
+      - KP
+      - PT
+      - PY
+      - PS
+      - PF
+      - QA
+      - RE
+      - RO
+      - RU
+      - RW
+      - SA
+      - SD
+      - SN
+      - SG
+      - GS
+      - SH
+      - SJ
+      - SB
+      - SL
+      - SV
+      - SM
+      - SO
+      - PM
+      - RS
+      - SS
+      - ST
+      - SR
+      - SK
+      - SI
+      - SE
+      - SZ
+      - SX
+      - SC
+      - SY
+      - TC
+      - TD
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TM
+      - TL
+      - TO
+      - TT
+      - TN
+      - TR
+      - TV
+      - TW
+      - TZ
+      - UG
+      - UA
+      - UM
+      - UY
+      - US
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - XK
+      - YE
+      - ZA
+      - ZM
+      - ZW
+    CustomerApiAchPaymentMethod:
+      properties:
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+          description: Identifier for this contact's saved ACH payment destination.
+        name_on_account:
+          type: string
+          title: Name On Account
+          description: Account holder name as it appears on the bank account.
+        nickname:
+          type: string
+          title: Nickname
+          description: Label you set for this payment method.
+        account_type:
+          $ref: '#/components/schemas/TreasuryPrimeAccountType'
+          description: Whether the destination is a checking or savings account.
+        account_number:
+          type: string
+          title: Account Number
+          description: Bank account number for the destination.
+        routing_number:
+          type: string
+          title: Routing Number
+          description: Routing number for the destination bank.
+        address_on_account:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiAddress'
+          - type: 'null'
+          description: Address on file for this bank account.
+      type: object
+      required:
+      - counterparty_id
+      - name_on_account
+      - nickname
+      - account_type
+      - account_number
+      - routing_number
+      title: CustomerApiAchPaymentMethod
+    CustomerApiInternationalPaymentMethod:
+      properties:
+        beneficiary_id:
+          type: string
+          title: Beneficiary Id
+          description: Identifier for this contact's saved international payment destination.
+        preferred_currency:
+          anyOf:
+          - $ref: '#/components/schemas/Iso4217Code'
+          - type: 'null'
+          description: Default currency for international payments to this contact.
+      type: object
+      required:
+      - beneficiary_id
+      title: CustomerApiInternationalPaymentMethod
+    CustomerApiContact:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The unique identifier of the contact.
+        nickname:
+          type: string
+          maxLength: 400
+          minLength: 1
+          title: Nickname
+          description: A nickname or display name for the contact.
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The email address of the contact.
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiAddress'
+          - type: 'null'
+          description: The physical address of the contact.
+        payment_methods:
+          $ref: '#/components/schemas/CustomerApiPaymentMethods'
+          description: Payment methods associated with this contact.
+        supported_payment_methods:
+          items:
+            $ref: '#/components/schemas/CustomerApiPaymentMethodType'
+          type: array
+          title: Supported Payment Methods
+          description: List of payment methods supported by this contact.
+        last_payment_reason:
+          anyOf:
+          - $ref: '#/components/schemas/ExtAwxPaymentReason'
+          - type: 'null'
+          description: Payment reason recorded on the most recent payment to this contact.
+      type: object
+      required:
+      - id
+      - nickname
+      - payment_methods
+      - supported_payment_methods
+      title: CustomerApiContact
+    ExtBridgeCryptocurrency:
+      type: string
+      enum:
+      - usdb
+      - usdc
+      - usdt
+      - dai
+      - pyusd
+      - cash
+      - usdg
+      - usdv
+      - eurc
+      - usd
+      title: ExtBridgeCryptocurrency
+      x-enum-varnames:
+      - usdb
+      - usdc
+      - usdt
+      - dai
+      - pyusd
+      - cash
+      - usdg
+      - usdv
+      - eurc
+      - usd
+    CustomerApiPaymentMethodType:
+      type: string
+      enum:
+      - ach
+      - wire
+      - check
+      - international
+      - crypto
+      - static_memo
+      title: CustomerApiPaymentMethodType
+      x-enum-varnames:
+      - ach
+      - wire
+      - check
+      - international
+      - crypto
+      - static_memo
+    CounterpartyDetailsRequest:
+      properties:
+        ach:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiAchSubobject'
+          - type: 'null'
+        wire:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiWireSubobject'
+          - type: 'null'
+        check:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiCheckSubobject'
+          - type: 'null'
+        tch:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiTchSubobject'
+          - type: 'null'
+        fednow:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiFedNowSubobject'
+          - type: 'null'
+        crnow:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiCrNowSubobject'
+          - type: 'null'
+        name_on_account:
+          type: string
+          maxLength: 300
+          minLength: 1
+          title: Name On Account
+        nickname:
+          type: string
+          maxLength: 300
+          minLength: 1
+          title: Nickname
+        plaid_processor_token:
+          anyOf:
+          - type: string
+            maxLength: 300
+            minLength: 1
+          - type: 'null'
+          title: Plaid Processor Token
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+        company_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Company Ids
+        conduit_counterparty_profile:
+          anyOf:
+          - $ref: '#/components/schemas/ConduitCounterpartyProfileRequest'
+          - type: 'null'
+      type: object
+      required:
+      - name_on_account
+      - nickname
+      title: CounterpartyDetailsRequest
+    MeowApiAchSubobject:
+      properties:
+        account_number:
+          type: string
+          maxLength: 18
+          minLength: 1
+          title: Account Number
+        account_type:
+          $ref: '#/components/schemas/TreasuryPrimeAccountType'
+        routing_number:
+          type: string
+          maxLength: 9
+          minLength: 9
+          title: Routing Number
+        address_on_account:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiAddress'
+          - type: 'null'
+      type: object
+      required:
+      - account_number
+      - account_type
+      - routing_number
+      title: MeowApiAchSubobject
+    CryptoAddressRequest:
+      properties:
+        address:
+          type: string
+          maxLength: 66
+          minLength: 10
+          title: Address
+        payment_rail:
+          $ref: '#/components/schemas/ExtBridgePaymentRail'
+        currency:
+          $ref: '#/components/schemas/ExtBridgeCryptocurrency'
+      type: object
+      required:
+      - address
+      - payment_rail
+      - currency
+      title: CryptoAddressRequest
+    ExtConduitCounterpartyType:
+      type: string
+      enum:
+      - individual
+      - business
+      title: ExtConduitCounterpartyType
+      x-enum-varnames:
+      - individual
+      - business
+    CryptoNetwork:
+      type: string
+      enum:
+      - ethereum
+      - base
+      - solana
+      - arbitrum
+      - polygon
+      - optimism
+      - tron
+      - stellar
+      - avalanche_c_chain
+      - binance
+      - sui
+      - tempo
+      - bitcoin
+      title: CryptoNetwork
+      x-enum-varnames:
+      - ethereum
+      - base
+      - solana
+      - arbitrum
+      - polygon
+      - optimism
+      - tron
+      - stellar
+      - avalanche_c_chain
+      - binance
+      - sui
+      - tempo
+      - bitcoin
+    UpdateContactRequest:
+      properties:
+        nickname:
+          anyOf:
+          - type: string
+            maxLength: 300
+            minLength: 1
+          - type: 'null'
+          title: Nickname
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/MeowAddressRequest'
+          - type: 'null'
+        counterparty:
+          anyOf:
+          - $ref: '#/components/schemas/CounterpartyDetailsRequest'
+          - type: 'null'
+      type: object
+      title: UpdateContactRequest
+    ExtBridgePaymentRail:
+      type: string
+      enum:
+      - arbitrum
+      - avalanche_c_chain
+      - base
+      - ethereum
+      - optimism
+      - polygon
+      - solana
+      - stellar
+      - sui
+      - tempo
+      - tron
+      - ach
+      - ach_push
+      - ach_same_day
+      - fednow
+      - wire
+      title: ExtBridgePaymentRail
+      x-enum-varnames:
+      - arbitrum
+      - avalanche_c_chain
+      - base
+      - ethereum
+      - optimism
+      - polygon
+      - solana
+      - stellar
+      - sui
+      - tempo
+      - tron
+      - ach
+      - ach_push
+      - ach_same_day
+      - fednow
+      - wire
+    CryptoCurrency:
+      type: string
+      enum:
+      - usdc
+      - usdt
+      - pyusd
+      - cash
+      - usdg
+      - usdv
+      - eurc
+      - eth
+      - sol
+      - btc
+      title: CryptoCurrency
+      x-enum-varnames:
+      - usdc
+      - usdt
+      - pyusd
+      - cash
+      - usdg
+      - usdv
+      - eurc
+      - eth
+      - sol
+      - btc
+    IntermediaryBank:
+      properties:
+        name:
+          type: string
+          maxLength: 35
+          minLength: 1
+          title: Name
+        routing_number:
+          type: string
+          maxLength: 9
+          minLength: 9
+          title: Routing Number
+        address:
+          $ref: '#/components/schemas/MeowApiAddress'
+      type: object
+      required:
+      - name
+      - routing_number
+      - address
+      title: IntermediaryBank
+    CustomerApiCheckPaymentMethod:
+      properties:
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+          description: Identifier for this contact's saved check payment destination.
+        name_on_account:
+          type: string
+          title: Name On Account
+          description: Payee name printed on the check.
+        nickname:
+          type: string
+          title: Nickname
+          description: Label you set for this payment method.
+        mailing_address:
+          $ref: '#/components/schemas/MeowApiAddress'
+          description: Address the check is mailed to.
+      type: object
+      required:
+      - counterparty_id
+      - name_on_account
+      - nickname
+      - mailing_address
+      title: CustomerApiCheckPaymentMethod
+    CustomerApiContactsList:
+      properties:
+        contacts:
+          items:
+            $ref: '#/components/schemas/CustomerApiContact'
+          type: array
+          title: Contacts
+          description: List of contacts.
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+          description: Pagination metadata.
+      type: object
+      required:
+      - contacts
+      title: CustomerApiContactsList
+    MeowApiTchSubobject:
+      properties:
+        account_number:
+          type: string
+          maxLength: 18
+          minLength: 1
+          title: Account Number
+        account_type:
+          $ref: '#/components/schemas/TreasuryPrimeAccountType'
+        routing_number:
+          type: string
+          maxLength: 9
+          minLength: 9
+          title: Routing Number
+        address_on_account:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiAddress'
+          - type: 'null'
+      type: object
+      required:
+      - account_number
+      - account_type
+      - routing_number
+      title: MeowApiTchSubobject
+    MeowApiWireSubobject:
+      properties:
+        account_number:
+          type: string
+          maxLength: 34
+          minLength: 1
+          title: Account Number
+        routing_number:
+          type: string
+          maxLength: 11
+          minLength: 8
+          title: Routing Number
+        address_on_account:
+          $ref: '#/components/schemas/MeowApiAddress'
+        bank_address:
+          $ref: '#/components/schemas/MeowApiAddress'
+        bank_name:
+          type: string
+          maxLength: 400
+          minLength: 1
+          title: Bank Name
+        intermediary_bank:
+          anyOf:
+          - $ref: '#/components/schemas/IntermediaryBank'
+          - type: 'null'
+      type: object
+      required:
+      - account_number
+      - routing_number
+      - address_on_account
+      - bank_address
+      - bank_name
+      title: MeowApiWireSubobject
+    PageMetadata:
+      properties:
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
+      type: object
+      title: PageMetadata
+    ConduitCounterpartyProfileRequest:
+      properties:
+        type:
+          $ref: '#/components/schemas/ExtConduitCounterpartyType'
+        business_name:
+          anyOf:
+          - type: string
+            maxLength: 300
+            minLength: 1
+          - type: 'null'
+          title: Business Name
+        first_name:
+          anyOf:
+          - type: string
+            maxLength: 300
+            minLength: 1
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+            maxLength: 300
+            minLength: 1
+          - type: 'null'
+          title: Last Name
+        date_of_birth:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Date Of Birth
+        identification_type:
+          anyOf:
+          - $ref: '#/components/schemas/ExtConduitCounterpartyIdentificationType'
+          - type: 'null'
+        identification_number:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+          - type: 'null'
+          title: Identification Number
+      type: object
+      required:
+      - type
+      title: ConduitCounterpartyProfileRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CustomerApiPaymentMethods:
+      properties:
+        ach:
+          anyOf:
+          - $ref: '#/components/schemas/CustomerApiAchPaymentMethod'
+          - type: 'null'
+          description: ACH payment method details.
+        wire:
+          anyOf:
+          - $ref: '#/components/schemas/CustomerApiWirePaymentMethod'
+          - type: 'null'
+          description: Wire payment method details.
+        check:
+          anyOf:
+          - $ref: '#/components/schemas/CustomerApiCheckPaymentMethod'
+          - type: 'null'
+          description: Check payment method details.
+        international:
+          anyOf:
+          - $ref: '#/components/schemas/CustomerApiInternationalPaymentMethod'
+          - type: 'null'
+          description: International payment method details.
+        crypto:
+          items:
+            $ref: '#/components/schemas/CryptoContactDestinationResponse'
+          type: array
+          title: Crypto
+          description: Crypto addresses you can pay this contact at.
+        static_memos:
+          items:
+            $ref: '#/components/schemas/BridgeStaticMemoResponse'
+          type: array
+          title: Static Memos
+          description: Memo-routed deposit destinations you can pay this contact at.
+      type: object
+      title: CustomerApiPaymentMethods
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MeowApiFedNowSubobject:
+      properties:
+        account_number:
+          type: string
+          maxLength: 18
+          minLength: 1
+          title: Account Number
+        account_type:
+          $ref: '#/components/schemas/TreasuryPrimeAccountType'
+        routing_number:
+          type: string
+          maxLength: 9
+          minLength: 9
+          title: Routing Number
+        address_on_account:
+          anyOf:
+          - $ref: '#/components/schemas/MeowApiAddress'
+          - type: 'null'
+      type: object
+      required:
+      - account_number
+      - account_type
+      - routing_number
+      title: MeowApiFedNowSubobject
+    BridgeStaticMemoResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        destination_address:
+          type: string
+          title: Destination Address
+        destination_payment_rail:
+          $ref: '#/components/schemas/ExtBridgePaymentRail'
+        destination_payment_currency:
+          $ref: '#/components/schemas/ExtBridgeCryptocurrency'
+      type: object
+      required:
+      - id
+      - destination_address
+      - destination_payment_rail
+      - destination_payment_currency
+      title: BridgeStaticMemoResponse
+    ExtConduitCounterpartyIdentificationType:
+      type: string
+      enum:
+      - tin
+      - nit
+      - cc
+      - ce
+      - passport
+      - cpf
+      - cnpj
+      - rfc
+      - curp
+      - cuit
+      - cuil
+      title: ExtConduitCounterpartyIdentificationType
+      x-enum-varnames:
+      - tin
+      - nit
+      - cc
+      - ce
+      - passport
+      - cpf
+      - cnpj
+      - rfc
+      - curp
+      - cuit
+      - cuil
+    CustomerApiWirePaymentMethod:
+      properties:
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+          description: Identifier for this contact's saved wire payment destination.
+        name_on_account:
+          type: string
+          title: Name On Account
+          description: Account holder name as it appears on the bank account.
+        nickname:
+          type: string
+          title: Nickname
+          description: Label you set for this payment method.
+        bank_name:
+          type: string
+          title: Bank Name
+          description: Name of the destination bank.
+        account_number:
+          type: string
+          title: Account Number
+          description: Bank account number for the destination.
+        routing_number:
+          type: string
+          title: Routing Number
+          description: Routing number for the destination bank.
+        beneficiary_address:
+          $ref: '#/components/schemas/MeowApiAddress'
+          description: Address of the person or business receiving the wire.
+        bank_address:
+          $ref: '#/components/schemas/MeowApiAddress'
+          description: Address of the destination bank.
+        intermediary_bank:
+          anyOf:
+          - $ref: '#/components/schemas/CustomerApiWireIntermediaryBank'
+          - type: 'null'
+          description: Intermediary bank to route the wire through, if one is needed.
+      type: object
+      required:
+      - counterparty_id
+      - name_on_account
+      - nickname
+      - bank_name
+      - account_number
+      - routing_number
+      - beneficiary_address
+      - bank_address
+      title: CustomerApiWirePaymentMethod
+    CryptoContactDestinationResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        destination_address:
+          type: string
+          title: Destination Address
+        destination_payment_rail:
+          anyOf:
+          - $ref: '#/components/schemas/ExtBridgePaymentRail'
+          - type: 'null'
+        destination_currency:
+          anyOf:
+          - $ref: '#/components/schemas/ExtBridgeCryptocurrency'
+          - type: 'null'
+        currency:
+          anyOf:
+          - $ref: '#/components/schemas/CryptoCurrency'
+          - type: 'null'
+        network:
+          anyOf:
+          - $ref: '#/components/schemas/CryptoNetwork'
+          - type: 'null'
+      type: object
+      required:
+      - id
+      - destination_address
+      title: CryptoContactDestinationResponse
+    CreateContactRequest:
+      properties:
+        nickname:
+          type: string
+          maxLength: 300
+          minLength: 1
+          title: Nickname
+          description: A nickname or display name for the contact (1-300 characters).
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: The email address of the contact.
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/MeowAddressRequest'
+          - type: 'null'
+          description: Optional postal address stored alongside ACH, wire, or check contacts.
+        counterparty:
+          anyOf:
+          - $ref: '#/components/schemas/CounterpartyDetailsRequest'
+          - type: 'null'
+          description: Banking (ACH, wire, or check) details. Provide either this or `crypto_address`.
+        crypto_address:
+          anyOf:
+          - $ref: '#/components/schemas/CryptoAddressRequest'
+          - type: 'null'
+          description: USDC crypto address. Provide either this or `counterparty`.
+      type: object
+      required:
+      - nickname
+      title: CreateContactRequest
+    ExtAwxPaymentReason:
+      type: string
+      enum:
+      - audio_visual_services
+      - bill_payment
+      - business_expenses
+      - construction
+      - donation_charitable_contribution
+      - education_training
+      - family_support
+      - freight
+      - goods_purchased
+      - investment_capital
+      - investment_proceeds
+      - living_expenses
+      - loan_credit_repayment
+      - medical_services
+      - pension
+      - personal_remittance
+      - professional_business_services
+      - real_estate
+      - taxes
+      - technical_services
+      - transfer_to_own_account
+      - travel
+      - wages_salary
+      - other_services
+      title: ExtAwxPaymentReason
+      x-enum-varnames:
+      - AUDIO_VISUAL_SERVICES
+      - BILL_PAYMENT
+      - BUSINESS_EXPENSES
+      - CONSTRUCTION
+      - DONATION_CHARITABLE_CONTRIBUTION
+      - EDUCATION_TRAINING
+      - FAMILY_SUPPORT
+      - FREIGHT
+      - GOODS_PURCHASED
+      - INVESTMENT_CAPITAL
+      - INVESTMENT_PROCEEDS
+      - LIVING_EXPENSES
+      - LOAN_CREDIT_REPAYMENT
+      - MEDICAL_SERVICES
+      - PENSION
+      - PERSONAL_REMITTANCE
+      - PROFESSIONAL_BUSINESS_SERVICES
+      - REAL_ESTATE
+      - TAXES
+      - TECHNICAL_SERVICES
+      - TRANSFER_TO_OWN_ACCOUNT
+      - TRAVEL
+      - WAGES_SALARY
+      - OTHER_SERVICES
+    CustomerApiWireIntermediaryBank:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the intermediary bank.
+        routing_number:
+          type: string
+          title: Routing Number
+          description: The routing number of the intermediary bank.
+        address:
+          $ref: '#/components/schemas/MeowApiAddress'
+          description: The address of the intermediary bank.
+      type: object
+      required:
+      - name
+      - routing_number
+      - address
+      title: CustomerApiWireIntermediaryBank
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your Meow API key, sent in the `x-api-key` header for authentication.
+      x-scopes:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+x-tagGroups:
+- name: Core API
+  tags:
+  - API Keys
+  - Contacts
+  - Accounts
+  - Transactions
+  - Balances
+  - Payment Networks
+  - Transfers
+  - Routing Numbers
+  - Cards
+  - Tax Forms
+  - Webhooks
+- name: Bill Pay
+  tags:
+  - Bills
+- name: Billing
+  tags:
+  - Products
+  - Customers
+  - Invoices
+  - Line Items
+  - Payment Methods
+  - Collection Accounts
+- name: Partner Onboarding
+  tags:
+  - Partner Onboarding
+- name: Sandbox
+  tags:
+  - Simulations

@@ -1,0 +1,1099 @@
+openapi: 3.1.0
+info:
+  title: Meow Accounts Transactions API
+  description: '## Overview
+
+
+    The Meow API provides financial services and billing capabilities for your business.
+
+
+    ### Core Features
+
+
+    - **Financial data access**: access account information, transactions, balances, and payment networks.
+
+    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
+
+
+    ### Billing API
+
+
+    The Billing API lets you create and manage invoices and collect payments:
+
+
+    - **Product management**: create and manage products with custom pricing.
+
+    - **Customer management**: maintain invoicing customers with their addresses.
+
+    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
+
+    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
+
+    - **Collection accounts**: configure accounts for payment collection.
+
+
+    ### Getting Started
+
+
+    Authenticate by sending your API key in the `x-api-key` request header.
+
+
+    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
+
+
+    ### Error Responses
+
+
+    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
+
+
+    Common error codes:
+
+
+    - `500`: Internal server error
+
+    - `501`: Subsystem unavailable
+
+    - `503`: Scheduled maintenance
+
+    - `601`: Data not found
+
+    - `602`: Customer not authorized
+
+    - `701`: Account not found
+
+    - `703`: Invalid input (including invalid date ranges)
+
+    - `704`: Account type not supported
+
+    - `705`: Account is closed
+
+    - `801`: Transaction not found
+
+    '
+  contact:
+    name: Meow
+    url: https://meow.com/
+    email: support@meow.com
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.meow.com/terms-of-service
+servers:
+- url: https://api.meow.com/v1
+  description: Meow API Production
+- url: https://api.sandbox.meow.com/v1
+  description: Meow API Sandbox
+security:
+- apiKeyAuth: []
+tags:
+- name: Transactions
+  description: Retrieve account transaction history and details.
+paths:
+  /accounts/{account_id}/transactions:
+    get:
+      tags:
+      - Transactions
+      summary: List Transactions for an Account
+      description: Returns a list of transactions for a specified account.
+      operationId: list_account_transactions_accounts__account_id__transactions_get
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - name: startTime
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 0
+            maxLength: 100
+          - type: 'null'
+          description: Start time for filtering transactions, in ISO 8601 format.
+          title: Starttime
+        description: Start time for filtering transactions, in ISO 8601 format.
+      - name: endTime
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 0
+            maxLength: 100
+          - type: 'null'
+          description: End time for filtering transactions, in ISO 8601 format.
+          title: Endtime
+        description: End time for filtering transactions, in ISO 8601 format.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 100
+          - type: 'null'
+          description: Opaque offset identifier for pagination. Use the `nextOffset` from a previous response.
+          title: Offset
+        description: Opaque offset identifier for pagination. Use the `nextOffset` from a previous response.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            maximum: 100
+            minimum: 1
+          - type: 'null'
+          description: Maximum number of transactions to return.
+          default: 10
+          title: Limit
+        description: Maximum number of transactions to return.
+      - name: transferMethod
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/BankingTransactionMethod'
+          - type: 'null'
+          description: Filter to a specific transfer method.
+          title: Transfermethod
+        description: Filter to a specific transfer method.
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/TransactionStatus'
+          - type: 'null'
+          description: Filter to one or more transaction statuses. Repeat the parameter to pass multiple values (e.g. `?status=PENDING&status=POSTED`). `AUTHORIZATION` and `MEMO` are accepted but currently return no results.
+          title: Status
+        description: Filter to one or more transaction statuses. Repeat the parameter to pass multiple values (e.g. `?status=PENDING&status=POSTED`). `AUTHORIZATION` and `MEMO` are accepted but currently return no results.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transactions'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:transactions
+  /accounts/{account_id}/check-deposits/{transaction_id}:
+    get:
+      tags:
+      - Transactions
+      summary: Get Check Deposit
+      description: Returns details about a check deposit for the specified account by transaction ID. Includes check number and originating bank details useful for reconciliation.
+      operationId: get_check_deposit_accounts__account_id__check_deposits__transaction_id__get
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - name: transaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The transaction group ID for the check deposit (e.g. deposit_ttx_...).
+          title: Transaction Id
+        description: The transaction group ID for the check deposit (e.g. deposit_ttx_...).
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckDepositResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:transactions
+components:
+  schemas:
+    InvestmentTransactionModel:
+      properties:
+        investmentTransaction:
+          $ref: '#/components/schemas/InvestmentTransaction'
+          description: Detailed information about the investment transaction.
+      additionalProperties: false
+      type: object
+      required:
+      - investmentTransaction
+      title: InvestmentTransactionModel
+    DebitCreditMemo:
+      type: string
+      enum:
+      - CREDIT
+      - DEBIT
+      - MEMO
+      - NONE
+      title: DebitCreditMemo
+    DepositTransactionType:
+      type: string
+      enum:
+      - ADJUSTMENT
+      - ATMDEPOSIT
+      - ATMWITHDRAWAL
+      - BILLPAYMENT
+      - CHECK
+      - DEPOSIT
+      - DIRECTDEPOSIT
+      - DIVIDEND
+      - FEE
+      - INTEREST
+      - POSCREDIT
+      - POSDEBIT
+      - TRANSFER
+      - WITHDRAWAL
+      - NONE
+      title: DepositTransactionType
+    Iso4217Code:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BOV
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHE
+      - CHF
+      - CHW
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - COU
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SLE
+      - SEK
+      - SGD
+      - SHP
+      - SLL
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UYW
+      - UZS
+      - VED
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWG
+      - ZWL
+      title: Iso4217Code
+    DepositTransaction:
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/Identifier'
+          description: Long-term persistent identity of the transaction, unique to the account. Transactions with status `PENDING` and `POSTED` have different IDs.
+        referenceTransactionId:
+          anyOf:
+          - $ref: '#/components/schemas/Identifier'
+          - type: 'null'
+          description: For reverse postings, the identity of the transaction being reversed. For the correction transaction, the identity of the reversing post. For credit card posting transactions, the identity of the authorization transaction.
+        postedTimestamp:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The date and time the transaction was posted to the account. When omitted, `transactionTimestamp` may be used instead. Absent for `PENDING` transactions and required for `POSTED` transactions.
+        transactionTimestamp:
+          $ref: '#/components/schemas/Timestamp'
+          description: The date and time the transaction was recorded.
+        description:
+          type: string
+          title: Description
+          description: The description of the transaction.
+        debitCreditMemo:
+          $ref: '#/components/schemas/DebitCreditMemo'
+          description: Debit or credit memo for the transaction.
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category
+          description: Transaction category, preferably an MCC or SIC code.
+        subCategory:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subcategory
+          description: Transaction category detail.
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+          description: The status of the transaction.
+        amount:
+          type: number
+          title: Amount
+          description: The amount of money in the account currency.
+        foreignAmount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Foreignamount
+          description: The amount of money in the foreign currency. When set, `foreignCurrency` is also set.
+        foreignCurrency:
+          anyOf:
+          - $ref: '#/components/schemas/Iso4217Code'
+          - type: 'null'
+          description: The ISO 4217 code of the foreign currency.
+        card_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Card Id
+          description: The ID of the card used for this transaction, if it was a card transaction.
+        transactionType:
+          anyOf:
+          - $ref: '#/components/schemas/DepositTransactionType'
+          - type: 'null'
+          description: The type of the deposit transaction.
+        payee:
+          anyOf:
+          - $ref: '#/components/schemas/String255'
+          - type: 'null'
+          description: Payee name.
+        checkNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Checknumber
+          description: Check number associated with a check deposit transaction.
+      type: object
+      required:
+      - transactionId
+      - transactionTimestamp
+      - description
+      - debitCreditMemo
+      - status
+      - amount
+      title: DepositTransaction
+    CheckDepositResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: The transaction group ID for this check deposit.
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+          description: Current status of the check deposit.
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The check deposit amount.
+        posted_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Posted Timestamp
+          description: Timestamp when the transaction was posted.
+        check_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Check Number
+          description: The check number from the deposited check.
+        counterparty_routing_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Counterparty Routing Number
+          description: Routing number from the deposited check.
+        counterparty_account_number_masked:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Counterparty Account Number Masked
+          description: Masked account number from the deposited check (last 4 digits).
+      type: object
+      required:
+      - id
+      - status
+      - amount
+      title: CheckDepositResponse
+    UnitType:
+      type: string
+      enum:
+      - CURRENCY
+      - SHARES
+      title: UnitType
+    InvestmentTransaction:
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/Identifier'
+          description: Long-term persistent identity of the transaction, unique to the account. Transactions with status `PENDING` and `POSTED` have different IDs.
+        referenceTransactionId:
+          anyOf:
+          - $ref: '#/components/schemas/Identifier'
+          - type: 'null'
+          description: For reverse postings, the identity of the transaction being reversed. For the correction transaction, the identity of the reversing post. For credit card posting transactions, the identity of the authorization transaction.
+        postedTimestamp:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The date and time the transaction was posted to the account. When omitted, `transactionTimestamp` may be used instead. Absent for `PENDING` transactions and required for `POSTED` transactions.
+        transactionTimestamp:
+          $ref: '#/components/schemas/Timestamp'
+          description: The date and time the transaction was recorded.
+        description:
+          type: string
+          title: Description
+          description: The description of the transaction.
+        debitCreditMemo:
+          $ref: '#/components/schemas/DebitCreditMemo'
+          description: Debit or credit memo for the transaction.
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category
+          description: Transaction category, preferably an MCC or SIC code.
+        subCategory:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subcategory
+          description: Transaction category detail.
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+          description: The status of the transaction.
+        amount:
+          type: number
+          title: Amount
+          description: The amount of money in the account currency.
+        foreignAmount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Foreignamount
+          description: The amount of money in the foreign currency. When set, `foreignCurrency` is also set.
+        foreignCurrency:
+          anyOf:
+          - $ref: '#/components/schemas/Iso4217Code'
+          - type: 'null'
+          description: The ISO 4217 code of the foreign currency.
+        card_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Card Id
+          description: The ID of the card used for this transaction, if it was a card transaction.
+        transactionType:
+          $ref: '#/components/schemas/InvestmentTransactionType'
+          description: Investment transaction type.
+        securityId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Securityid
+          description: Security ID.
+        securityIdType:
+          anyOf:
+          - $ref: '#/components/schemas/customer_api__v1__app__transactions__models__SecurityIdType'
+          - type: 'null'
+          description: Security ID type.
+        securityType:
+          anyOf:
+          - $ref: '#/components/schemas/SecurityType'
+          - type: 'null'
+          description: Security type.
+        symbol:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Symbol
+          description: Ticker symbol.
+        commission:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Commission
+          description: Commission.
+        fees:
+          type: number
+          title: Fees
+          description: Fees.
+        unitPrice:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Unitprice
+          description: Unit price.
+        units:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Units
+          description: Units.
+        unitType:
+          anyOf:
+          - $ref: '#/components/schemas/UnitType'
+          - type: 'null'
+          description: Unit type.
+      type: object
+      required:
+      - transactionId
+      - transactionTimestamp
+      - description
+      - debitCreditMemo
+      - status
+      - amount
+      - transactionType
+      - fees
+      title: InvestmentTransaction
+    DigitalWalletTransactionModel:
+      properties:
+        digitalWalletTransaction:
+          $ref: '#/components/schemas/DigitalWalletTransaction'
+          description: Detailed information about the digital wallet transaction.
+      additionalProperties: false
+      type: object
+      required:
+      - digitalWalletTransaction
+      title: DigitalWalletTransactionModel
+    customer_api__v1__app__transactions__models__SecurityIdType:
+      type: string
+      enum:
+      - CUSIP
+      - ISIN
+      - SEDOL
+      - SICC
+      - VALOR
+      - WKN
+      title: SecurityIdType
+      description: 'Supported security identifier types: CUSIP, ISIN, SEDOL, SICC, VALOR, WKN.'
+    Transactions:
+      properties:
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+          description: Metadata for pagination.
+        transactions:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/DepositTransactionModel'
+            - $ref: '#/components/schemas/InvestmentTransactionModel'
+            - $ref: '#/components/schemas/DigitalWalletTransactionModel'
+          type: array
+          title: Transactions
+          description: The account's transactions. The transaction shape depends on the account type; this is empty when there are no transactions to return.
+      type: object
+      required:
+      - transactions
+      title: Transactions
+    Identifier:
+      type: string
+      maxLength: 256
+      title: Identifier
+      description: Value for a unique identifier.
+    PageMetadata:
+      properties:
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
+      type: object
+      title: PageMetadata
+    SecurityType:
+      type: string
+      enum:
+      - BOND
+      - DEBT
+      - MUTUALFUND
+      - OPTION
+      - OTHER
+      - STOCK
+      - SWEEP
+      title: SecurityType
+    InvestmentTransactionType:
+      type: string
+      enum:
+      - ADJUSTMENT
+      - ATM
+      - CASH
+      - CHECK
+      - CLOSURE
+      - CLOSUREOPT
+      - CONTRIBUTION
+      - DEP
+      - DEPOSIT
+      - DIRECTDEBIT
+      - DIRECTDEP
+      - DIV
+      - DIVIDEND
+      - DIVIDENDREINVEST
+      - EXPENSE
+      - FEE
+      - INCOME
+      - INTEREST
+      - INVEXPENSE
+      - JRNLFUND
+      - JRNLSEC
+      - MARGININTEREST
+      - OPTIONEXERCISE
+      - OPTIONEXPIRATION
+      - OTHER
+      - PAYMENT
+      - POS
+      - PURCHASED
+      - PURCHASEDTOCOVER
+      - PURCHASETOCLOSE
+      - PURCHASETOOPEN
+      - REINVESTOFINCOME
+      - REPEATPMT
+      - RETURNOFCAPITAL
+      - SOLD
+      - SOLDTOCLOSE
+      - SOLDTOOPEN
+      - SPLIT
+      - SRVCHG
+      - TRANSFER
+      - XFER
+      title: InvestmentTransactionType
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DigitalWalletTransaction:
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/Identifier'
+          description: Long-term persistent identity of the transaction, unique to the account. Transactions with status `PENDING` and `POSTED` have different IDs.
+        referenceTransactionId:
+          anyOf:
+          - $ref: '#/components/schemas/Identifier'
+          - type: 'null'
+          description: For reverse postings, the identity of the transaction being reversed. For the correction transaction, the identity of the reversing post. For credit card posting transactions, the identity of the authorization transaction.
+        postedTimestamp:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The date and time the transaction was posted to the account. When omitted, `transactionTimestamp` may be used instead. Absent for `PENDING` transactions and required for `POSTED` transactions.
+        transactionTimestamp:
+          $ref: '#/components/schemas/Timestamp'
+          description: The date and time the transaction was recorded.
+        description:
+          type: string
+          title: Description
+          description: The description of the transaction.
+        debitCreditMemo:
+          $ref: '#/components/schemas/DebitCreditMemo'
+          description: Debit or credit memo for the transaction.
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category
+          description: Transaction category, preferably an MCC or SIC code.
+        subCategory:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subcategory
+          description: Transaction category detail.
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+          description: The status of the transaction.
+        amount:
+          type: number
+          title: Amount
+          description: The amount of money in the account currency.
+        foreignAmount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Foreignamount
+          description: The amount of money in the foreign currency. When set, `foreignCurrency` is also set.
+        foreignCurrency:
+          anyOf:
+          - $ref: '#/components/schemas/Iso4217Code'
+          - type: 'null'
+          description: The ISO 4217 code of the foreign currency.
+        card_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Card Id
+          description: The ID of the card used for this transaction, if it was a card transaction.
+        transactionType:
+          anyOf:
+          - $ref: '#/components/schemas/DigitalWalletTransactionType'
+          - type: 'null'
+          description: The type of the digital wallet transaction.
+        payee:
+          anyOf:
+          - $ref: '#/components/schemas/String255'
+          - type: 'null'
+          description: Payee or counterparty name.
+      type: object
+      required:
+      - transactionId
+      - transactionTimestamp
+      - description
+      - debitCreditMemo
+      - status
+      - amount
+      title: DigitalWalletTransaction
+    DigitalWalletTransactionType:
+      type: string
+      enum:
+      - DEPOSIT
+      - WITHDRAWAL
+      - FEE
+      - INTEREST
+      title: DigitalWalletTransactionType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TransactionStatus:
+      type: string
+      enum:
+      - AUTHORIZATION
+      - MEMO
+      - PENDING
+      - POSTED
+      title: TransactionStatus
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    String255:
+      type: string
+      maxLength: 255
+      title: String255
+      description: String of maximum length 255.
+    BankingTransactionMethod:
+      type: string
+      enum:
+      - INCOMING_ACH
+      - INCOMING_WIRE
+      - OUTGOING_ACH
+      - OUTGOING_WIRE
+      - CHECK_DEPOSIT
+      - BOOK_TRANSFER
+      - ISSUED_CHECK
+      - HOLD
+      - CARD
+      - INTEREST
+      - MANUAL_POST
+      - INTERNATIONAL_PAYMENT
+      - INCOMING_INSTANT_PAYMENT
+      - OUTGOING_INSTANT_PAYMENT
+      title: BankingTransactionMethod
+      x-enum-varnames:
+      - INCOMING_ACH
+      - INCOMING_WIRE
+      - OUTGOING_ACH
+      - OUTGOING_WIRE
+      - CHECK_DEPOSIT
+      - BOOK_TRANSFER
+      - ISSUED_CHECK
+      - HOLD
+      - CARD
+      - INTEREST
+      - MANUAL_POST
+      - INTERNATIONAL_PAYMENT
+      - INCOMING_INSTANT_PAYMENT
+      - OUTGOING_INSTANT_PAYMENT
+    DepositTransactionModel:
+      properties:
+        depositTransaction:
+          $ref: '#/components/schemas/DepositTransaction'
+          description: Detailed information about the deposit transaction.
+      additionalProperties: false
+      type: object
+      required:
+      - depositTransaction
+      title: DepositTransactionModel
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your Meow API key, sent in the `x-api-key` header for authentication.
+      x-scopes:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+x-tagGroups:
+- name: Core API
+  tags:
+  - API Keys
+  - Contacts
+  - Accounts
+  - Transactions
+  - Balances
+  - Payment Networks
+  - Transfers
+  - Routing Numbers
+  - Cards
+  - Tax Forms
+  - Webhooks
+- name: Bill Pay
+  tags:
+  - Bills
+- name: Billing
+  tags:
+  - Products
+  - Customers
+  - Invoices
+  - Line Items
+  - Payment Methods
+  - Collection Accounts
+- name: Partner Onboarding
+  tags:
+  - Partner Onboarding
+- name: Sandbox
+  tags:
+  - Simulations

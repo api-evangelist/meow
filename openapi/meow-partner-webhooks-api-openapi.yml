@@ -1,0 +1,906 @@
+openapi: 3.1.0
+info:
+  title: Meow Accounts Partner Webhooks API
+  description: '## Overview
+
+
+    The Meow API provides financial services and billing capabilities for your business.
+
+
+    ### Core Features
+
+
+    - **Financial data access**: access account information, transactions, balances, and payment networks.
+
+    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
+
+
+    ### Billing API
+
+
+    The Billing API lets you create and manage invoices and collect payments:
+
+
+    - **Product management**: create and manage products with custom pricing.
+
+    - **Customer management**: maintain invoicing customers with their addresses.
+
+    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
+
+    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
+
+    - **Collection accounts**: configure accounts for payment collection.
+
+
+    ### Getting Started
+
+
+    Authenticate by sending your API key in the `x-api-key` request header.
+
+
+    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
+
+
+    ### Error Responses
+
+
+    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
+
+
+    Common error codes:
+
+
+    - `500`: Internal server error
+
+    - `501`: Subsystem unavailable
+
+    - `503`: Scheduled maintenance
+
+    - `601`: Data not found
+
+    - `602`: Customer not authorized
+
+    - `701`: Account not found
+
+    - `703`: Invalid input (including invalid date ranges)
+
+    - `704`: Account type not supported
+
+    - `705`: Account is closed
+
+    - `801`: Transaction not found
+
+    '
+  contact:
+    name: Meow
+    url: https://meow.com/
+    email: support@meow.com
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.meow.com/terms-of-service
+servers:
+- url: https://api.meow.com/v1
+  description: Meow API Production
+- url: https://api.sandbox.meow.com/v1
+  description: Meow API Sandbox
+security:
+- apiKeyAuth: []
+tags:
+- name: Partner Webhooks
+paths:
+  /partner/webhooks/subscriptions:
+    get:
+      tags:
+      - Partner Webhooks
+      summary: List Partner Webhook Subscriptions
+      description: Returns your partner webhook subscriptions.
+      operationId: list_subscriptions_partner_webhooks_subscriptions_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/WebhookSubscriptionResponse'
+                type: array
+                title: Response List Subscriptions Partner Webhooks Subscriptions Get
+      security:
+      - apiKeyAuth:
+        - partner:webhooks:read
+    post:
+      tags:
+      - Partner Webhooks
+      summary: Create Partner Webhook Subscription
+      description: Creates a partner webhook subscription and returns it along with the signing secret. The secret is returned only once, so store it now to verify delivery signatures.
+      operationId: create_subscription_partner_webhooks_subscriptions_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookSubscriptionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSubscriptionWithSecretResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - partner:webhooks:write
+  /partner/webhooks/subscriptions/{subscription_id}:
+    patch:
+      tags:
+      - Partner Webhooks
+      summary: Update Partner Webhook Subscription
+      description: Updates a partner webhook subscription. Returns the updated subscription, including a new signing secret when you request a rotation.
+      operationId: update_subscription_partner_webhooks_subscriptions__subscription_id__patch
+      parameters:
+      - name: subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Subscription Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebhookSubscriptionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/WebhookSubscriptionResponse'
+                - $ref: '#/components/schemas/WebhookSubscriptionWithSecretResponse'
+                title: Response Update Subscription Partner Webhooks Subscriptions  Subscription Id  Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - partner:webhooks:write
+    delete:
+      tags:
+      - Partner Webhooks
+      summary: Delete Partner Webhook Subscription
+      description: Deletes a partner webhook subscription.
+      operationId: delete_subscription_partner_webhooks_subscriptions__subscription_id__delete
+      parameters:
+      - name: subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Subscription Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - partner:webhooks:write
+  /partner/webhooks/subscriptions/{subscription_id}/test:
+    post:
+      tags:
+      - Partner Webhooks
+      summary: Send Test Partner Webhook Event
+      description: Sends a test event to a partner webhook subscription and queues it for delivery so you can verify your endpoint and signature handling.
+      operationId: send_test_event_partner_webhooks_subscriptions__subscription_id__test_post
+      parameters:
+      - name: subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Subscription Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookTestEventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - partner:webhooks:write
+  /partner/webhooks/deliveries/{delivery_id}/redrive:
+    post:
+      tags:
+      - Partner Webhooks
+      summary: Redrive Partner Webhook Delivery
+      description: Re-queues a failed partner webhook delivery for another attempt. A delivery that already succeeded or is currently being attempted cannot be redriven.
+      operationId: redrive_delivery_partner_webhooks_deliveries__delivery_id__redrive_post
+      parameters:
+      - name: delivery_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Delivery Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookRedriveResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - partner:webhooks:write
+  /partner/webhooks/deliveries/{delivery_id}/attempts:
+    get:
+      tags:
+      - Partner Webhooks
+      summary: List Partner Webhook Delivery Attempts
+      description: Returns the individual delivery attempts for a partner webhook delivery, including the response status of each attempt.
+      operationId: list_delivery_attempts_partner_webhooks_deliveries__delivery_id__attempts_get
+      parameters:
+      - name: delivery_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Delivery Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookDeliveryAttemptsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - partner:webhooks:read
+  /partner/webhooks/deliveries:
+    get:
+      tags:
+      - Partner Webhooks
+      summary: List Partner Webhook Deliveries
+      description: Returns your partner webhook deliveries across all subscriptions, most recent first.
+      operationId: list_deliveries_partner_webhooks_deliveries_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookDeliveryListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - partner:webhooks:read
+components:
+  schemas:
+    WebhookDeliveryAttemptResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        delivery_id:
+          type: string
+          format: uuid
+          title: Delivery Id
+        attempt_number:
+          type: integer
+          title: Attempt Number
+        webhook_msg_id:
+          type: string
+          title: Webhook Msg Id
+        request_url:
+          type: string
+          title: Request Url
+        response_status:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Response Status
+        response_body_excerpt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Response Body Excerpt
+        duration_ms:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Ms
+        error_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Message
+        attempted_at:
+          type: string
+          format: date-time
+          title: Attempted At
+      type: object
+      required:
+      - id
+      - delivery_id
+      - attempt_number
+      - webhook_msg_id
+      - request_url
+      - response_status
+      - response_body_excerpt
+      - duration_ms
+      - error_message
+      - attempted_at
+      title: WebhookDeliveryAttemptResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    UpdateWebhookSubscriptionRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 255
+          - type: 'null'
+          title: Name
+        url:
+          anyOf:
+          - type: string
+            maxLength: 2048
+            minLength: 1
+            format: uri
+          - type: 'null'
+          title: Url
+        event_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/WebhookEventType'
+            type: array
+          - type: 'null'
+          title: Event Types
+        rotate_secret:
+          type: boolean
+          title: Rotate Secret
+          default: false
+        is_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Enabled
+        payload_mode:
+          anyOf:
+          - $ref: '#/components/schemas/WebhookPayloadMode'
+          - type: 'null'
+      type: object
+      title: UpdateWebhookSubscriptionRequest
+    WebhookSubscriptionResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+        url:
+          type: string
+          title: Url
+        is_enabled:
+          type: boolean
+          title: Is Enabled
+        event_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/WebhookEventType'
+            type: array
+          - type: 'null'
+          title: Event Types
+        payload_mode:
+          $ref: '#/components/schemas/WebhookPayloadMode'
+        created_time:
+          type: string
+          format: date-time
+          title: Created Time
+        updated_time:
+          type: string
+          format: date-time
+          title: Updated Time
+      type: object
+      required:
+      - id
+      - name
+      - url
+      - is_enabled
+      - event_types
+      - payload_mode
+      - created_time
+      - updated_time
+      title: WebhookSubscriptionResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    WebhookTestEventResponse:
+      properties:
+        event_id:
+          type: string
+          format: uuid
+          title: Event Id
+        delivery_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Delivery Id
+        queued:
+          type: boolean
+          title: Queued
+      type: object
+      required:
+      - event_id
+      - delivery_id
+      - queued
+      title: WebhookTestEventResponse
+    WebhookDeliveryListResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/WebhookDeliveryResponse'
+          type: array
+          title: Items
+        total_count:
+          type: integer
+          title: Total Count
+        has_more:
+          type: boolean
+          title: Has More
+      type: object
+      required:
+      - items
+      - total_count
+      - has_more
+      title: WebhookDeliveryListResponse
+    WebhookDeliveryAttemptsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/WebhookDeliveryAttemptResponse'
+          type: array
+          title: Items
+        total_count:
+          type: integer
+          title: Total Count
+        has_more:
+          type: boolean
+          title: Has More
+      type: object
+      required:
+      - items
+      - total_count
+      - has_more
+      title: WebhookDeliveryAttemptsResponse
+    WebhookDeliveryResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        event_id:
+          type: string
+          format: uuid
+          title: Event Id
+        subscription_id:
+          type: string
+          format: uuid
+          title: Subscription Id
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        attempt_count:
+          type: integer
+          title: Attempt Count
+        next_attempt_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Attempt At
+        last_attempted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Attempted At
+        created_time:
+          type: string
+          format: date-time
+          title: Created Time
+        updated_time:
+          type: string
+          format: date-time
+          title: Updated Time
+        event_type:
+          $ref: '#/components/schemas/WebhookEventType'
+        entity_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Entity Id
+          description: 'The entity this delivery''s event belongs to, so a consumer of a global (user-scoped) subscription can attribute each delivery to an entity. `null` for events that are not scoped to a single entity: the `webhook.test` and `message.attempt.exhausted` meta events.'
+        resource_object:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resource Object
+        resource_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resource Id
+        sequence:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Sequence
+      type: object
+      required:
+      - id
+      - event_id
+      - subscription_id
+      - status
+      - attempt_count
+      - next_attempt_at
+      - last_attempted_at
+      - created_time
+      - updated_time
+      - event_type
+      - entity_id
+      - resource_object
+      - resource_id
+      - sequence
+      title: WebhookDeliveryResponse
+    CreateWebhookSubscriptionRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          title: Name
+        url:
+          type: string
+          maxLength: 2048
+          minLength: 1
+          format: uri
+          title: Url
+        event_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/WebhookEventType'
+            type: array
+          - type: 'null'
+          title: Event Types
+        payload_mode:
+          $ref: '#/components/schemas/WebhookPayloadMode'
+          default: snapshot
+      type: object
+      required:
+      - name
+      - url
+      title: CreateWebhookSubscriptionRequest
+    WebhookEventType:
+      type: string
+      enum:
+      - ach_transfer.created
+      - ach_transfer.updated
+      - wire_transfer.created
+      - wire_transfer.updated
+      - book_transfer.created
+      - book_transfer.updated
+      - inbound_ach_transfer.created
+      - inbound_ach_transfer.updated
+      - inbound_wire_transfer.created
+      - inbound_wire_transfer.updated
+      - check_deposit.created
+      - check_deposit.updated
+      - global_account_transfer.created
+      - application.created
+      - application.under_review
+      - application.submitted
+      - application.approved
+      - application.rejected
+      - identity_verification.action_required
+      - identity_verification.approved
+      - identity_verification.rejected
+      - balance.updated
+      - message.attempt.exhausted
+      - webhook.test
+      title: WebhookEventType
+      x-enum-varnames:
+      - ach_transfer_created
+      - ach_transfer_updated
+      - wire_transfer_created
+      - wire_transfer_updated
+      - book_transfer_created
+      - book_transfer_updated
+      - inbound_ach_transfer_created
+      - inbound_ach_transfer_updated
+      - inbound_wire_transfer_created
+      - inbound_wire_transfer_updated
+      - check_deposit_created
+      - check_deposit_updated
+      - global_account_transfer_created
+      - application_created
+      - application_under_review
+      - application_submitted
+      - application_approved
+      - application_rejected
+      - identity_verification_action_required
+      - identity_verification_approved
+      - identity_verification_rejected
+      - balance_updated
+      - message_attempt_exhausted
+      - webhook_test
+    WebhookPayloadMode:
+      type: string
+      enum:
+      - snapshot
+      - thin
+      title: WebhookPayloadMode
+      x-enum-varnames:
+      - snapshot
+      - thin
+    WebhookRedriveResponse:
+      properties:
+        delivery_id:
+          type: string
+          format: uuid
+          title: Delivery Id
+        queued:
+          type: boolean
+          title: Queued
+      type: object
+      required:
+      - delivery_id
+      - queued
+      title: WebhookRedriveResponse
+    DeliveryStatus:
+      type: string
+      enum:
+      - pending
+      - retrying
+      - in_progress
+      - succeeded
+      - failed_permanent
+      title: DeliveryStatus
+      x-enum-varnames:
+      - pending
+      - retrying
+      - in_progress
+      - succeeded
+      - failed_permanent
+    WebhookSubscriptionWithSecretResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+        url:
+          type: string
+          title: Url
+        is_enabled:
+          type: boolean
+          title: Is Enabled
+        event_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/WebhookEventType'
+            type: array
+          - type: 'null'
+          title: Event Types
+        payload_mode:
+          $ref: '#/components/schemas/WebhookPayloadMode'
+        created_time:
+          type: string
+          format: date-time
+          title: Created Time
+        updated_time:
+          type: string
+          format: date-time
+          title: Updated Time
+        secret:
+          type: string
+          format: password
+          title: Secret
+          writeOnly: false
+      type: object
+      required:
+      - id
+      - name
+      - url
+      - is_enabled
+      - event_types
+      - payload_mode
+      - created_time
+      - updated_time
+      - secret
+      title: WebhookSubscriptionWithSecretResponse
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your Meow API key, sent in the `x-api-key` header for authentication.
+      x-scopes:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+x-tagGroups:
+- name: Core API
+  tags:
+  - API Keys
+  - Contacts
+  - Accounts
+  - Transactions
+  - Balances
+  - Payment Networks
+  - Transfers
+  - Routing Numbers
+  - Cards
+  - Tax Forms
+  - Webhooks
+- name: Bill Pay
+  tags:
+  - Bills
+- name: Billing
+  tags:
+  - Products
+  - Customers
+  - Invoices
+  - Line Items
+  - Payment Methods
+  - Collection Accounts
+- name: Partner Onboarding
+  tags:
+  - Partner Onboarding
+- name: Sandbox
+  tags:
+  - Simulations

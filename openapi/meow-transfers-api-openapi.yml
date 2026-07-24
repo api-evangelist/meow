@@ -1,0 +1,1638 @@
+openapi: 3.1.0
+info:
+  title: Meow Accounts Transfers API
+  description: '## Overview
+
+
+    The Meow API provides financial services and billing capabilities for your business.
+
+
+    ### Core Features
+
+
+    - **Financial data access**: access account information, transactions, balances, and payment networks.
+
+    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
+
+
+    ### Billing API
+
+
+    The Billing API lets you create and manage invoices and collect payments:
+
+
+    - **Product management**: create and manage products with custom pricing.
+
+    - **Customer management**: maintain invoicing customers with their addresses.
+
+    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
+
+    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
+
+    - **Collection accounts**: configure accounts for payment collection.
+
+
+    ### Getting Started
+
+
+    Authenticate by sending your API key in the `x-api-key` request header.
+
+
+    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
+
+
+    ### Error Responses
+
+
+    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
+
+
+    Common error codes:
+
+
+    - `500`: Internal server error
+
+    - `501`: Subsystem unavailable
+
+    - `503`: Scheduled maintenance
+
+    - `601`: Data not found
+
+    - `602`: Customer not authorized
+
+    - `701`: Account not found
+
+    - `703`: Invalid input (including invalid date ranges)
+
+    - `704`: Account type not supported
+
+    - `705`: Account is closed
+
+    - `801`: Transaction not found
+
+    '
+  contact:
+    name: Meow
+    url: https://meow.com/
+    email: support@meow.com
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.meow.com/terms-of-service
+servers:
+- url: https://api.meow.com/v1
+  description: Meow API Production
+- url: https://api.sandbox.meow.com/v1
+  description: Meow API Sandbox
+security:
+- apiKeyAuth: []
+tags:
+- name: Transfers
+  description: Initiate ACH, wire, book, and crypto transfers, and retrieve transfer details.
+paths:
+  /accounts/{account_id}/usdc:
+    post:
+      tags:
+      - Transfers
+      summary: Create USDC Transaction (Legacy)
+      description: Legacy endpoint for USDC transactions. Requires the `transfers:usdc:write` scope. For new integrations, use `POST /accounts/{account_id}/crypto` with `currency` in the request body.
+      operationId: create_usdc_transaction_accounts__account_id__usdc_post
+      deprecated: true
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUSDCTransactionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUSDCTransactionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - transfers:usdc:write
+  /accounts/{account_id}/crypto:
+    post:
+      tags:
+      - Transfers
+      summary: Create Crypto Transaction
+      description: 'Creates a new crypto transaction from a specified account. The currency and network are determined automatically from the destination''s payment method. Provide exactly one of `static_memo_id` or `crypto_id` to identify the destination:
+
+
+        - **`static_memo_id`**: Use the ID from the contact''s `payment_methods.static_memos` array. Required for traditional banking accounts; also supported for wallet accounts.
+
+        - **`crypto_id`**: Use the ID from the contact''s `payment_methods.crypto` array. Only supported for wallet accounts.
+
+
+        Supported currencies: `usdc`, `usdt`, `pyusd`, `cash`, `usdg`.
+
+
+        Requires the `transfers:crypto:write` scope. Use this endpoint for all crypto transfers. The legacy `/usdc` endpoint is deprecated.'
+      operationId: create_crypto_transaction_accounts__account_id__crypto_post
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCryptoTransactionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCryptoTransactionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - transfers:crypto:write
+  /accounts/{account_id}/book:
+    post:
+      tags:
+      - Transfers
+      summary: Create Book Transfer
+      description: Creates a new internal book transfer between bank accounts.
+      operationId: create_book_transfer_accounts__account_id__book_post
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookTransferRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBookTransferResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - transfers:book:write
+  /accounts/{account_id}/ach:
+    post:
+      tags:
+      - Transfers
+      summary: Create ACH Transfer
+      description: Creates a new ACH transfer to an external counterparty.
+      operationId: create_ach_transfer_accounts__account_id__ach_post
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAchTransferRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAchTransferResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - transfers:ach:write
+  /accounts/{account_id}/ach/scheduled:
+    post:
+      tags:
+      - Transfers
+      summary: Create Scheduled ACH Transfer
+      description: Creates a new scheduled ACH transfer to an external counterparty.
+      operationId: create_scheduled_ach_transfer_accounts__account_id__ach_scheduled_post
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScheduledAchTransferRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateScheduledAchTransferResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - transfers:ach:write
+    get:
+      tags:
+      - Transfers
+      summary: List Scheduled ACH Transfers
+      description: Returns a list of scheduled ACH transfers for a specified account.
+      operationId: list_scheduled_ach_transfers_accounts__account_id__ach_scheduled_get
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 100
+          - type: 'null'
+          description: Opaque offset identifier for pagination. Use the nextOffset from a previous response.
+          title: Offset
+        description: Opaque offset identifier for pagination. Use the nextOffset from a previous response.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledAchTransfers'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:transactions
+  /accounts/{account_id}/wire:
+    post:
+      tags:
+      - Transfers
+      summary: Create Wire Transfer
+      description: Creates a new wire transfer to an external counterparty.
+      operationId: create_wire_transfer_accounts__account_id__wire_post
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWireTransferRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateWireTransferResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - transfers:wire:write
+  /accounts/{account_id}/transactions/{transaction_id}:
+    get:
+      tags:
+      - Transfers
+      summary: Get USDC Transaction (Legacy)
+      description: Legacy endpoint for retrieving USDC transaction details. For new integrations, use `GET /accounts/{account_id}/crypto/{transaction_id}`.
+      operationId: get_usdc_transaction_accounts__account_id__transactions__transaction_id__get
+      deprecated: true
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - name: transaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the USDC transaction.
+          title: Transaction Id
+        description: The ID of the USDC transaction.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUSDCTransactionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:transactions
+  /accounts/{account_id}/crypto/{transaction_id}:
+    get:
+      tags:
+      - Transfers
+      summary: Get Crypto Transaction
+      description: Returns details about a crypto transaction by transaction ID, including the status of an outgoing crypto transfer after it has been initiated.
+      operationId: get_crypto_transaction_accounts__account_id__crypto__transaction_id__get
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - name: transaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the crypto transaction.
+          title: Transaction Id
+        description: The ID of the crypto transaction.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCryptoTransactionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:transactions
+  /accounts/{account_id}/wires/{wire_transfer_id}:
+    get:
+      tags:
+      - Transfers
+      summary: Get Wire Transfer
+      description: Returns details about a wire transfer (incoming or outgoing) for the specified account by wire transfer ID, including the status of an outgoing wire after it has been initiated.
+      operationId: get_wire_transfer_accounts__account_id__wires__wire_transfer_id__get
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - name: wire_transfer_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The transaction group ID for the wire transfer.
+          title: Wire Transfer Id
+        description: The transaction group ID for the wire transfer.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WireTransferResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:transactions
+  /accounts/{account_id}/achs/{ach_transfer_id}:
+    get:
+      tags:
+      - Transfers
+      summary: Get ACH Transfer
+      description: Returns details about an ACH transfer (incoming or outgoing) for the specified account by ACH transfer ID, including the status of an outgoing ACH transfer after it has been initiated.
+      operationId: get_ach_transfer_accounts__account_id__achs__ach_transfer_id__get
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The ID of the account.
+          title: Account Id
+        description: The ID of the account.
+      - name: ach_transfer_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The transaction group ID for the ACH transfer (e.g. `withdrawal_ach_...`), or the ACH ID returned when you created the transfer (e.g. `ach_...`).
+          title: Ach Transfer Id
+        description: The transaction group ID for the ACH transfer (e.g. `withdrawal_ach_...`), or the ACH ID returned when you created the transfer (e.g. `ach_...`).
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AchTransferResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:transactions
+components:
+  schemas:
+    CreateWireTransferRequest:
+      properties:
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+          description: Email address to notify when the operation completes
+        amount:
+          anyOf:
+          - type: number
+            maximum: 1000000000.0
+            minimum: 1.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+        instructions:
+          anyOf:
+          - type: string
+            maxLength: 140
+            minLength: 1
+          - type: 'null'
+          title: Instructions
+        purpose:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: Purpose
+        internal_note:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 5
+          - type: 'null'
+          title: Internal Note
+        idempotency_key:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Idempotency Key
+      type: object
+      required:
+      - amount
+      - counterparty_id
+      - idempotency_key
+      title: CreateWireTransferRequest
+    CreateUSDCTransactionResponse:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        internal_note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Internal Note
+        created_time:
+          type: integer
+          title: Created Time
+        destination_address:
+          type: string
+          title: Destination Address
+        destination_payment_rail:
+          $ref: '#/components/schemas/ExtBridgePaymentRail'
+        destination_address_nickname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Destination Address Nickname
+        approval_id:
+          type: string
+          format: uuid
+          title: Approval Id
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - status
+      - amount
+      - created_time
+      - destination_address
+      - destination_payment_rail
+      - approval_id
+      title: CreateUSDCTransactionResponse
+    CreateAchTransferRequest:
+      properties:
+        amount:
+          anyOf:
+          - type: number
+            maximum: 1000000.0
+            minimum: 0.01
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+        description:
+          anyOf:
+          - type: string
+            maxLength: 10
+            minLength: 1
+          - type: 'null'
+          title: Description
+        internal_note:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 5
+          - type: 'null'
+          title: Internal Note
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+        idempotency_key:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Idempotency Key
+      type: object
+      required:
+      - amount
+      - counterparty_id
+      - idempotency_key
+      title: CreateAchTransferRequest
+    GetUSDCTransactionResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        destination_address:
+          type: string
+          title: Destination Address
+        destination_payment_rail:
+          $ref: '#/components/schemas/ExtBridgePaymentRail'
+        destination_tx_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Destination Tx Hash
+        destination_address_nickname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Destination Address Nickname
+      type: object
+      required:
+      - id
+      - amount
+      - destination_address
+      - destination_payment_rail
+      title: GetUSDCTransactionResponse
+    CreateCryptoTransactionResponse:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        internal_note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Internal Note
+        created_time:
+          type: integer
+          title: Created Time
+        destination_address:
+          type: string
+          title: Destination Address
+        destination_payment_rail:
+          $ref: '#/components/schemas/ExtBridgePaymentRail'
+        destination_address_nickname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Destination Address Nickname
+        approval_id:
+          type: string
+          format: uuid
+          title: Approval Id
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - status
+      - amount
+      - created_time
+      - destination_address
+      - destination_payment_rail
+      - approval_id
+      title: CreateCryptoTransactionResponse
+    CreateBookTransferResponse:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        created_time:
+          type: integer
+          title: Created Time
+        transfer_type:
+          $ref: '#/components/schemas/TransferMethod'
+        to_account_id:
+          type: string
+          format: uuid
+          title: To Account Id
+        to_account_name:
+          type: string
+          title: To Account Name
+        to_account_account_number_masked:
+          type: string
+          title: To Account Account Number Masked
+        to_entity_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: To Entity Id
+        to_entity_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: To Entity Name
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/TransferStatus'
+          - type: 'null'
+        approval_id:
+          type: string
+          format: uuid
+          title: Approval Id
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - amount
+      - description
+      - created_time
+      - transfer_type
+      - to_account_id
+      - to_account_name
+      - to_account_account_number_masked
+      - approval_id
+      title: CreateBookTransferResponse
+    GetCryptoTransactionResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        destination_address:
+          type: string
+          title: Destination Address
+        destination_payment_rail:
+          $ref: '#/components/schemas/ExtBridgePaymentRail'
+        destination_tx_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Destination Tx Hash
+        destination_address_nickname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Destination Address Nickname
+      type: object
+      required:
+      - id
+      - amount
+      - destination_address
+      - destination_payment_rail
+      title: GetCryptoTransactionResponse
+    CreateWireTransferResponse:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instructions
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+        created_time:
+          type: integer
+          title: Created Time
+        transfer_type:
+          $ref: '#/components/schemas/TransferMethod'
+        approval_id:
+          type: string
+          format: uuid
+          title: Approval Id
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - status
+      - amount
+      - instructions
+      - counterparty_id
+      - created_time
+      - transfer_type
+      - approval_id
+      title: CreateWireTransferResponse
+    CreateScheduledAchTransferResponse:
+      properties:
+        id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Id
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+        rrule:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Rrule
+          description: 'RFC 5545 RRULE string. Required: DTSTART, RRULE. Allowed frequencies: WEEKLY, MONTHLY.'
+        first_occurrence:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+        transfer_type:
+          $ref: '#/components/schemas/TransferMethod'
+        approval_id:
+          type: string
+          format: uuid
+          title: Approval Id
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - status
+      - amount
+      - description
+      - counterparty_id
+      - rrule
+      - transfer_type
+      - approval_id
+      title: CreateScheduledAchTransferResponse
+    CreateAchTransferResponse:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+        created_time:
+          type: integer
+          title: Created Time
+        transfer_type:
+          $ref: '#/components/schemas/TransferMethod'
+        approval_id:
+          type: string
+          format: uuid
+          title: Approval Id
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - status
+      - amount
+      - description
+      - counterparty_id
+      - created_time
+      - transfer_type
+      - approval_id
+      title: CreateAchTransferResponse
+    WireTransferResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: The unique identifier for the wire transfer.
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The amount of the transfer.
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+          description: The current status of the transfer.
+        instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instructions
+          description: Instructions, or OBI (Originator to Beneficiary Information).
+        counterparty_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Counterparty Id
+          description: The unique identifier for the counterparty.
+        counterparty_name:
+          type: string
+          title: Counterparty Name
+          description: The name of the counterparty.
+        counterparty_account_number:
+          type: string
+          title: Counterparty Account Number
+          description: The account number of the counterparty.
+        counterparty_routing_number:
+          type: string
+          title: Counterparty Routing Number
+          description: The routing number of the counterparty.
+        counterparty_bank_name:
+          type: string
+          title: Counterparty Bank Name
+          description: The name of the counterparty's bank.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: The time the transfer was created.
+        updated_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: The time the transfer was last updated.
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+          description: Error message if the transfer failed.
+        imad:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Imad
+          description: IMAD (Input Message Accountability Data) for the wire.
+        purpose:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Purpose
+          description: The purpose of the wire transfer.
+        internal_note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Internal Note
+          description: An internal note associated with the transfer.
+      type: object
+      required:
+      - id
+      - amount
+      - status
+      - counterparty_name
+      - counterparty_account_number
+      - counterparty_routing_number
+      - counterparty_bank_name
+      - created_at
+      - updated_at
+      title: WireTransferResponse
+      examples:
+      - amount: '1000.00'
+        counterparty_account_number: '123456789'
+        counterparty_bank_name: Chase Bank
+        counterparty_id: cp_789
+        counterparty_name: ABC Corp
+        counterparty_routing_number: '021000021'
+        created_at: '2024-01-01T12:00:00Z'
+        id: wire_123456
+        imad: '2024010100000001'
+        instructions: Wire transfer for invoice payment
+        internal_note: Payment for invoice 123
+        purpose: invoice_payment
+        status: sent
+        updated_at: '2024-01-01T12:00:00Z'
+    CreateCryptoTransactionRequest:
+      properties:
+        amount:
+          anyOf:
+          - type: number
+            maximum: 1000000000.0
+            minimum: 1.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+        static_memo_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Static Memo Id
+        crypto_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Crypto Id
+        internal_note:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 5
+          - type: 'null'
+          title: Internal Note
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+      type: object
+      required:
+      - amount
+      title: CreateCryptoTransactionRequest
+    ScheduledAchTransfer:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique identifier for the scheduled transfer.
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+          description: Current status of the scheduled transfer.
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The amount to be transferred.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: A brief description of the transfer.
+        schedule_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Schedule Description
+          description: A human-readable description of the schedule (e.g. "once on Dec 29, 2025").
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+          description: The ID of the counterparty.
+        rrule:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Rrule
+          description: The recurrence rule (RFC 5545) for the schedule.
+        first_occurrence:
+          $ref: '#/components/schemas/Timestamp'
+          description: The timestamp of the next occurrence.
+        transfer_type:
+          $ref: '#/components/schemas/TransferMethod'
+          description: The transfer method (e.g. `ach`).
+      type: object
+      required:
+      - id
+      - status
+      - amount
+      - counterparty_id
+      - rrule
+      - first_occurrence
+      - transfer_type
+      title: ScheduledAchTransfer
+    ExtBridgePaymentRail:
+      type: string
+      enum:
+      - arbitrum
+      - avalanche_c_chain
+      - base
+      - ethereum
+      - optimism
+      - polygon
+      - solana
+      - stellar
+      - sui
+      - tempo
+      - tron
+      - ach
+      - ach_push
+      - ach_same_day
+      - fednow
+      - wire
+      title: ExtBridgePaymentRail
+      x-enum-varnames:
+      - arbitrum
+      - avalanche_c_chain
+      - base
+      - ethereum
+      - optimism
+      - polygon
+      - solana
+      - stellar
+      - sui
+      - tempo
+      - tron
+      - ach
+      - ach_push
+      - ach_same_day
+      - fednow
+      - wire
+    AchTransferResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: The unique identifier for the ACH transfer.
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The amount of the transfer.
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+          description: The current status of the transfer.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: A description of the transfer.
+        counterparty_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Counterparty Id
+          description: The unique identifier for the counterparty.
+        counterparty_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Counterparty Name
+          description: The name of the counterparty.
+        counterparty_account_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Counterparty Account Number
+          description: The account number of the counterparty.
+        counterparty_routing_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Counterparty Routing Number
+          description: The routing number of the counterparty.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: The time the transfer was created.
+        updated_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: The time the transfer was last updated.
+        internal_note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Internal Note
+          description: An internal note associated with the transfer.
+        additional_details:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Additional Details
+          description: Additional details about the transfer.
+        trace_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trace Number
+          description: The ACH trace number for the transfer.
+        payment_related_info:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Payment Related Info
+          description: Payment-related information (e.g. for incoming ACH).
+      type: object
+      required:
+      - id
+      - amount
+      - status
+      - created_at
+      - updated_at
+      title: AchTransferResponse
+    PageMetadata:
+      properties:
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
+      type: object
+      title: PageMetadata
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TransferStatus:
+      type: string
+      enum:
+      - pending
+      - pending_approval
+      - canceled
+      - processing
+      - error
+      - sent
+      - returned
+      - void
+      title: TransferStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TransferMethod:
+      type: string
+      enum:
+      - book
+      - usdc
+      - usdt
+      - pyusd
+      - cash
+      - usdg
+      - ach
+      - wire
+      title: TransferMethod
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    CreateScheduledAchTransferRequest:
+      properties:
+        amount:
+          anyOf:
+          - type: number
+            maximum: 1000000.0
+            minimum: 0.01
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+        counterparty_id:
+          type: string
+          format: uuid
+          title: Counterparty Id
+        description:
+          anyOf:
+          - type: string
+            maxLength: 10
+            minLength: 1
+          - type: 'null'
+          title: Description
+        internal_note:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 5
+          - type: 'null'
+          title: Internal Note
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+        idempotency_key:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Idempotency Key
+        rrule:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Rrule
+          description: 'RFC 5545 RRULE string. Required: DTSTART, RRULE. Allowed frequencies: WEEKLY, MONTHLY.'
+      type: object
+      required:
+      - amount
+      - counterparty_id
+      - idempotency_key
+      - rrule
+      title: CreateScheduledAchTransferRequest
+    CreateUSDCTransactionRequest:
+      properties:
+        amount:
+          anyOf:
+          - type: number
+            maximum: 1000000000.0
+            minimum: 1.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+        static_memo_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Static Memo Id
+        crypto_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Crypto Id
+        internal_note:
+          anyOf:
+          - type: string
+            maxLength: 255
+            minLength: 5
+          - type: 'null'
+          title: Internal Note
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+      type: object
+      required:
+      - amount
+      title: CreateUSDCTransactionRequest
+    CreateBookTransferRequest:
+      properties:
+        amount:
+          anyOf:
+          - type: number
+            maximum: 1000000000.0
+            minimum: 0.01
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+        to_account_id:
+          type: string
+          format: uuid
+          title: To Account Id
+        description:
+          anyOf:
+          - type: string
+            maxLength: 50
+            minLength: 1
+          - type: 'null'
+          title: Description
+        idempotency_key:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Idempotency Key
+      type: object
+      required:
+      - amount
+      - to_account_id
+      - idempotency_key
+      title: CreateBookTransferRequest
+    ScheduledAchTransfers:
+      properties:
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+          description: Metadata for pagination.
+        scheduled_ach_transfers:
+          items:
+            $ref: '#/components/schemas/ScheduledAchTransfer'
+          type: array
+          title: Scheduled Ach Transfers
+          description: A list of scheduled ACH transfers for the account.
+      type: object
+      required:
+      - scheduled_ach_transfers
+      title: ScheduledAchTransfers
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your Meow API key, sent in the `x-api-key` header for authentication.
+      x-scopes:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+x-tagGroups:
+- name: Core API
+  tags:
+  - API Keys
+  - Contacts
+  - Accounts
+  - Transactions
+  - Balances
+  - Payment Networks
+  - Transfers
+  - Routing Numbers
+  - Cards
+  - Tax Forms
+  - Webhooks
+- name: Bill Pay
+  tags:
+  - Bills
+- name: Billing
+  tags:
+  - Products
+  - Customers
+  - Invoices
+  - Line Items
+  - Payment Methods
+  - Collection Accounts
+- name: Partner Onboarding
+  tags:
+  - Partner Onboarding
+- name: Sandbox
+  tags:
+  - Simulations

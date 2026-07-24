@@ -1,0 +1,313 @@
+openapi: 3.1.0
+info:
+  title: Meow Accounts Limits API
+  description: '## Overview
+
+
+    The Meow API provides financial services and billing capabilities for your business.
+
+
+    ### Core Features
+
+
+    - **Financial data access**: access account information, transactions, balances, and payment networks.
+
+    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
+
+
+    ### Billing API
+
+
+    The Billing API lets you create and manage invoices and collect payments:
+
+
+    - **Product management**: create and manage products with custom pricing.
+
+    - **Customer management**: maintain invoicing customers with their addresses.
+
+    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
+
+    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
+
+    - **Collection accounts**: configure accounts for payment collection.
+
+
+    ### Getting Started
+
+
+    Authenticate by sending your API key in the `x-api-key` request header.
+
+
+    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
+
+
+    ### Error Responses
+
+
+    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
+
+
+    Common error codes:
+
+
+    - `500`: Internal server error
+
+    - `501`: Subsystem unavailable
+
+    - `503`: Scheduled maintenance
+
+    - `601`: Data not found
+
+    - `602`: Customer not authorized
+
+    - `701`: Account not found
+
+    - `703`: Invalid input (including invalid date ranges)
+
+    - `704`: Account type not supported
+
+    - `705`: Account is closed
+
+    - `801`: Transaction not found
+
+    '
+  contact:
+    name: Meow
+    url: https://meow.com/
+    email: support@meow.com
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.meow.com/terms-of-service
+servers:
+- url: https://api.meow.com/v1
+  description: Meow API Production
+- url: https://api.sandbox.meow.com/v1
+  description: Meow API Sandbox
+security:
+- apiKeyAuth: []
+tags:
+- name: Limits
+paths:
+  /limits/daily-withdrawal:
+    get:
+      tags:
+      - Limits
+      summary: Get Daily Withdrawal Limit
+      description: Returns your current daily withdrawal limit, the highest you can raise it to, and how much you have withdrawn and can still withdraw today.
+      operationId: get_daily_withdrawal_limit_limits_daily_withdrawal_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyWithdrawalLimitResponse'
+      security:
+      - apiKeyAuth:
+        - banking:limits:read
+      parameters:
+      - $ref: '#/components/parameters/EntityIdHeader'
+    put:
+      tags:
+      - Limits
+      summary: Set Daily Withdrawal Limit
+      description: Sets the most that can be withdrawn from your accounts in a single day across all transfer types. Must be a whole dollar amount from 0 up to the maximum set for your entity. Set it to 0 to block all outbound transfers while you collect funds, then raise it when you are ready to pay out.
+      operationId: update_daily_withdrawal_limit_limits_daily_withdrawal_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDailyWithdrawalLimitRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyWithdrawalLimitResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - banking:limits:write
+      parameters:
+      - $ref: '#/components/parameters/EntityIdHeader'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UpdateDailyWithdrawalLimitRequest:
+      properties:
+        daily_withdrawal_limit:
+          anyOf:
+          - type: number
+            multipleOf: 1.0
+            maximum: 1000000000.0
+            minimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,0}0*$
+          title: Daily Withdrawal Limit
+          description: The most, in USD, that can be withdrawn from your accounts in a single day across all transfer types. Must be a whole dollar amount from 0 up to the maximum set for your entity. Set it to 0 to block all outbound transfers while you collect funds.
+          examples:
+          - '25000'
+      type: object
+      required:
+      - daily_withdrawal_limit
+      title: UpdateDailyWithdrawalLimitRequest
+    DailyWithdrawalLimitResponse:
+      properties:
+        daily_withdrawal_limit:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Daily Withdrawal Limit
+          description: The most, in USD, that can be withdrawn from your accounts in a single day across all transfer types. This is the limit enforced on outbound transfers today.
+          examples:
+          - '50000'
+        max_daily_withdrawal_limit:
+          anyOf:
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Max Daily Withdrawal Limit
+          description: The highest daily withdrawal limit you can set, in USD. When `null`, no maximum is configured for your entity yet, so you can only lower the limit. Contact support@meow.com to raise it.
+          examples:
+          - '100000'
+        spent_today:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Spent Today
+          description: The total, in USD, you have already withdrawn today.
+          examples:
+          - '12500'
+        remaining_today:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Remaining Today
+          description: How much more, in USD, you can withdraw today before reaching your daily limit.
+          examples:
+          - '37500'
+      type: object
+      required:
+      - daily_withdrawal_limit
+      - max_daily_withdrawal_limit
+      - spent_today
+      - remaining_today
+      title: DailyWithdrawalLimitResponse
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your Meow API key, sent in the `x-api-key` header for authentication.
+      x-scopes:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+x-tagGroups:
+- name: Core API
+  tags:
+  - API Keys
+  - Contacts
+  - Accounts
+  - Transactions
+  - Balances
+  - Payment Networks
+  - Transfers
+  - Routing Numbers
+  - Cards
+  - Tax Forms
+  - Webhooks
+- name: Bill Pay
+  tags:
+  - Bills
+- name: Billing
+  tags:
+  - Products
+  - Customers
+  - Invoices
+  - Line Items
+  - Payment Methods
+  - Collection Accounts
+- name: Partner Onboarding
+  tags:
+  - Partner Onboarding
+- name: Sandbox
+  tags:
+  - Simulations

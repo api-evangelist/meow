@@ -1,0 +1,446 @@
+openapi: 3.1.0
+info:
+  title: Meow Accounts Approvals API
+  description: '## Overview
+
+
+    The Meow API provides financial services and billing capabilities for your business.
+
+
+    ### Core Features
+
+
+    - **Financial data access**: access account information, transactions, balances, and payment networks.
+
+    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
+
+
+    ### Billing API
+
+
+    The Billing API lets you create and manage invoices and collect payments:
+
+
+    - **Product management**: create and manage products with custom pricing.
+
+    - **Customer management**: maintain invoicing customers with their addresses.
+
+    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
+
+    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
+
+    - **Collection accounts**: configure accounts for payment collection.
+
+
+    ### Getting Started
+
+
+    Authenticate by sending your API key in the `x-api-key` request header.
+
+
+    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
+
+
+    ### Error Responses
+
+
+    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
+
+
+    Common error codes:
+
+
+    - `500`: Internal server error
+
+    - `501`: Subsystem unavailable
+
+    - `503`: Scheduled maintenance
+
+    - `601`: Data not found
+
+    - `602`: Customer not authorized
+
+    - `701`: Account not found
+
+    - `703`: Invalid input (including invalid date ranges)
+
+    - `704`: Account type not supported
+
+    - `705`: Account is closed
+
+    - `801`: Transaction not found
+
+    '
+  contact:
+    name: Meow
+    url: https://meow.com/
+    email: support@meow.com
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.meow.com/terms-of-service
+servers:
+- url: https://api.meow.com/v1
+  description: Meow API Production
+- url: https://api.sandbox.meow.com/v1
+  description: Meow API Sandbox
+security:
+- apiKeyAuth: []
+tags:
+- name: Approvals
+paths:
+  /approvals/{approval_id}:
+    get:
+      tags:
+      - Approvals
+      summary: Get Approval
+      description: Returns the status and details of an approval request, including how many approvals are required and how many have been received.
+      operationId: get_approval_approvals__approval_id__get
+      parameters:
+      - name: approval_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Approval Id
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - accounts:read
+components:
+  schemas:
+    ApprovalTransferHandle:
+      properties:
+        id:
+          type: string
+          title: Id
+        transfer_type:
+          $ref: '#/components/schemas/TransferMethod'
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+      type: object
+      required:
+      - id
+      - transfer_type
+      - status
+      title: ApprovalTransferHandle
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InitiatorIdentityType:
+      type: string
+      enum:
+      - web_user
+      - user_api_key
+      - entity_api_key
+      - mcp_oauth
+      - cli_key
+      - partner_api_key
+      title: InitiatorIdentityType
+      x-enum-varnames:
+      - web_user
+      - user_api_key
+      - entity_api_key
+      - mcp_oauth
+      - cli_key
+      - partner_api_key
+    ApprovalStatus:
+      type: string
+      enum:
+      - pending_approval
+      - approved
+      - executing
+      - completed
+      - rejected
+      - expired
+      - failed
+      title: ApprovalStatus
+    TransferStatus:
+      type: string
+      enum:
+      - pending
+      - pending_approval
+      - canceled
+      - processing
+      - error
+      - sent
+      - returned
+      - void
+      title: TransferStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TransferMethod:
+      type: string
+      enum:
+      - book
+      - usdc
+      - usdt
+      - pyusd
+      - cash
+      - usdg
+      - ach
+      - wire
+      title: TransferMethod
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    ApprovalResponse:
+      properties:
+        approval_id:
+          type: string
+          format: uuid
+          title: Approval Id
+        status:
+          $ref: '#/components/schemas/ApprovalStatus'
+        action_type:
+          anyOf:
+          - $ref: '#/components/schemas/ActionType'
+          - type: 'null'
+        transfer_type:
+          anyOf:
+          - $ref: '#/components/schemas/TransferMethod'
+          - type: 'null'
+        amount:
+          anyOf:
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Amount
+        counterparty_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Counterparty Id
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        initiator:
+          $ref: '#/components/schemas/Initiator'
+        approvals_required:
+          type: integer
+          title: Approvals Required
+        approvals_received:
+          type: integer
+          title: Approvals Received
+        approver_display_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Approver Display Names
+        security_policy_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Security Policy Id
+        created_time:
+          $ref: '#/components/schemas/Timestamp'
+        expires_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+        executed_transfer:
+          anyOf:
+          - $ref: '#/components/schemas/ApprovalTransferHandle'
+          - type: 'null'
+        rejection_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Rejection Reason
+      type: object
+      required:
+      - approval_id
+      - status
+      - initiator
+      - approvals_required
+      - approvals_received
+      - created_time
+      title: ApprovalResponse
+    ActionType:
+      type: string
+      enum:
+      - manage_users_and_policies
+      - send_money
+      title: ActionType
+    Initiator:
+      properties:
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        public_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Public Id
+        api_key_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key Id
+        api_key_nickname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key Nickname
+        identity_type:
+          $ref: '#/components/schemas/InitiatorIdentityType'
+          default: web_user
+        user_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: User Id
+        display:
+          $ref: '#/components/schemas/DisplayInitiator'
+          readOnly: true
+      type: object
+      required:
+      - display
+      title: Initiator
+    DisplayInitiator:
+      properties:
+        primary:
+          type: string
+          title: Primary
+      type: object
+      required:
+      - primary
+      title: DisplayInitiator
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your Meow API key, sent in the `x-api-key` header for authentication.
+      x-scopes:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+x-tagGroups:
+- name: Core API
+  tags:
+  - API Keys
+  - Contacts
+  - Accounts
+  - Transactions
+  - Balances
+  - Payment Networks
+  - Transfers
+  - Routing Numbers
+  - Cards
+  - Tax Forms
+  - Webhooks
+- name: Bill Pay
+  tags:
+  - Bills
+- name: Billing
+  tags:
+  - Products
+  - Customers
+  - Invoices
+  - Line Items
+  - Payment Methods
+  - Collection Accounts
+- name: Partner Onboarding
+  tags:
+  - Partner Onboarding
+- name: Sandbox
+  tags:
+  - Simulations

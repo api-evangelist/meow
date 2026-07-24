@@ -1,0 +1,667 @@
+openapi: 3.1.0
+info:
+  title: Meow Accounts Invoices API
+  description: '## Overview
+
+
+    The Meow API provides financial services and billing capabilities for your business.
+
+
+    ### Core Features
+
+
+    - **Financial data access**: access account information, transactions, balances, and payment networks.
+
+    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
+
+
+    ### Billing API
+
+
+    The Billing API lets you create and manage invoices and collect payments:
+
+
+    - **Product management**: create and manage products with custom pricing.
+
+    - **Customer management**: maintain invoicing customers with their addresses.
+
+    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
+
+    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
+
+    - **Collection accounts**: configure accounts for payment collection.
+
+
+    ### Getting Started
+
+
+    Authenticate by sending your API key in the `x-api-key` request header.
+
+
+    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
+
+
+    ### Error Responses
+
+
+    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
+
+
+    Common error codes:
+
+
+    - `500`: Internal server error
+
+    - `501`: Subsystem unavailable
+
+    - `503`: Scheduled maintenance
+
+    - `601`: Data not found
+
+    - `602`: Customer not authorized
+
+    - `701`: Account not found
+
+    - `703`: Invalid input (including invalid date ranges)
+
+    - `704`: Account type not supported
+
+    - `705`: Account is closed
+
+    - `801`: Transaction not found
+
+    '
+  contact:
+    name: Meow
+    url: https://meow.com/
+    email: support@meow.com
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.meow.com/terms-of-service
+servers:
+- url: https://api.meow.com/v1
+  description: Meow API Production
+- url: https://api.sandbox.meow.com/v1
+  description: Meow API Sandbox
+security:
+- apiKeyAuth: []
+tags:
+- name: Invoices
+  description: Create and manage invoices.
+paths:
+  /billing/invoices:
+    get:
+      tags:
+      - Invoices
+      summary: List Invoices
+      description: Lists all invoices.
+      operationId: list_invoices_billing_invoices_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Invoice'
+                type: array
+                title: Response List Invoices Billing Invoices Get
+      security:
+      - apiKeyAuth:
+        - billing:invoices:read
+      parameters:
+      - $ref: '#/components/parameters/EntityIdHeader'
+    post:
+      tags:
+      - Invoices
+      summary: Create Invoice
+      description: Creates a new invoice.
+      operationId: create_invoice_billing_invoices_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInvoiceRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - billing:invoices:write
+      parameters:
+      - $ref: '#/components/parameters/EntityIdHeader'
+  /billing/invoices/{invoice_id}:
+    get:
+      tags:
+      - Invoices
+      summary: Get Invoice
+      description: Gets an invoice by ID.
+      operationId: get_invoice_billing_invoices__invoice_id__get
+      parameters:
+      - name: invoice_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Invoice Id
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - billing:invoices:read
+  /billing/invoices/{invoice_id}/download:
+    get:
+      tags:
+      - Invoices
+      summary: Download Invoice PDF
+      description: Downloads an invoice as a PDF file.
+      operationId: download_invoice_pdf_billing_invoices__invoice_id__download_get
+      parameters:
+      - name: invoice_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the invoice to download.
+          title: Invoice Id
+        description: The unique identifier of the invoice to download.
+      - $ref: '#/components/parameters/EntityIdHeader'
+      responses:
+        '200':
+          description: The invoice as a PDF file. Returns binary data (raw bytes).
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+              example: Binary PDF content
+          headers:
+            Content-Disposition:
+              description: The `Content-Disposition` header that triggers a file download with the invoice filename.
+              schema:
+                type: string
+                example: attachment; filename="Invoice - INV-2024-001.pdf"
+        '404':
+          description: Invoice not found.
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                  code:
+                    type: integer
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - apiKeyAuth:
+        - billing:invoices:read
+components:
+  schemas:
+    DateString:
+      type: string
+      format: date
+      title: DateString
+      description: ISO 8601 full-date in the format `YYYY-MM-DD` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Invoice:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The unique identifier for the invoice.
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: The name of the invoice.
+        customer_id:
+          type: string
+          format: uuid
+          title: Customer Id
+          description: The unique identifier for the customer.
+        status:
+          $ref: '#/components/schemas/InvoiceStatus'
+          description: The current status of the invoice.
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The total amount of the invoice.
+        amount_paid:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount Paid
+          description: The amount that has been paid on the invoice.
+        amount_due:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount Due
+          description: The remaining amount due on the invoice.
+        invoice_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Number
+          description: The public-facing invoice number.
+        line_item_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Line Item Ids
+          description: List of line item IDs associated with the invoice.
+        invoice_date:
+          anyOf:
+          - $ref: '#/components/schemas/DateString'
+          - type: 'null'
+          description: The date the invoice is scheduled to be sent.
+        due_date:
+          anyOf:
+          - $ref: '#/components/schemas/DateString'
+          - type: 'null'
+          description: The date the invoice payment is due.
+        payment_method_types:
+          items:
+            $ref: '#/components/schemas/PaymentMethodType'
+          type: array
+          title: Payment Method Types
+          description: List of allowed payment method types for the invoice.
+        send_email_on_creation:
+          type: boolean
+          title: Send Email On Creation
+          description: Whether to send an email upon invoice creation.
+        additional_recipient_emails:
+          items:
+            type: string
+          type: array
+          title: Additional Recipient Emails
+          description: List of additional email addresses to receive the invoice.
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+          description: A note associated with the invoice.
+        collection_account_id:
+          type: string
+          format: uuid
+          title: Collection Account Id
+          description: The collection account ID where funds will be collected.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: The timestamp when the invoice was created.
+        updated_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The timestamp when the invoice was last updated.
+        paid_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The timestamp when the invoice was fully paid.
+        canceled_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The timestamp when the invoice was canceled.
+        sent_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The timestamp when the invoice was sent.
+        expired_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The timestamp when the invoice expired.
+      type: object
+      required:
+      - id
+      - customer_id
+      - status
+      - amount
+      - amount_paid
+      - amount_due
+      - line_item_ids
+      - payment_method_types
+      - send_email_on_creation
+      - additional_recipient_emails
+      - collection_account_id
+      - created_at
+      title: Invoice
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InvoiceStatus:
+      type: string
+      enum:
+      - Draft
+      - Open
+      - Pending
+      - Scheduled
+      - Partially Paid
+      - Paid
+      - Canceled
+      - Expired
+      - Overdue
+      title: InvoiceStatus
+      x-enum-varnames:
+      - DRAFT
+      - OPEN
+      - PENDING
+      - SCHEDULED
+      - PARTIALLY_PAID
+      - PAID
+      - CANCELED
+      - EXPIRED
+      - OVERDUE
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    InvoiceLineRequest:
+      properties:
+        product_id:
+          type: string
+          format: uuid
+          title: Product Id
+        quantity:
+          anyOf:
+          - type: number
+            maximum: 100000000.0
+            exclusiveMinimum: 0.001
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,3}0*$
+          title: Quantity
+          description: Quantity of the product.
+        price:
+          anyOf:
+          - anyOf:
+            - type: number
+              maximum: 100000000.0
+              minimum: 0.01
+            - type: string
+              pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+            description: Price of the product. Defaults to the product's default price.
+          - type: 'null'
+          title: Price
+        description:
+          anyOf:
+          - type: string
+            maxLength: 400
+          - type: 'null'
+          title: Description
+          description: Description of the product. Defaults to the product's description if not provided.
+        discount_percentage:
+          anyOf:
+          - anyOf:
+            - type: number
+              maximum: 100.0
+              minimum: 0.0
+            - type: string
+              pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,0}0*$
+            description: Discount percentage of the product.
+          - type: 'null'
+          title: Discount Percentage
+        discount_description:
+          anyOf:
+          - type: string
+            maxLength: 100
+          - type: 'null'
+          title: Discount Description
+          description: Description of the discount applied to the product.
+      type: object
+      required:
+      - product_id
+      - quantity
+      title: InvoiceLineRequest
+    PaymentMethodType:
+      type: string
+      enum:
+      - BANK_TRANSFER
+      - CARD
+      - ACH_DIRECT_DEBIT
+      - INTERNATIONAL_WIRE
+      - USDC_ETHEREUM
+      - USDC_SOLANA
+      - USDC_BASE
+      - USDT_ETHEREUM
+      - USDT_SOLANA
+      - CASH_SOLANA
+      title: PaymentMethodType
+      x-enum-varnames:
+      - BANK_TRANSFER
+      - CARD
+      - ACH_DIRECT_DEBIT
+      - INTERNATIONAL_WIRE
+      - USDC_ETHEREUM
+      - USDC_SOLANA
+      - USDC_BASE
+      - USDT_ETHEREUM
+      - USDT_SOLANA
+      - CASH_SOLANA
+    CreateInvoiceRequest:
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+          title: Customer Id
+        line_items:
+          items:
+            $ref: '#/components/schemas/InvoiceLineRequest'
+          type: array
+          title: Line Items
+        invoice_date:
+          $ref: '#/components/schemas/DateString'
+          description: Date the invoice is scheduled to be sent.
+        due_date:
+          $ref: '#/components/schemas/DateString'
+          description: Date the invoice is due.
+        payment_method_types:
+          items:
+            $ref: '#/components/schemas/PaymentMethodType'
+          type: array
+          title: Payment Method Types
+          description: Payment method types to enable on the invoice. `BANK_TRANSFER` is always enabled.
+        recurring_schedule:
+          anyOf:
+          - type: string
+            maxLength: 120
+            minLength: 1
+            description: 'RFC 5545 RRULE string. Required: DTSTART, RRULE. Allowed frequencies: WEEKLY, MONTHLY.'
+          - type: 'null'
+          title: Recurring Schedule
+          description: Recurring schedule for the invoice as an RFC 2445 RRULE string. A generator is available at https://icalendar.org/rrule-tool.html.
+        send_email_on_creation:
+          type: boolean
+          title: Send Email On Creation
+          description: If true, sends an email to the customer (and any additional recipients) on the `invoice_date`.
+        additional_recipient_emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+            maxItems: 20
+          - type: 'null'
+          title: Additional Recipient Emails
+          description: Additional recipient emails to send the invoice and any reminders to.
+        note:
+          anyOf:
+          - type: string
+            maxLength: 300
+          - type: 'null'
+          title: Note
+          description: Note to include on the invoice.
+        name:
+          anyOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+          title: Name
+          description: Name of the invoice.
+        collection_account_id:
+          type: string
+          format: uuid
+          title: Collection Account Id
+          description: The collection account ID where payments on this invoice will be deposited.
+        show_contact_address:
+          type: boolean
+          title: Show Contact Address
+          description: Whether to show the customer's address on the invoice, if it exists.
+          default: false
+      type: object
+      required:
+      - customer_id
+      - line_items
+      - invoice_date
+      - due_date
+      - payment_method_types
+      - send_email_on_creation
+      - collection_account_id
+      title: CreateInvoiceRequest
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your Meow API key, sent in the `x-api-key` header for authentication.
+      x-scopes:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+x-tagGroups:
+- name: Core API
+  tags:
+  - API Keys
+  - Contacts
+  - Accounts
+  - Transactions
+  - Balances
+  - Payment Networks
+  - Transfers
+  - Routing Numbers
+  - Cards
+  - Tax Forms
+  - Webhooks
+- name: Bill Pay
+  tags:
+  - Bills
+- name: Billing
+  tags:
+  - Products
+  - Customers
+  - Invoices
+  - Line Items
+  - Payment Methods
+  - Collection Accounts
+- name: Partner Onboarding
+  tags:
+  - Partner Onboarding
+- name: Sandbox
+  tags:
+  - Simulations
