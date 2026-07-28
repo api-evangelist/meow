@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "name": "Meow",
+  "description": "Financial infrastructure for AI agents \u2014 business formation, banking onboarding, ACH, wires, USDC transfers, corporate cards, invoicing, and spend controls via CLI or MCP.",
+  "url": "https://www.meow.com",
+  "documentation": {
+    "llms_txt": "https://www.meow.com/llms.txt",
+    "guide": "https://www.meow.com/skills.md",
+    "skills_index": "https://www.meow.com/.well-known/skills/index.json"
+  },
+  "mcp_servers": [
+    {
+      "name": "meow",
+      "url": "https://mcp.meow.com/cli",
+      "transport": "http",
+      "description": "Financial tools for AI agents \u2014 business formation, onboarding, payments, cards, invoicing, and account management",
+      "capabilities": [
+        "business_formation",
+        "payments",
+        "cards",
+        "invoicing",
+        "account_management"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+generated: '2026-07-28'
+method: probed
+source: https://meow.com/.well-known/agent.json
+description: 'A2A Agent Card observed at /.well-known/agent.json on meow.com. Grade is measured against
+  the A2A 1.0.0 AgentCard object: ''conformant'' passes every structural check, ''near-conformant'' is
+  correctly shaped but omits optional fields, ''flavored'' fails a hard check and is an agent card in
+  spirit rather than in schema. Provider-published by construction — served from the provider''s own host;
+  nothing here is derived or generated.'
+discovery:
+  path: /.well-known/agent.json
+  canonical: false
+  host: meow.com
+conformance:
+  spec: A2A 1.0.0
+  grade: flavored
+  protocol_version: null
+  preferred_transport: null
+  deviations:
+  - capabilities-not-object
+  - no-protocolVersion
+  - skills-not-array
+  - no-defaultInputModes
+  - no-defaultOutputModes
+  - no-preferredTransport
+  - no-version
+card:
+  name: Meow
+  description: Financial infrastructure for AI agents — business formation, banking onboarding, ACH, wires,
+    USDC transfers, corporate cards, invoicing, and spend controls via CLI or MCP.
+  url: https://www.meow.com
+  version: null
+  documentation_url: null
+  skills: null
+  file: meow-agent-card.json
+x-evidence:
+  fetched: '2026-07-28'
+  url: https://meow.com/.well-known/agent.json
+  http_status: 200
+  content_type: application/json
+  note: Verbatim body saved alongside this manifest. No field inferred.

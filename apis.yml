@@ -23,5 +23,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgentCard
+  url: a2a/meow-a2a.yml
+  name: A2A Agent Card
+  description: Agent Card served at /.well-known/agent.json (flavored against A2A 1.0.0).
 - type: Website
   url: http://www.meow.com
