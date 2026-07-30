@@ -16,7 +16,218 @@ modified: '2026-07-17'
 tags:
 - Company
 - Banking
-apis: []
+apis:
+- aid: meow:meow-accounts-api
+  name: Meow Accounts API
+  description: Access and manage accounts.
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-accounts-api-openapi.yml
+- aid: meow:meow-api-keys-api
+  name: Meow API Keys API
+  description: Retrieve metadata about API keys and their accessible entities.
+  tags:
+  - API Keys
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-api-keys-api-openapi.yml
+- aid: meow:meow-approvals-api
+  name: Meow Approvals API
+  description: The Approvals API from Meow — 1 operation(s) for approvals.
+  tags:
+  - Approvals
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-approvals-api-openapi.yml
+- aid: meow:meow-balances-api
+  name: Meow Balances API
+  description: Retrieve account balances and available funds.
+  tags:
+  - Balances
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-balances-api-openapi.yml
+- aid: meow:meow-bills-api
+  name: Meow Bills API
+  description: View and manage bills for vendor payments.
+  tags:
+  - Bills
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-bills-api-openapi.yml
+- aid: meow:meow-cards-api
+  name: Meow Cards API
+  description: Manage virtual and physical cards, and view transactions and insights.
+  tags:
+  - Cards
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-cards-api-openapi.yml
+- aid: meow:meow-collection-accounts-api
+  name: Meow Collection Accounts API
+  description: Manage accounts for payment collection.
+  tags:
+  - Collection Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-collection-accounts-api-openapi.yml
+- aid: meow:meow-contacts-api
+  name: Meow Contacts API
+  description: Manage contacts for crypto and USDC transfers.
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-contacts-api-openapi.yml
+- aid: meow:meow-customers-api
+  name: Meow Customers API
+  description: Manage invoicing customers and their details.
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-customers-api-openapi.yml
+- aid: meow:meow-entities-api
+  name: Meow Entities API
+  description: The Entities API from Meow — 12 operation(s) for entities.
+  tags:
+  - Entities
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-entities-api-openapi.yml
+- aid: meow:meow-health-api
+  name: Meow Health API
+  description: The Health API from Meow — 1 operation(s) for health.
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-health-api-openapi.yml
+- aid: meow:meow-invoices-api
+  name: Meow Invoices API
+  description: Create and manage invoices.
+  tags:
+  - Invoices
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-invoices-api-openapi.yml
+- aid: meow:meow-limits-api
+  name: Meow Limits API
+  description: The Limits API from Meow — 1 operation(s) for limits.
+  tags:
+  - Limits
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-limits-api-openapi.yml
+- aid: meow:meow-line-items-api
+  name: Meow Line Items API
+  description: Manage invoice line items.
+  tags:
+  - Line Items
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-line-items-api-openapi.yml
+- aid: meow:meow-partner-onboarding-api
+  name: Meow Partner Onboarding API
+  description: Onboard entities using your partner API key.
+  tags:
+  - Partner Onboarding
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-partner-onboarding-api-openapi.yml
+- aid: meow:meow-partner-webhooks-api
+  name: Meow Partner Webhooks API
+  description: The Partner Webhooks API from Meow — 6 operation(s) for partner webhooks.
+  tags:
+  - Partner Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-partner-webhooks-api-openapi.yml
+- aid: meow:meow-payment-methods-api
+  name: Meow Payment Methods API
+  description: View available payment method types.
+  tags:
+  - Payment Methods
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-payment-methods-api-openapi.yml
+- aid: meow:meow-payment-networks-api
+  name: Meow Payment Networks API
+  description: Manage payment networks and routing information.
+  tags:
+  - Payment Networks
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-payment-networks-api-openapi.yml
+- aid: meow:meow-products-api
+  name: Meow Products API
+  description: Manage products and pricing for invoicing.
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-products-api-openapi.yml
+- aid: meow:meow-routing-numbers-api
+  name: Meow Routing Numbers API
+  description: Validate routing numbers and retrieve bank information.
+  tags:
+  - Routing Numbers
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-routing-numbers-api-openapi.yml
+- aid: meow:meow-security-policies-api
+  name: Meow Security Policies API
+  description: The Security Policies API from Meow — 1 operation(s) for security policies.
+  tags:
+  - Security Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-security-policies-api-openapi.yml
+- aid: meow:meow-simulations-api
+  name: Meow Simulations API
+  description: >-
+    Trigger simulated events — inbound transfers, card authorizations, application approval — to test
+    integrations end-to-end without real money movement. **Not available in production**: these endpoints
+    exist only in sandbox and development environments and return `404 Not Found` in production.
+  tags:
+  - Simulations
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-simulations-api-openapi.yml
+- aid: meow:meow-tax-forms-api
+  name: Meow Tax Forms API
+  description: Retrieve IRS tax forms (1099 family) issued for accounts.
+  tags:
+  - Tax Forms
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-tax-forms-api-openapi.yml
+- aid: meow:meow-transactions-api
+  name: Meow Transactions API
+  description: Retrieve account transaction history and details.
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-transactions-api-openapi.yml
+- aid: meow:meow-transfers-api
+  name: Meow Transfers API
+  description: Initiate ACH, wire, book, and crypto transfers, and retrieve transfer details.
+  tags:
+  - Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-transfers-api-openapi.yml
+- aid: meow:meow-webhooks-api
+  name: Meow Webhooks API
+  description: Manage webhook subscriptions and inspect delivery history.
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/meow-webhooks-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
