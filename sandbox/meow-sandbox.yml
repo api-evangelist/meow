@@ -1,0 +1,47 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/meow-openapi.yaml
+docs:
+- https://developer.meow.com/getting-started
+- https://developer.meow.com/authentication
+environments:
+- name: production
+  base_url: https://api.meow.com/v1
+- name: sandbox
+  base_url: https://api.sandbox.meow.com/v1
+  purpose: Development and testing before going live.
+- name: development
+  base_url: https://api.dev.meow.com/v1
+  purpose: Early integration testing.
+notes: >-
+  Meow keys are created and scoped from the dashboard; use a sandbox-scoped key
+  against the sandbox base URL. Simulation endpoints exist only in sandbox and
+  development and return 404 in production. No public magic test card numbers or
+  fixture tokens were found in the docs, so none are recorded here (would not be
+  fabricated).
+simulation_endpoints:
+- operationId: simulate_application_approval_simulations_entities__entity_id__application_approval_post
+  path: POST /simulations/entities/{entity_id}/application_approval
+  description: Simulate approval of an onboarding application.
+- operationId: simulate_inbound_transfer_simulations_inbound_transfers_post
+  path: POST /simulations/inbound_transfers
+  description: Simulate an inbound transfer into an account.
+- operationId: simulate_card_authorization_simulations_card_authorizations_post
+  path: POST /simulations/card_authorizations
+  description: Simulate a card authorization.
+- operationId: simulate_card_capture_simulations_card_authorizations__authorization_id__capture_post
+  path: POST /simulations/card_authorizations/{authorization_id}/capture
+  description: Simulate capture of a card authorization.
+- operationId: simulate_card_increment_simulations_card_authorizations__authorization_id__increment_post
+  path: POST /simulations/card_authorizations/{authorization_id}/increment
+  description: Simulate an incremental authorization.
+- operationId: simulate_card_reverse_simulations_card_authorizations__authorization_id__reverse_post
+  path: POST /simulations/card_authorizations/{authorization_id}/reverse
+  description: Simulate reversal of a card authorization.
+- operationId: simulate_card_refund_simulations_card_transactions__transaction_id__refund_post
+  path: POST /simulations/card_transactions/{transaction_id}/refund
+  description: Simulate a refund on a card transaction.
+- operationId: simulate_fund_financial_account_simulations_fund_financial_account_post
+  path: POST /simulations/fund_financial_account
+  description: Simulate funding a financial account (stablecoin account funding).
+scope_required: simulations:write

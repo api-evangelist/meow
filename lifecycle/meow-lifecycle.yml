@@ -1,0 +1,26 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/meow-openapi.yaml
+docs: https://developer.meow.com/changelog
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://developer.meow.com/getting-started
+deprecation:
+  policy_url: https://developer.meow.com/changelog
+  mechanism: >-
+    Operations are marked deprecated in the OpenAPI (deprecated: true) and
+    announced with a "Deprecated" tag in the dated changelog, with the
+    replacement endpoint named.
+  sunset_header: unknown
+status_page: https://status.meow.com
+sla:
+  url: null
+  uptime_target: null
+deprecated_operations:
+- operation: openapi/meow-openapi.yaml#create_usdc_transaction_accounts__account_id__usdc_post
+  path: POST /accounts/{account_id}/usdc
+  replacement: POST /accounts/{account_id}/crypto
+- operation: openapi/meow-openapi.yaml#get_usdc_transaction_accounts__account_id__transactions__transaction_id__get
+  path: GET /accounts/{account_id}/transactions/{transaction_id}
+  replacement: GET /accounts/{account_id}/crypto/{transaction_id}

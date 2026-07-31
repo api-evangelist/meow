@@ -1,0 +1,120 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/meow-openapi.yaml
+docs: https://developer.meow.com/authentication
+mcp_docs: https://developer.meow.com/mcp/authentication
+notes: >-
+  Meow scopes exist on two surfaces. The REST API key carries fine-grained
+  scopes (declared as x-scopes on the apiKeyAuth security scheme and documented
+  on the changelog as they shipped). The Meow MCP server exposes four coarse
+  OAuth 2.1 meow.* scopes that map onto groups of the API-key scopes. The
+  narrower of role and granted scope always wins.
+oauth_scopes:
+- scope: meow.read
+  description: >-
+    All read access: accounts, balances, transactions, payment networks,
+    contacts, billing, bills, and cards. Always granted (locked on).
+  maps_to:
+  - accounts:read
+  - accounts:balances
+  - accounts:transactions
+  - accounts:payment_networks
+  - contacts:read
+  - billing:products:read
+  - billing:customers:read
+  - billing:invoices:read
+  - billing:accounts:read
+  - billpay:read
+  - cards:read
+- scope: meow.transfers
+  description: Draft ACH, scheduled ACH, wire, book, and crypto payments (for human approval).
+  maps_to:
+  - transfers:ach:write
+  - transfers:wire:write
+  - transfers:book:write
+  - transfers:crypto:write
+- scope: meow.cards
+  description: Issue, update, freeze, and revoke virtual cards.
+  maps_to:
+  - cards:write
+- scope: meow.billing
+  description: Create and manage invoicing products, customers, and invoices.
+  maps_to:
+  - billing:invoices:write
+  - billing:customers:write
+  - billing:products:write
+api_key_scopes:
+- scope: accounts:read
+  description: Read account information.
+- scope: accounts:write
+  description: Create, update, and close bank accounts.
+- scope: accounts:payment-networks
+  description: List payment networks supported by an account.
+- scope: accounts:transactions
+  description: List account transactions.
+- scope: accounts:balances
+  description: List account balances.
+- scope: accounts:statements
+  description: Access account statements.
+- scope: accounts:tax-documents
+  description: Access account tax documents (1099 family).
+- scope: entity:create
+  description: Create a business entity.
+- scope: transfers:crypto:write
+  description: Create crypto (USDC) transactions.
+- scope: transfers:usdc:write
+  description: Legacy USDC transfer scope (superseded by transfers:crypto:write).
+- scope: transfers:ach:write
+  description: Create ACH transfers.
+- scope: transfers:wire:write
+  description: Create wire transfers.
+- scope: transfers:book:write
+  description: Create internal book transfers.
+- scope: contacts:read
+  description: Read payment contacts.
+- scope: contacts:write
+  description: Create, update, and delete payment contacts.
+- scope: billing:products:read
+  description: Read invoicing products.
+- scope: billing:products:write
+  description: Create and manage invoicing products.
+- scope: billing:customers:read
+  description: Read invoicing customers.
+- scope: billing:customers:write
+  description: Create and manage invoicing customers.
+- scope: billing:invoices:read
+  description: Read invoices and line items.
+- scope: billing:invoices:write
+  description: Create and manage invoices.
+- scope: billing:accounts:read
+  description: Read collection accounts.
+- scope: billpay:read
+  description: Read bills.
+- scope: billpay:write
+  description: Create, update, and delete bills.
+- scope: onboarding:read
+  description: Read business-entity onboarding status.
+- scope: onboarding:write
+  description: Manage business-entity onboarding (representatives, documents, submission).
+- scope: cards:read
+  description: Read cards, card transactions, and spending insights.
+- scope: cards:write
+  description: Issue, update, freeze, and revoke cards.
+- scope: webhooks:read
+  description: Read webhook subscriptions and delivery history.
+- scope: webhooks:write
+  description: Create, update, and delete webhook subscriptions.
+- scope: partner:onboarding:read
+  description: Read partner onboarding applications.
+- scope: partner:onboarding:write
+  description: Create and manage partner onboarding applications.
+- scope: partner:webhooks:read
+  description: Read partner webhook subscriptions and deliveries.
+- scope: partner:webhooks:write
+  description: Create and manage partner webhook subscriptions.
+- scope: simulations:write
+  description: Run sandbox simulation endpoints (sandbox/dev only).
+- scope: banking:limits:read
+  description: Read daily withdrawal limits.
+- scope: banking:limits:write
+  description: Set daily withdrawal limits.

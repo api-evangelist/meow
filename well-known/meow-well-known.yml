@@ -1,0 +1,29 @@
+generated: '2026-07-20'
+method: probed
+notes: >-
+  Probed the /.well-known/ discovery surface on the marketing host and the API
+  host. Nothing was served on www.meow.com (all 404). The API host
+  api.meow.com returns 401 (the host exists but gates every path behind auth),
+  so no discovery document could be captured. No raw files saved; absence is
+  valid recorded data.
+hosts:
+- host: https://www.meow.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.meow.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/openid-configuration
+    status: 401
+  - path: /.well-known/oauth-authorization-server
+    status: 401

@@ -1,0 +1,55 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/meow-openapi.yaml
+notes: >-
+  Packaged Agent Skills generated from the Meow OpenAPI and the developer docs
+  (conventions, scopes, errors). Every operationId referenced is verified to
+  exist verbatim in openapi/meow-openapi.yaml. Meow also ships a first-party
+  hosted MCP server (see mcp/meow-mcp.yml) that packages these same flows for
+  interactive assistants.
+skills:
+- file: meow-issue-virtual-card.md
+  name: Issue and manage a virtual card
+  api: openapi/meow-openapi.yaml
+  operations:
+  - create_card_cards_post
+  - get_card_details_cards__card_id__details_get
+  - update_card_cards__card_id__patch
+  - revoke_card_cards__card_id__revoke_post
+  - list_card_transactions_cards_transactions_get
+- file: meow-draft-ach-transfer.md
+  name: Draft an ACH transfer for approval
+  api: openapi/meow-openapi.yaml
+  operations:
+  - list_accounts_accounts_get
+  - list_contacts_contacts_get
+  - create_ach_transfer_accounts__account_id__ach_post
+  - get_approval_approvals__approval_id__get
+  - get_ach_transfer_accounts__account_id__achs__ach_transfer_id__get
+- file: meow-create-and-send-invoice.md
+  name: Create and send an invoice
+  api: openapi/meow-openapi.yaml
+  operations:
+  - create_invoicing_customer_billing_customers_post
+  - create_product_billing_products_post
+  - create_invoice_billing_invoices_post
+  - get_invoice_billing_invoices__invoice_id__get
+  - list_billing_accounts_billing_accounts_get
+- file: meow-onboard-business-entity.md
+  name: Onboard a business entity (KYB)
+  api: openapi/meow-openapi.yaml
+  operations:
+  - create_business_entity_entities_post
+  - update_entity_business_details_entities__entity_id__business_details_patch
+  - create_representative_entities__entity_id__representatives_post
+  - submit_representative_kyc_data_entities__entity_id__representatives__representative_id__kyc_post
+  - submit_entity_application_entities__entity_id__submit_post
+  - get_entity_onboarding_entities__entity_id__get
+- file: meow-subscribe-webhooks.md
+  name: Subscribe to and verify webhooks
+  api: openapi/meow-openapi.yaml
+  operations:
+  - create_subscription_webhooks_subscriptions_post
+  - send_test_event_webhooks_subscriptions__subscription_id__test_post
+  - list_deliveries_webhooks_deliveries_get
+  - redrive_delivery_webhooks_deliveries__delivery_id__redrive_post

@@ -1,0 +1,47 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/meow-openapi.yaml
+docs: https://developer.meow.com/errors
+format: custom-json
+envelope:
+  fields:
+  - name: code
+    description: Numeric error code, aligned with FDX where possible.
+  - name: message
+    description: Human-readable error message.
+  - name: debug_message
+    description: Troubleshooting detail; for debugging only, not for display to end users.
+notes: >-
+  Meow does not use RFC 9457 application/problem+json. Errors return a custom
+  JSON body {code, message, debug_message}. HTTP-level responses observed in the
+  OpenAPI are 404 (not found) and 422 (validation error, HTTPValidationError).
+  The numeric codes below are the documented application-level error codes.
+http_responses:
+- status: 404
+  description: Resource not found.
+  source: openapi/meow-openapi.yaml
+- status: 422
+  description: Validation error (HTTPValidationError).
+  source: openapi/meow-openapi.yaml
+problems:
+- code: 500
+  title: Internal server error
+- code: 501
+  title: Subsystem unavailable
+- code: 503
+  title: Scheduled maintenance
+- code: 601
+  title: Data not found
+- code: 602
+  title: Customer not authorized
+- code: 701
+  title: Account not found
+  remediation: Use /accounts to get a list of accounts and their IDs.
+- code: 703
+  title: Invalid input (including invalid date ranges)
+- code: 704
+  title: Account type not supported
+- code: 705
+  title: Account is closed
+- code: 801
+  title: Transaction not found

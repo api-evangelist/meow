@@ -1,0 +1,90 @@
+generated: '2026-07-20'
+method: searched
+type: Webhooks
+source: https://developer.meow.com/guides/webhooks
+docs:
+- https://developer.meow.com/guides/webhooks
+- https://developer.meow.com/api-reference/webhooks/events
+spec_type: null
+notes: >-
+  Meow documents a rich webhook surface but publishes no AsyncAPI document, so
+  this captures the webhook event catalog rather than a verbatim AsyncAPI spec.
+wire_format: Standard Webhooks (https://www.standardwebhooks.com/)
+signature:
+  algorithm: HMAC-SHA-256
+  signed_content: "{webhook-id}.{webhook-timestamp}.{body}"
+  key: base64-decoded whsec_ secret
+  headers:
+  - webhook-id
+  - webhook-timestamp
+  - webhook-signature
+  replay_window_seconds: 300
+delivery:
+  payload_modes:
+  - snapshot
+  - thin
+  ordering: per-resource monotonic `sequence` (not gapless)
+  dedupe_on: webhook-id
+  retries: up to 10 attempts over ~91 hours with up to 20% jitter
+  circuit_breaker: opens after 5 consecutive failures
+  auto_disable: after 10 failed attempts (disabled_reason=retry_exhausted)
+scopes:
+- webhooks:read
+- webhooks:write
+- partner:webhooks:read
+- partner:webhooks:write
+envelope:
+  fields:
+  - type
+  - timestamp
+  - data
+  - sequence
+events:
+- type: ach_transfer.created
+  when: A new outbound ACH transfer was created.
+- type: ach_transfer.updated
+  when: An outbound ACH transfer changed state.
+  statuses: [pending, processing, sent, returned, canceled, error]
+- type: wire_transfer.created
+  when: A new outbound wire was created.
+- type: wire_transfer.updated
+  when: An outbound wire changed state.
+  statuses: [pending, processing, sent, returned, canceled, error]
+- type: inbound_ach_transfer.created
+  when: An ACH credit or debit hit your account.
+- type: inbound_ach_transfer.updated
+  when: An inbound ACH changed state.
+  statuses: [pending, posted, scheduled, failed, canceled, returned]
+- type: inbound_wire_transfer.created
+  when: A wire arrived at your account.
+- type: inbound_wire_transfer.updated
+  when: An inbound wire changed state.
+- type: check_deposit.created
+  when: A check deposit was submitted.
+- type: check_deposit.updated
+  when: A check deposit changed state.
+- type: global_account_transfer.created
+  when: Activity on a global (virtual) account. Single-emission.
+  activity_types: [funds_scheduled, funds_received, payment_submitted, payment_processed, refund_in_flight, refunded, refund_failed]
+- type: webhook.test
+  when: A test event you triggered.
+- type: message.attempt.exhausted
+  when: A delivery hit 10 failed attempts and the subscription was auto-disabled.
+partner_events:
+- type: application.created
+  when: A partner created an onboarding application.
+- type: application.under_review
+  when: KYB review is pending.
+- type: application.submitted
+  when: KYB approved; the banking account is not yet active.
+- type: application.approved
+  when: Onboarding finished — the account is active.
+- type: application.rejected
+  when: The application was rejected.
+management_operations:
+- openapi/meow-openapi.yaml#create_subscription_webhooks_subscriptions_post
+- openapi/meow-openapi.yaml#list_subscriptions_webhooks_subscriptions_get
+- openapi/meow-openapi.yaml#update_subscription_webhooks_subscriptions__subscription_id__patch
+- openapi/meow-openapi.yaml#delete_subscription_webhooks_subscriptions__subscription_id__delete
+- openapi/meow-openapi.yaml#send_test_event_webhooks_subscriptions__subscription_id__test_post
+- openapi/meow-openapi.yaml#redrive_delivery_webhooks_deliveries__delivery_id__redrive_post

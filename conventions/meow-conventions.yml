@@ -1,0 +1,66 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/meow-openapi.yaml
+docs:
+- https://developer.meow.com/authentication
+- https://developer.meow.com/errors
+- https://developer.meow.com/guides/webhooks
+authentication:
+  style: api-key-header
+  header: x-api-key
+  multi_entity_header: x-entity-id
+  mcp_oauth: OAuth 2.1 with PKCE on the Meow MCP server (mcp.meow.com)
+  see: authentication/meow-authentication.yml
+idempotency:
+  supported: true
+  mechanism: header
+  header: Idempotency-Key
+  scope: per-request on money-movement / mutating operations
+  key_length: 1-50 characters
+  evidence: >-
+    The OpenAPI declares an Idempotency-Key header parameter on transfer
+    creation operations (ACH, scheduled ACH, wire, book, crypto). Supply a
+    unique key to safely retry a request without duplicating the transfer.
+  source: openapi/meow-openapi.yaml
+pagination:
+  style: offset-limit
+  params:
+  - limit
+  - offset
+  notes: Used on list endpoints such as contacts and bills; ordered results (e.g. contacts by nickname).
+versioning:
+  scheme: uri-path
+  current: v1
+  base_urls:
+    production: https://api.meow.com/v1
+    sandbox: https://api.sandbox.meow.com/v1
+    development: https://api.dev.meow.com/v1
+error_envelope:
+  format: custom-json
+  fields:
+  - code
+  - message
+  - debug_message
+  code_alignment: FDX-aligned where possible
+  problem_json: false
+  see: errors/meow-problem-types.yml
+webhooks:
+  wire_format: Standard Webhooks (standardwebhooks.com)
+  signature: HMAC-SHA-256 over "{webhook-id}.{webhook-timestamp}.{body}"
+  headers:
+  - webhook-id
+  - webhook-timestamp
+  - webhook-signature
+  replay_window: 5 minutes
+  ordering: per-resource monotonic (not gapless) `sequence` field
+  payload_modes:
+  - snapshot
+  - thin
+  dedupe_on: webhook-id
+  retries: up to 10 attempts over ~91 hours with jitter; circuit breaker after 5 consecutive failures
+  see: asyncapi/meow-webhooks.yml
+rate_limit_signaling:
+  documented: partial
+  notes: Retry-After honored on 429/503 for webhook delivery; no dedicated public rate-limit-header reference found in docs.
+tracing:
+  request_id: operation_request_id appears on some transfer resources

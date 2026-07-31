@@ -1,0 +1,269 @@
+generated: '2026-07-20'
+method: searched
+status: published
+source: https://developer.meow.com/mcp-server
+docs:
+- https://developer.meow.com/mcp-server
+- https://developer.meow.com/mcp/authentication
+- https://developer.meow.com/mcp/tools
+- https://developer.meow.com/mcp/security
+- https://developer.meow.com/mcp/connect
+server:
+  name: meow
+  transport: http
+  surfaces:
+  - name: oauth
+    url: https://mcp.meow.com
+    auth: oauth2.1-pkce
+    best_for: Interactive assistants (Claude.ai, Claude Code, ChatGPT, Cursor, VS Code, Goose)
+    access: All entities the login can reach
+  - name: cli
+    url: https://mcp.meow.com/cli
+    auth: api-key-bearer
+    best_for: Coding agents, automation, and agent-led signup
+    access: The single entity the API key is scoped to
+install:
+  claude_code: claude mcp add --transport http meow https://mcp.meow.com
+scopes:
+- meow.read
+- meow.transfers
+- meow.cards
+- meow.billing
+safety:
+  human_in_the_loop: >-
+    Transfer tools never move money; each creates a draft in a pending-approval
+    state that a human must approve on the Meow dashboard.
+  annotations: Tools carry readOnlyHint / destructiveHint for client confirmation prompts.
+  enforcement: Per-call checks of token authenticity, role on the target entity, granted scope, entity status, session revocation, and MFA.
+tools:
+- name: list_my_entities
+  scope: meow.read
+  type: read
+  surface: oauth
+- name: get_my_entity
+  scope: meow.read
+  type: read
+  surface: cli
+- name: get_session_info
+  scope: meow.read
+  type: read
+  surface: both
+- name: list_bank_accounts
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_accounts_accounts_get
+- name: get_bank_account
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_account_handler_accounts__account_id__get
+- name: get_account_balances
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_account_balances_accounts__account_id__balances_get
+- name: list_account_payment_networks
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_account_payment_networks_accounts__account_id__payment_networks_get
+- name: list_account_transactions
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_account_transactions_accounts__account_id__transactions_get
+- name: get_usdc_transaction
+  scope: meow.read
+  type: read
+  surface: both
+- name: get_ach_transfer
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_ach_transfer_accounts__account_id__achs__ach_transfer_id__get
+- name: get_wire_transfer
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_wire_transfer_accounts__account_id__wires__wire_transfer_id__get
+- name: list_scheduled_ach_transfers
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_scheduled_ach_transfers_accounts__account_id__ach_scheduled_get
+- name: list_contacts
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_contacts_contacts_get
+- name: get_contact
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_contact_contacts__contact_id__get
+- name: list_cards
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_cards_cards_get
+- name: list_card_transactions
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_card_transactions_cards_transactions_get
+- name: get_card_insights
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_card_insights_cards_insights_get
+- name: get_card
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_card_cards__card_id__get
+- name: get_card_details
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_card_details_cards__card_id__details_get
+- name: create_card
+  scope: meow.cards
+  type: action
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#create_card_cards_post
+- name: update_card
+  scope: meow.cards
+  type: action
+  surface: oauth
+  source_operation: openapi/meow-openapi.yaml#update_card_cards__card_id__patch
+- name: revoke_card
+  scope: meow.cards
+  type: action
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#revoke_card_cards__card_id__revoke_post
+- name: create_ach_transfer
+  scope: meow.transfers
+  type: action-draft
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#create_ach_transfer_accounts__account_id__ach_post
+- name: create_scheduled_ach_transfer
+  scope: meow.transfers
+  type: action-draft
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#create_scheduled_ach_transfer_accounts__account_id__ach_scheduled_post
+- name: create_wire_transfer
+  scope: meow.transfers
+  type: action-draft
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#create_wire_transfer_accounts__account_id__wire_post
+- name: create_book_transfer
+  scope: meow.transfers
+  type: action-draft
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#create_book_transfer_accounts__account_id__book_post
+- name: create_crypto_transaction
+  scope: meow.transfers
+  type: action-draft
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#create_crypto_transaction_accounts__account_id__crypto_post
+- name: get_approval
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_approval_approvals__approval_id__get
+- name: list_bills
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#List_Bills_bills_get
+- name: get_bill
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#Get_Bill_bills__bill_id__get
+- name: list_products
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_products_billing_products_get
+- name: get_product
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_product_billing_products__product_id__get
+- name: create_product
+  scope: meow.billing
+  type: action
+  surface: oauth
+  source_operation: openapi/meow-openapi.yaml#create_product_billing_products_post
+- name: list_invoicing_customers
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_invoicing_customers_billing_customers_get
+- name: get_invoicing_customer
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_invoicing_customer_billing_customers__customer_id__get
+- name: create_invoicing_customer
+  scope: meow.billing
+  type: action
+  surface: oauth
+  source_operation: openapi/meow-openapi.yaml#create_invoicing_customer_billing_customers_post
+- name: list_payment_method_types
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_payment_method_types_billing_payment_method_types_get
+- name: list_invoices
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_invoices_billing_invoices_get
+- name: get_invoice
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_invoice_billing_invoices__invoice_id__get
+- name: list_invoice_line_items
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#List_Invoice_Line_Items_billing_invoices__invoice_id__line_items_get
+- name: get_invoice_line_item
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#Get_Invoice_Line_Item_billing_invoices__invoice_id__line_items__line_item_id__get
+- name: create_invoice
+  scope: meow.billing
+  type: action
+  surface: oauth
+  source_operation: openapi/meow-openapi.yaml#create_invoice_billing_invoices_post
+- name: list_collection_accounts
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_billing_accounts_billing_accounts_get
+- name: search_tax_forms
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#search_tax_forms_tax_forms_get
+- name: get_tax_form
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#get_tax_form_tax_forms__taxFormId__get
+- name: list_security_policies
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#list_security_policies_security_policies_get
+- name: validate_routing_number
+  scope: meow.read
+  type: read
+  surface: both
+  source_operation: openapi/meow-openapi.yaml#validate_routing_number_routing_numbers__routing_number__get

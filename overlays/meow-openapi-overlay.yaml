@@ -1,0 +1,31 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Meow API
+  version: 1.0.0
+extends: openapi/meow-openapi.yaml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-20'
+    x-apievangelist-artifacts:
+      mcp: mcp/meow-mcp.yml
+      authentication: authentication/meow-authentication.yml
+      scopes: scopes/meow-scopes.yml
+      conventions: conventions/meow-conventions.yml
+      errors: errors/meow-problem-types.yml
+      lifecycle: lifecycle/meow-lifecycle.yml
+      changelog: changelog/meow-changelog.yml
+      sandbox: sandbox/meow-sandbox.yml
+      webhooks: asyncapi/meow-webhooks.yml
+      data_model: data-model/meow-data-model.yml
+      conformance: conformance/meow-conformance.yml
+      agentic_access: agentic-access/meow-agentic-access.yml
+- target: $.info
+  update:
+    x-apievangelist-idempotency:
+      supported: true
+      header: Idempotency-Key
+      scope: money-movement operations
+    x-apievangelist-agent-notes: >-
+      Transfer creation operations are drafts pending human approval when routed
+      through the Meow MCP server; supply an Idempotency-Key to safely retry.

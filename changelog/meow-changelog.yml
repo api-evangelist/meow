@@ -1,0 +1,70 @@
+generated: '2026-07-20'
+method: searched
+source: https://developer.meow.com/changelog
+docs:
+- https://developer.meow.com/changelog
+- https://developer.meow.com/changelog/app
+- https://developer.meow.com/changelog/mcp
+scheme: dated
+current_version: v1
+entries:
+- date: '2026-07-15'
+  tags: [New Feature, Improvement]
+  highlights:
+  - 'Onboarding: submitting an application returns a hosted consent_url; product_features requests additional products (stablecoins); non-US businesses can onboard via the API.'
+  - 'Webhooks: global subscriptions receive events for every entity a user administers, each delivery carrying entity_id.'
+  - 'Accounts: PATCH /accounts/{account_id} sets a custom account nickname.'
+  breaking: false
+- date: '2026-06-10'
+  tags: [New Feature]
+  highlights:
+  - 'Webhooks: per-resource `sequence` for out-of-order protection; richer delivery history; partner webhooks for application.* events; stricter event_types allowlists.'
+  breaking: false
+- date: '2026-05-22'
+  tags: [New Feature]
+  highlights:
+  - 'Webhooks: subscribe to events and inspect deliveries; snapshot/thin payload modes; 13 rail events; Standard Webhooks signatures; scopes webhooks:read/write.'
+  breaking: false
+- date: '2026-05-15'
+  tags: [New Feature]
+  highlights:
+  - 'Cards: PATCH /cards/{card_id} to freeze/unfreeze/update spend limits.'
+  - 'Tax Forms: GET /tax-forms and GET /tax-forms/{taxFormId} for IRS 1099 forms.'
+  - 'Instant payments: FedNow supported as a payment rail.'
+  breaking: false
+- date: '2026-04-26'
+  tags: [New Feature]
+  highlights:
+  - 'Partner Onboarding API: submit and track partner onboarding applications.'
+  breaking: false
+- date: '2026-04-13'
+  tags: [New Feature]
+  highlights:
+  - 'Approval Workflow: programmatic transfers flow through configurable approval policies; pending-approval state surfaced to API callers.'
+  breaking: false
+- date: '2026-03-25'
+  tags: [New Feature]
+  highlights:
+  - 'MCP Server: new MCP server for the Meow API with OAuth.'
+  breaking: false
+- date: '2026-03-16'
+  tags: [New Feature, Deprecated]
+  highlights:
+  - 'Crypto Transaction API: POST/GET /accounts/{account_id}/crypto replaces the legacy USDC endpoints; scope transfers:crypto:write.'
+  - 'Deprecated: POST /accounts/{account_id}/usdc and GET /accounts/{account_id}/transactions/{transaction_id}.'
+  breaking: false
+- date: '2026-01-28'
+  tags: [New Feature]
+  highlights:
+  - 'Billpay API: bill management endpoints; scope billpay:read.'
+  breaking: false
+- date: '2025-12-02'
+  tags: [New Feature]
+  highlights:
+  - 'Contacts API (full CRUD), Billing API (products/customers/invoices/line-items), transfer APIs (book/ach/wire), payment networks, routing-number validation, API-keys management, multi-entity x-entity-id header.'
+  breaking: false
+- date: '2025-04-08'
+  tags: [New Feature]
+  highlights:
+  - 'Unified Meow API: combined read and write APIs; Accounts API, USDC transactions, health check, x-api-key auth and scoped permissions.'
+  breaking: false

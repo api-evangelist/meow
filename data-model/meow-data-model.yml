@@ -1,0 +1,100 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/meow-openapi.yaml
+docs: https://developer.meow.com/api-reference/overview
+notes: >-
+  Entity-relationship graph derived from the OpenAPI paths and id-reference
+  fields (entity_id, account_id, counterparty_id, customer_id, invoice_id,
+  card_id, subscription_id, delivery_id, approval_id) and the webhook event
+  catalog. Meow-managed IDs are UUIDs; bank-rail resource IDs are opaque
+  strings whose format varies by the underlying bank (e.g. withdrawal_txc_...,
+  bridge_va_inach_...).
+entities:
+- name: BusinessEntity
+  id: entity_id
+  scoped_by_header: x-entity-id
+  relationships:
+  - has_many: BankAccount
+  - has_many: Representative
+- name: Representative
+  id: representative_id
+  relationships:
+  - belongs_to: BusinessEntity (via entity_id)
+- name: BankAccount
+  id: account_id
+  relationships:
+  - belongs_to: BusinessEntity (via entity_id)
+  - has_many: Balance
+  - has_many: Transaction
+  - has_many: Transfer
+  - has_many: Card
+- name: Balance
+  relationships:
+  - belongs_to: BankAccount (via account_id)
+- name: Transaction
+  relationships:
+  - belongs_to: BankAccount (via account_id)
+- name: Contact
+  id: contact_id
+  domain: Payment counterparty (ACH/wire/check or USDC crypto address)
+  relationships:
+  - referenced_by: Transfer (via counterparty_id)
+- name: Transfer
+  subtypes: [ach_transfer, wire_transfer, book_transfer, crypto_transaction, scheduled_ach_transfer]
+  relationships:
+  - belongs_to: BankAccount (via account_id)
+  - belongs_to: Contact (via counterparty_id)
+  - has_one: Approval (draft transfers pending human approval)
+- name: Approval
+  id: approval_id
+  relationships:
+  - belongs_to: Transfer
+- name: Card
+  id: card_id
+  domain: Virtual card scoped to a single merchant and spend limit
+  relationships:
+  - belongs_to: BankAccount (linked banking account)
+  - has_many: CardTransaction
+- name: Invoice
+  id: invoice_id
+  relationships:
+  - belongs_to: Customer (via customer_id)
+  - has_many: LineItem
+  - uses: CollectionAccount
+- name: LineItem
+  id: line_item_id
+  relationships:
+  - belongs_to: Invoice (via invoice_id)
+  - references: Product
+- name: Product
+  id: product_id
+  relationships:
+  - used_by: LineItem
+- name: Customer
+  id: customer_id
+  domain: Invoicing customer
+- name: CollectionAccount
+  relationships:
+  - used_by: Invoice
+- name: Bill
+  id: bill_id
+  domain: Vendor payable (draft pending dashboard approval)
+  relationships:
+  - has_many: BillDocument
+- name: WebhookSubscription
+  id: subscription_id
+  relationships:
+  - has_many: WebhookDelivery
+- name: WebhookDelivery
+  id: delivery_id
+  relationships:
+  - belongs_to: WebhookSubscription (via subscription_id)
+  - has_many: DeliveryAttempt
+- name: TaxForm
+  id: taxFormId
+  domain: IRS 1099-family forms issued for an account
+- name: PartnerApplication
+  id: application_id
+  domain: Partner-onboarding KYB application
+  relationships:
+  - onboards: BusinessEntity (via entity_id)

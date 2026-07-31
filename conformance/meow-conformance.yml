@@ -1,0 +1,37 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/meow-openapi.yaml
+docs:
+- https://developer.meow.com/authentication
+- https://developer.meow.com/guides/webhooks
+- https://developer.meow.com/errors
+standards:
+- id: oauth2
+  conforms: true
+  evidence: The Meow MCP server authenticates with OAuth 2.1 + PKCE (mcp.meow.com).
+- id: api-key-auth
+  conforms: true
+  evidence: REST API uses x-api-key header with scoped keys.
+- id: standard-webhooks
+  conforms: true
+  evidence: Webhooks use the Standard Webhooks wire format with HMAC-SHA-256 signatures.
+- id: idempotency-keys
+  conforms: true
+  evidence: Idempotency-Key header supported on money-movement operations.
+- id: fdx-error-codes
+  conforms: partial
+  evidence: Error `code` values are aligned with FDX where possible.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom {code, message, debug_message} JSON envelope, not application/problem+json.
+- id: pagination-offset-limit
+  conforms: true
+  evidence: List endpoints use limit/offset query parameters.
+- id: rfc2445-rrule
+  conforms: true
+  evidence: Recurring invoices use RFC 2445 RRULE scheduling (per changelog).
+compliance_program_published: false
+compliance_notes: >-
+  No public trust center or named security certifications (SOC 2, ISO 27001,
+  PCI DSS, etc.) were found for Meow's own surface; banking services are
+  provided through partner banks. No Compliance pointer is emitted.
