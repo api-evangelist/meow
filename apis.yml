@@ -234,6 +234,12 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgentSkill
+  url: skills/meow-create-and-send-invoice.md
+- type: MCPServer
+  url: mcp/meow-mcp.yml
+- type: Overlay
+  url: overlays/meow-openapi-overlay.yaml
 - type: AgentCard
   url: a2a/meow-a2a.yml
   name: A2A Agent Card
