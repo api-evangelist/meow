@@ -1,0 +1,2867 @@
+{
+  "item": [
+    {
+      "id": "3ae55811-cf54-4eae-8f9f-e7b52ef97357",
+      "name": "Entities",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5bd08322-0590-4150-ad92-890c2c8db7ce",
+          "name": "Create Business Entity",
+          "request": {
+            "name": "Create Business Entity",
+            "description": {
+              "content": "Creates a new business entity owned by your API key's user. Send an empty body to create a bare not-started entity, or seed any KYB business details up front: legal name, incorporation, the registered legal and (optional) physical address, and the business profile fields (phone, tax ID, website, description, industry, account purpose, and digital-currency questions). The creating user is granted admin on the new entity, so the same API key can immediately act on it by passing the returned entity ID in the `x-entity-id` header. Anything you omit can be added later with Update Business Details. The entity still completes KYB (beneficial owners and any remaining details) before it can be approved or open bank accounts.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"business_phone\": \"<string>\",\n  \"business_taxid\": \"<string>\",\n  \"business_website\": \"<string>\",\n  \"business_description\": \"<string>\",\n  \"industry\": \"<string>\",\n  \"account_purpose\": \"<string>\",\n  \"account_purpose_description\": \"<string>\",\n  \"provides_blockchain_or_digital_currency_services\": \"<boolean>\",\n  \"transacts_in_digital_currency\": \"<boolean>\",\n  \"develops_governs_supports_blockchain_protocol\": \"<boolean>\",\n  \"business_name\": \"<string>\",\n  \"business_date_of_incorporation\": \"<date>\",\n  \"incorporation_state\": \"<string>\",\n  \"legal_structure\": \"<string>\",\n  \"business_address\": {\n    \"address\": \"<string>\",\n    \"city\": \"<string>\",\n    \"zip\": \"<string>\",\n    \"country\": \"<string>\",\n    \"address_2\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"physical_address\": {\n    \"address\": \"<string>\",\n    \"city\": \"<string>\",\n    \"zip\": \"<string>\",\n    \"country\": \"<string>\",\n    \"address_2\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"reference_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "74d2c013-9be0-4c49-b467-cedf9ef5a10e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_phone\": \"stringstring\",\n  \"business_taxid\": \"string\",\n  \"business_website\": \"string\",\n  \"business_description\": \"string\",\n  \"industry\": \"financial_services_fintech\",\n  \"account_purpose\": \"other\",\n  \"account_purpose_description\": \"string\",\n  \"provides_blockchain_or_digital_currency_services\": true,\n  \"transacts_in_digital_currency\": false,\n  \"develops_governs_supports_blockchain_protocol\": true,\n  \"business_name\": \"string\",\n  \"business_date_of_incorporation\": \"1955-12-04\",\n  \"incorporation_state\": \"WI\",\n  \"legal_structure\": \"ccorp\",\n  \"business_address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"AS\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  },\n  \"physical_address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"MU\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  },\n  \"reference_id\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"977f35d3-9501-341d-3d58-602a8042be91\",\n  \"business_name\": \"string\",\n  \"created_at\": \"1992-05-31T19:11:58.626Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d70ec7f-c287-4b65-b8d3-679d3ba4848b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_phone\": \"stringstring\",\n  \"business_taxid\": \"string\",\n  \"business_website\": \"string\",\n  \"business_description\": \"string\",\n  \"industry\": \"financial_services_fintech\",\n  \"account_purpose\": \"other\",\n  \"account_purpose_description\": \"string\",\n  \"provides_blockchain_or_digital_currency_services\": true,\n  \"transacts_in_digital_currency\": false,\n  \"develops_governs_supports_blockchain_protocol\": true,\n  \"business_name\": \"string\",\n  \"business_date_of_incorporation\": \"1955-12-04\",\n  \"incorporation_state\": \"WI\",\n  \"legal_structure\": \"ccorp\",\n  \"business_address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"AS\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  },\n  \"physical_address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"MU\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  },\n  \"reference_id\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f49c2b8d-19c0-48bc-8809-bf64c50ab950",
+          "name": "List Onboarding Entities",
+          "request": {
+            "name": "List Onboarding Entities",
+            "description": {
+              "content": "Lists the business entities being onboarded by your API key's user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<string>",
+                  "description": "Opaque offset identifier for pagination. Use the nextOffset from a previous response."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c62c7079-1bf8-4e5d-8015-8e950a2cda0e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entities\": [\n    {\n      \"entity_id\": \"25e048fe-7260-7ec8-5579-1c99659b5d09\",\n      \"status\": \"approved\",\n      \"business_name\": \"string\",\n      \"created_at\": \"1989-10-24T20:28:33.763Z\",\n      \"updated_at\": \"1987-05-10T17:11:49.928Z\",\n      \"onboarding_type\": \"smb\"\n    },\n    {\n      \"entity_id\": \"70657aa5-6c1a-09af-1f1c-b0fa86e69939\",\n      \"status\": \"under_review\",\n      \"business_name\": \"string\",\n      \"created_at\": \"2000-04-13T13:04:26.560Z\",\n      \"updated_at\": \"2007-02-06T13:35:10.238Z\",\n      \"onboarding_type\": \"partner\"\n    }\n  ],\n  \"page\": {\n    \"nextOffset\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94478ca2-14be-4a68-84a8-209f040717df",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "088dfd47-0a1e-423a-bb9a-b7027182897a",
+          "name": "Get Entity Onboarding Status",
+          "request": {
+            "name": "Get Entity Onboarding Status",
+            "description": {
+              "content": "Returns the onboarding status of a business entity, including uploaded documents and each representative's KYC status in the `representatives` array. The top-level `kyc_status` reflects the primary representative.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6d18f5b2-4770-402a-9fb7-0066edf0e08d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_id\": \"4a5fce26-3830-7efd-31d5-fa766816af5a\",\n  \"status\": \"pending_user_action\",\n  \"business_name\": \"string\",\n  \"created_at\": \"2007-02-15T17:35:16.311Z\",\n  \"updated_at\": \"2010-02-11T21:45:45.268Z\",\n  \"documents\": [\n    {\n      \"proof_type\": \"aml_sanction\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"1a13dd39-0f6d-cf94-8eef-e754ce19b2cc\"\n    },\n    {\n      \"proof_type\": \"officer_registry\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"d2c11672-37bf-634b-6a2a-9591da29421a\"\n    }\n  ],\n  \"kyc_status\": \"approved\",\n  \"onboarding_type\": \"mcp\",\n  \"next_step\": {\n    \"step\": \"collect_business_details\",\n    \"phase\": \"submitted\",\n    \"missing\": [\n      \"string\",\n      \"string\"\n    ],\n    \"can_submit\": true,\n    \"required_proof_types\": [\n      \"token_purchase_agreement\",\n      \"industry_related_license\"\n    ]\n  },\n  \"representatives\": [\n    {\n      \"representative_id\": \"3cb791b1-2d61-6ecb-b5a7-ce5af015adf9\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": false,\n      \"is_beneficial_owner\": false,\n      \"percent_ownership\": \"00000005564400.73857\",\n      \"kyc_status\": \"pending\"\n    },\n    {\n      \"representative_id\": \"90687d49-741e-91ff-1036-a227e7f992ce\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": true,\n      \"is_beneficial_owner\": true,\n      \"percent_ownership\": \"000000076684609\",\n      \"kyc_status\": \"action_required\"\n    }\n  ],\n  \"consent_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e0b0a6f-a2c4-4f01-9574-99be9aef5e0f",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "baf07aba-eecf-4967-89ae-a8e115049b79",
+          "name": "Update Business Details",
+          "request": {
+            "name": "Update Business Details",
+            "description": {
+              "content": "Update a business entity's KYB details before its application is submitted. Send only the fields you want to change; anything you omit keeps its current value. Use this to fill in the business phone, tax ID, website, description, industry, account purpose, and digital-currency questions, and the registered legal and physical addresses, or to correct details captured at creation. Send `physical_address` together with `business_address`; omitting it keeps any physical address already on file, or uses the legal address when none is set. Returns the refreshed onboarding status, including what is still required next.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "business-details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"business_phone\": \"<string>\",\n  \"business_taxid\": \"<string>\",\n  \"business_website\": \"<string>\",\n  \"business_description\": \"<string>\",\n  \"industry\": \"<string>\",\n  \"account_purpose\": \"<string>\",\n  \"account_purpose_description\": \"<string>\",\n  \"provides_blockchain_or_digital_currency_services\": \"<boolean>\",\n  \"transacts_in_digital_currency\": \"<boolean>\",\n  \"develops_governs_supports_blockchain_protocol\": \"<boolean>\",\n  \"business_name\": \"<string>\",\n  \"business_date_of_incorporation\": \"<date>\",\n  \"incorporation_state\": \"<string>\",\n  \"legal_structure\": \"<string>\",\n  \"business_address\": {\n    \"address\": \"<string>\",\n    \"city\": \"<string>\",\n    \"zip\": \"<string>\",\n    \"country\": \"<string>\",\n    \"address_2\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"physical_address\": {\n    \"address\": \"<string>\",\n    \"city\": \"<string>\",\n    \"zip\": \"<string>\",\n    \"country\": \"<string>\",\n    \"address_2\": \"<string>\",\n    \"state\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "86beb1bb-5c47-4ce1-afe4-b099255d28dd",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "business-details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_phone\": \"<string>\",\n  \"business_taxid\": \"<string>\",\n  \"business_website\": \"<string>\",\n  \"business_description\": \"<string>\",\n  \"industry\": \"travel_agency\",\n  \"account_purpose\": \"additional_yield\",\n  \"account_purpose_description\": \"<string>\",\n  \"provides_blockchain_or_digital_currency_services\": \"<boolean>\",\n  \"transacts_in_digital_currency\": \"<boolean>\",\n  \"develops_governs_supports_blockchain_protocol\": \"<boolean>\",\n  \"business_name\": \"<string>\",\n  \"business_date_of_incorporation\": \"1983-11-05\",\n  \"incorporation_state\": \"MT\",\n  \"legal_structure\": \"trust\",\n  \"business_address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"CC\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  },\n  \"physical_address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"LI\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_id\": \"4a5fce26-3830-7efd-31d5-fa766816af5a\",\n  \"status\": \"pending_user_action\",\n  \"business_name\": \"string\",\n  \"created_at\": \"2007-02-15T17:35:16.311Z\",\n  \"updated_at\": \"2010-02-11T21:45:45.268Z\",\n  \"documents\": [\n    {\n      \"proof_type\": \"aml_sanction\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"1a13dd39-0f6d-cf94-8eef-e754ce19b2cc\"\n    },\n    {\n      \"proof_type\": \"officer_registry\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"d2c11672-37bf-634b-6a2a-9591da29421a\"\n    }\n  ],\n  \"kyc_status\": \"approved\",\n  \"onboarding_type\": \"mcp\",\n  \"next_step\": {\n    \"step\": \"collect_business_details\",\n    \"phase\": \"submitted\",\n    \"missing\": [\n      \"string\",\n      \"string\"\n    ],\n    \"can_submit\": true,\n    \"required_proof_types\": [\n      \"token_purchase_agreement\",\n      \"industry_related_license\"\n    ]\n  },\n  \"representatives\": [\n    {\n      \"representative_id\": \"3cb791b1-2d61-6ecb-b5a7-ce5af015adf9\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": false,\n      \"is_beneficial_owner\": false,\n      \"percent_ownership\": \"00000005564400.73857\",\n      \"kyc_status\": \"pending\"\n    },\n    {\n      \"representative_id\": \"90687d49-741e-91ff-1036-a227e7f992ce\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": true,\n      \"is_beneficial_owner\": true,\n      \"percent_ownership\": \"000000076684609\",\n      \"kyc_status\": \"action_required\"\n    }\n  ],\n  \"consent_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0fb0cb85-12da-48a6-abf5-f9deb953b3fc",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "business-details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_phone\": \"<string>\",\n  \"business_taxid\": \"<string>\",\n  \"business_website\": \"<string>\",\n  \"business_description\": \"<string>\",\n  \"industry\": \"travel_agency\",\n  \"account_purpose\": \"additional_yield\",\n  \"account_purpose_description\": \"<string>\",\n  \"provides_blockchain_or_digital_currency_services\": \"<boolean>\",\n  \"transacts_in_digital_currency\": \"<boolean>\",\n  \"develops_governs_supports_blockchain_protocol\": \"<boolean>\",\n  \"business_name\": \"<string>\",\n  \"business_date_of_incorporation\": \"1983-11-05\",\n  \"incorporation_state\": \"MT\",\n  \"legal_structure\": \"trust\",\n  \"business_address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"CC\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  },\n  \"physical_address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"LI\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4ce27ea3-1317-44cd-89e3-ac0550664fbb",
+          "name": "Add Entity Representative",
+          "request": {
+            "name": "Add Entity Representative",
+            "description": {
+              "content": "Add a representative (a beneficial owner or officer) to a business entity. Set `is_primary` to mark the primary representative (signer); exactly one primary is required before the application can be submitted. Verify the representative separately by submitting their KYC data or minting a self-serve verification link. This is allowed only before the application is submitted for review.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "representatives"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"<email>\",\n  \"title_id\": \"<string>\",\n  \"is_beneficial_owner\": false,\n  \"percent_ownership\": \"<number>\",\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"is_primary\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8138a252-d8e1-4af5-a771-dbc5924fff56",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"felix@catnipcoffee.com\",\n  \"title_id\": \"finance manager\",\n  \"is_beneficial_owner\": false,\n  \"percent_ownership\": \"<number>\",\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"is_primary\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"representative_id\": \"44115c0f-f922-f1f2-5423-c967e272ee7e\",\n  \"email\": \"string\",\n  \"title_id\": \"managing member\",\n  \"is_beneficial_owner\": true,\n  \"percent_ownership\": \"-0000000000002838\",\n  \"is_primary\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e0dc512-bba6-4462-b869-32ed5dcc46e6",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"felix@catnipcoffee.com\",\n  \"title_id\": \"finance manager\",\n  \"is_beneficial_owner\": false,\n  \"percent_ownership\": \"<number>\",\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"is_primary\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a016bb6-1964-49ef-bb4f-19d5e6804b58",
+          "name": "List Entity Representatives",
+          "request": {
+            "name": "List Entity Representatives",
+            "description": {
+              "content": "List the representatives (beneficial owners and officers) on a business entity's application, each with their identity verification (KYC) status. The primary representative (signer) is returned first. Use each `representative_id` to submit KYC, mint a verification link, or make it primary.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "representatives"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "584499b0-eca3-4e50-ad57-a41e7bffb34a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"representatives\": [\n    {\n      \"representative_id\": \"b9dc5241-516b-7f2f-8fb4-296f5b10f3f6\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": false,\n      \"is_beneficial_owner\": true,\n      \"percent_ownership\": \"000026.9\",\n      \"kyc_status\": \"pending\"\n    },\n    {\n      \"representative_id\": \"0e1ab163-ef47-67ed-8560-57f9aa51214c\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": false,\n      \"is_beneficial_owner\": true,\n      \"percent_ownership\": \"00012261\",\n      \"kyc_status\": \"pending\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00068700-0932-4603-9ce1-ecc09b67f90e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "98f38191-4d52-4d63-b6a0-55b89f931e67",
+          "name": "Submit Representative KYC Data",
+          "request": {
+            "name": "Submit Representative KYC Data",
+            "description": {
+              "content": "Submit identity (KYC) data for a representative you added. Verification runs server-side; poll the entity onboarding status endpoint for the result. Use this when you hold the representative's identity details; otherwise mint a verification link for them to self-verify.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "representatives",
+                ":representative_id",
+                "kyc"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "representative_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"date_of_birth\": \"<date>\",\n  \"id_number\": \"<password>\",\n  \"address\": {\n    \"address\": \"<string>\",\n    \"city\": \"<string>\",\n    \"zip\": \"<string>\",\n    \"country\": \"<string>\",\n    \"address_2\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"ip\": \"<ipvanyaddress>\",\n  \"id_type\": \"us_ssn\",\n  \"phone_number\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "17a6eeaa-1c6f-462e-b751-29326660396e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives",
+                    ":representative_id",
+                    "kyc"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "representative_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"first_name\": \"Felix\",\n  \"last_name\": \"Whiskers\",\n  \"date_of_birth\": \"2019-06-20\",\n  \"id_number\": \"123-45-6789\",\n  \"address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"BM\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  },\n  \"ip\": \"203.0.113.42\",\n  \"id_type\": \"us_ssn\",\n  \"phone_number\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"representative_id\": \"058d6252-a605-ec48-f72c-ad100779f4b4\",\n  \"kyc_status\": \"pending\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95e28067-c0f4-411f-9b51-cf5a432a055b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives",
+                    ":representative_id",
+                    "kyc"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "representative_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"first_name\": \"Felix\",\n  \"last_name\": \"Whiskers\",\n  \"date_of_birth\": \"2019-06-20\",\n  \"id_number\": \"123-45-6789\",\n  \"address\": {\n    \"address\": \"9 Whisker Way\",\n    \"city\": \"San Francisco\",\n    \"zip\": \"94105\",\n    \"country\": \"BM\",\n    \"address_2\": \"string\",\n    \"state\": \"string\"\n  },\n  \"ip\": \"203.0.113.42\",\n  \"id_type\": \"us_ssn\",\n  \"phone_number\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f745a7be-f310-4362-8f76-343904b3424d",
+          "name": "Create Representative Verification Link",
+          "request": {
+            "name": "Create Representative Verification Link",
+            "description": {
+              "content": "Mint a shareable identity-verification link the representative opens to complete KYC themselves. The alternative to submitting their KYC data directly.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "representatives",
+                ":representative_id",
+                "verification-link"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "representative_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "859f4731-7fc6-4418-b00c-de84041385e2",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives",
+                    ":representative_id",
+                    "verification-link"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "representative_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"representative_id\": \"2ad5f1e6-4273-3fc5-9b61-806841f502ed\",\n  \"identity_verification_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6d84e0d-a593-41ea-8327-0b980caf0be2",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives",
+                    ":representative_id",
+                    "verification-link"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "representative_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5969eed7-da78-4e00-be77-c0d8bbb639d0",
+          "name": "Make Representative Primary",
+          "request": {
+            "name": "Make Representative Primary",
+            "description": {
+              "content": "Make an existing representative the primary representative (signer). Any current primary is demoted, so exactly one remains. Allowed only before the application is submitted for review. Returns the updated onboarding status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "representatives",
+                ":representative_id",
+                "make-primary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "representative_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e67ea9c8-7312-4de0-aeab-8a5d8862faf7",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives",
+                    ":representative_id",
+                    "make-primary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "representative_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_id\": \"4a5fce26-3830-7efd-31d5-fa766816af5a\",\n  \"status\": \"pending_user_action\",\n  \"business_name\": \"string\",\n  \"created_at\": \"2007-02-15T17:35:16.311Z\",\n  \"updated_at\": \"2010-02-11T21:45:45.268Z\",\n  \"documents\": [\n    {\n      \"proof_type\": \"aml_sanction\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"1a13dd39-0f6d-cf94-8eef-e754ce19b2cc\"\n    },\n    {\n      \"proof_type\": \"officer_registry\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"d2c11672-37bf-634b-6a2a-9591da29421a\"\n    }\n  ],\n  \"kyc_status\": \"approved\",\n  \"onboarding_type\": \"mcp\",\n  \"next_step\": {\n    \"step\": \"collect_business_details\",\n    \"phase\": \"submitted\",\n    \"missing\": [\n      \"string\",\n      \"string\"\n    ],\n    \"can_submit\": true,\n    \"required_proof_types\": [\n      \"token_purchase_agreement\",\n      \"industry_related_license\"\n    ]\n  },\n  \"representatives\": [\n    {\n      \"representative_id\": \"3cb791b1-2d61-6ecb-b5a7-ce5af015adf9\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": false,\n      \"is_beneficial_owner\": false,\n      \"percent_ownership\": \"00000005564400.73857\",\n      \"kyc_status\": \"pending\"\n    },\n    {\n      \"representative_id\": \"90687d49-741e-91ff-1036-a227e7f992ce\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": true,\n      \"is_beneficial_owner\": true,\n      \"percent_ownership\": \"000000076684609\",\n      \"kyc_status\": \"action_required\"\n    }\n  ],\n  \"consent_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da3263ac-5de4-4a66-9a67-41f34a467053",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "representatives",
+                    ":representative_id",
+                    "make-primary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "representative_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b044e7e4-746e-46be-afbe-a7c0358a6dbd",
+          "name": "Get Entity Document Upload URL",
+          "request": {
+            "name": "Get Entity Document Upload URL",
+            "description": {
+              "content": "Get a pre-signed URL to upload a KYB document. Use HTTP PUT to upload the file to the returned URL, then confirm it. For a document that belongs to a specific representative (e.g. their ID or proof of address), pass their `representative_id` here and again on the confirm call, which records the link.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "documents",
+                "upload-url"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"proof_type\": \"<string>\",\n  \"file_name\": \"<string>\",\n  \"content_type\": \"application/pdf\",\n  \"representative_id\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e5b7507e-48aa-4307-9aaf-026db2fef327",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "documents",
+                    "upload-url"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"proof_type\": \"aml_kyc_policy\",\n  \"file_name\": \"<string>\",\n  \"content_type\": \"application/pdf\",\n  \"representative_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"upload_url\": \"string\",\n  \"object_key\": \"string\",\n  \"max_bytes\": 5213,\n  \"expires_in_seconds\": 9992\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2667a8e3-f4a3-4634-92f8-61bf4b6e2d6b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "documents",
+                    "upload-url"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"proof_type\": \"aml_kyc_policy\",\n  \"file_name\": \"<string>\",\n  \"content_type\": \"application/pdf\",\n  \"representative_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0fa76545-422a-4feb-bb6c-acb74ff72648",
+          "name": "Confirm Entity Document Upload",
+          "request": {
+            "name": "Confirm Entity Document Upload",
+            "description": {
+              "content": "Confirm that a KYB document was uploaded successfully. Pass the same `representative_id` given when the upload URL was generated (if any) to record which representative the document belongs to; it is echoed back on the entity's onboarding status under `documents`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "documents",
+                "confirm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object_key\": \"<string>\",\n  \"proof_type\": \"<string>\",\n  \"representative_id\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a6983e45-1c72-4267-a1da-591c02086065",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "documents",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"object_key\": \"<string>\",\n  \"proof_type\": \"corporate_structure_chart\",\n  \"representative_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"confirmed\": true,\n  \"file_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d11affb7-514c-4bd0-a7c3-a79c5ed5cefb",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "documents",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"object_key\": \"<string>\",\n  \"proof_type\": \"corporate_structure_chart\",\n  \"representative_id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c5bf35e9-c287-4684-baf4-197b852d777c",
+          "name": "Submit Entity Application",
+          "request": {
+            "name": "Submit Entity Application",
+            "description": {
+              "content": "Submit a fully prepared business entity for review. Choose the checking account product to open. The application must have everything it needs first (check `next_step.can_submit` on the onboarding status); otherwise this returns the outstanding requirements. Once submitted, the application moves to review and can no longer be edited. Pass `product_features` to request additional products alongside the checking account (for example `stablecoins` for USDC access); they are enabled once the application is approved. Returns the updated onboarding status, including a `consent_url`: share it with the primary representative so they can review and accept the required agreements, disclosures, and attestations in their browser (no login needed). The same link is also returned on `GET /entities/{entity_id}` after submission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "submit"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"banking_account_product_type\": \"<string>\",\n  \"product_features\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "751875bc-8ade-4956-a38a-81112e7fe622",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "submit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"banking_account_product_type\": \"crb\",\n  \"product_features\": [\n    \"stablecoins\",\n    \"stablecoins\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_id\": \"4a5fce26-3830-7efd-31d5-fa766816af5a\",\n  \"status\": \"pending_user_action\",\n  \"business_name\": \"string\",\n  \"created_at\": \"2007-02-15T17:35:16.311Z\",\n  \"updated_at\": \"2010-02-11T21:45:45.268Z\",\n  \"documents\": [\n    {\n      \"proof_type\": \"aml_sanction\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"1a13dd39-0f6d-cf94-8eef-e754ce19b2cc\"\n    },\n    {\n      \"proof_type\": \"officer_registry\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"d2c11672-37bf-634b-6a2a-9591da29421a\"\n    }\n  ],\n  \"kyc_status\": \"approved\",\n  \"onboarding_type\": \"mcp\",\n  \"next_step\": {\n    \"step\": \"collect_business_details\",\n    \"phase\": \"submitted\",\n    \"missing\": [\n      \"string\",\n      \"string\"\n    ],\n    \"can_submit\": true,\n    \"required_proof_types\": [\n      \"token_purchase_agreement\",\n      \"industry_related_license\"\n    ]\n  },\n  \"representatives\": [\n    {\n      \"representative_id\": \"3cb791b1-2d61-6ecb-b5a7-ce5af015adf9\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": false,\n      \"is_beneficial_owner\": false,\n      \"percent_ownership\": \"00000005564400.73857\",\n      \"kyc_status\": \"pending\"\n    },\n    {\n      \"representative_id\": \"90687d49-741e-91ff-1036-a227e7f992ce\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": true,\n      \"is_beneficial_owner\": true,\n      \"percent_ownership\": \"000000076684609\",\n      \"kyc_status\": \"action_required\"\n    }\n  ],\n  \"consent_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3eff1791-6a9e-4448-b85f-b913172e7c61",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "submit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"banking_account_product_type\": \"crb\",\n  \"product_features\": [\n    \"stablecoins\",\n    \"stablecoins\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "027faf10-7b09-4961-af05-3281b177636f",
+          "name": "Submit Due Diligence Form",
+          "request": {
+            "name": "Submit Due Diligence Form",
+            "description": {
+              "content": "Submit an enhanced due diligence form for a business entity. Some industries require additional due diligence before the application can be submitted (check `next_step.missing` on the onboarding status). Only forms that collect plain data are accepted here; forms that require document uploads must be completed in the web app. Returns the updated onboarding status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "due-diligence"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"form_type\": \"<string>\",\n  \"form_data\": {\n    \"overview\": \"<string>\",\n    \"international_investments\": \"<boolean>\",\n    \"registered_sec\": \"<boolean>\",\n    \"current_portfolio_value\": \"<number>\",\n    \"countries_invested\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"works_with_investors\": \"<boolean>\",\n    \"investors\": {\n      \"type_of_investors\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"international_investors\": \"<boolean>\",\n      \"investor_verification_process\": \"<string>\",\n      \"investor_countries\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"additional_investors_due_diligence\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d63397cc-526d-4ef6-b636-a63f0666e283",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "due-diligence"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"form_type\": \"string\",\n  \"form_data\": {\n    \"overview\": \"string\",\n    \"international_investments\": false,\n    \"registered_sec\": false,\n    \"current_portfolio_value\": 7400.709166766499,\n    \"countries_invested\": [\n      \"IQ\",\n      \"MC\"\n    ],\n    \"works_with_investors\": false,\n    \"investors\": {\n      \"type_of_investors\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"international_investors\": true,\n      \"investor_verification_process\": \"string\",\n      \"investor_countries\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"additional_investors_due_diligence\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_id\": \"4a5fce26-3830-7efd-31d5-fa766816af5a\",\n  \"status\": \"pending_user_action\",\n  \"business_name\": \"string\",\n  \"created_at\": \"2007-02-15T17:35:16.311Z\",\n  \"updated_at\": \"2010-02-11T21:45:45.268Z\",\n  \"documents\": [\n    {\n      \"proof_type\": \"aml_sanction\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"1a13dd39-0f6d-cf94-8eef-e754ce19b2cc\"\n    },\n    {\n      \"proof_type\": \"officer_registry\",\n      \"file_name\": \"string\",\n      \"representative_id\": \"d2c11672-37bf-634b-6a2a-9591da29421a\"\n    }\n  ],\n  \"kyc_status\": \"approved\",\n  \"onboarding_type\": \"mcp\",\n  \"next_step\": {\n    \"step\": \"collect_business_details\",\n    \"phase\": \"submitted\",\n    \"missing\": [\n      \"string\",\n      \"string\"\n    ],\n    \"can_submit\": true,\n    \"required_proof_types\": [\n      \"token_purchase_agreement\",\n      \"industry_related_license\"\n    ]\n  },\n  \"representatives\": [\n    {\n      \"representative_id\": \"3cb791b1-2d61-6ecb-b5a7-ce5af015adf9\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": false,\n      \"is_beneficial_owner\": false,\n      \"percent_ownership\": \"00000005564400.73857\",\n      \"kyc_status\": \"pending\"\n    },\n    {\n      \"representative_id\": \"90687d49-741e-91ff-1036-a227e7f992ce\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"email\": \"string\",\n      \"is_primary\": true,\n      \"is_beneficial_owner\": true,\n      \"percent_ownership\": \"000000076684609\",\n      \"kyc_status\": \"action_required\"\n    }\n  ],\n  \"consent_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "85391b6a-25d4-4ecc-8273-7ea4bc40d4a1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "due-diligence"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"form_type\": \"string\",\n  \"form_data\": {\n    \"overview\": \"string\",\n    \"international_investments\": false,\n    \"registered_sec\": false,\n    \"current_portfolio_value\": 7400.709166766499,\n    \"countries_invested\": [\n      \"IQ\",\n      \"MC\"\n    ],\n    \"works_with_investors\": false,\n    \"investors\": {\n      \"type_of_investors\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"international_investors\": true,\n      \"investor_verification_process\": \"string\",\n      \"investor_countries\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"additional_investors_due_diligence\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cea097ae-508f-430d-89e4-a6f2c0ad5df0",
+          "name": "Get Due Diligence Requirements",
+          "request": {
+            "name": "Get Due Diligence Requirements",
+            "description": {
+              "content": "List the enhanced due diligence forms required for a business entity, each with its completion status and whether it must be completed in the web app (forms that collect document uploads cannot be submitted through the API). Fetch each submittable form's schema, then submit it.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "due-diligence"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "03163ed5-2a09-4389-b7d7-bd40a93877e5",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "due-diligence"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"complete\": false,\n  \"forms\": [\n    {\n      \"form_type\": \"holdings\",\n      \"complete\": false,\n      \"requires_webapp\": false\n    },\n    {\n      \"form_type\": \"crypto\",\n      \"complete\": true,\n      \"requires_webapp\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "486181bb-93b1-4893-a998-c1539d7c757a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "due-diligence"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5e11473f-aec3-4753-bf60-eb2b121765f5",
+          "name": "Get Due Diligence Form Schema",
+          "request": {
+            "name": "Get Due Diligence Form Schema",
+            "description": {
+              "content": "Get the field schema for a due diligence form: its pages and elements with types, choices, validation, and conditional visibility. Use it to build a valid submission body. Only forms submittable through the API have a schema; others must be completed in the web app.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "due-diligence",
+                "schema",
+                ":form_type"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "form_type",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "10e1de42-b2b9-4eac-b5d6-fa82ae9d4238",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "due-diligence",
+                    "schema",
+                    ":form_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "form_type",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"pages\": [\n    {\n      \"name\": \"string\",\n      \"title\": \"string\",\n      \"elements\": [\n        {\n          \"type\": \"confirm\",\n          \"name\": \"string\",\n          \"title\": \"string\",\n          \"description\": \"string\",\n          \"required\": false,\n          \"default_value\": \"string\",\n          \"choices\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"visible_when\": {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"required_when\": {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"validation\": {\n            \"min_length\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_length\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"min_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"multiple\": false,\n          \"elements\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/DDElement detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/DDElement detected>\"\n            }\n          ],\n          \"min_items\": 7510,\n          \"max_items\": 7716,\n          \"file_upload_config\": {\n            \"accepted_types\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"proof_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_files\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"input_format\": \"percentage\",\n          \"component\": \"string\",\n          \"exclude_countries\": [\n            \"string\",\n            \"string\"\n          ]\n        },\n        {\n          \"type\": \"comment\",\n          \"name\": \"string\",\n          \"title\": \"string\",\n          \"description\": \"string\",\n          \"required\": false,\n          \"default_value\": \"string\",\n          \"choices\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"visible_when\": {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"required_when\": {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"validation\": {\n            \"min_length\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_length\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"min_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"multiple\": false,\n          \"elements\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/DDElement detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/DDElement detected>\"\n            }\n          ],\n          \"min_items\": 5035,\n          \"max_items\": 8549,\n          \"file_upload_config\": {\n            \"accepted_types\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"proof_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_files\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"input_format\": \"currency\",\n          \"component\": \"string\",\n          \"exclude_countries\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"title\": \"string\",\n      \"elements\": [\n        {\n          \"type\": \"group\",\n          \"name\": \"string\",\n          \"title\": \"string\",\n          \"description\": \"string\",\n          \"required\": false,\n          \"default_value\": \"string\",\n          \"choices\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"visible_when\": {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"required_when\": {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"validation\": {\n            \"min_length\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_length\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"min_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"multiple\": false,\n          \"elements\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/DDElement detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/DDElement detected>\"\n            }\n          ],\n          \"min_items\": 7317,\n          \"max_items\": 5669,\n          \"file_upload_config\": {\n            \"accepted_types\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"proof_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_files\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"input_format\": \"percentage\",\n          \"component\": \"string\",\n          \"exclude_countries\": [\n            \"string\",\n            \"string\"\n          ]\n        },\n        {\n          \"type\": \"text_list\",\n          \"name\": \"string\",\n          \"title\": \"string\",\n          \"description\": \"string\",\n          \"required\": false,\n          \"default_value\": \"string\",\n          \"choices\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"visible_when\": {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"required_when\": {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"validation\": {\n            \"min_length\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_length\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"min_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"multiple\": false,\n          \"elements\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/DDElement detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/DDElement detected>\"\n            }\n          ],\n          \"min_items\": 4534,\n          \"max_items\": 7772,\n          \"file_upload_config\": {\n            \"accepted_types\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"proof_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_files\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"input_format\": \"currency\",\n          \"component\": \"string\",\n          \"exclude_countries\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8f467077-d445-4ddb-9b38-bfd8198fd068",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "due-diligence",
+                    "schema",
+                    ":form_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "form_type",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.meow.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "642af4bd-7826-4da8-98a4-bf83d6445e41",
+    "name": "Meow Accounts Entities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Overview\n\nThe Meow API provides financial services and billing capabilities for your business.\n\n### Core Features\n\n- **Financial data access**: access account information, transactions, balances, and payment networks.\n- **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.\n\n### Billing API\n\nThe Billing API lets you create and manage invoices and collect payments:\n\n- **Product management**: create and manage products with custom pricing.\n- **Customer management**: maintain invoicing customers with their addresses.\n- **Invoice creation**: generate invoices with line items, discounts, and custom notes.\n- **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.\n- **Collection accounts**: configure accounts for payment collection.\n\n### Getting Started\n\nAuthenticate by sending your API key in the `x-api-key` request header.\n\nTo scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.\n\n### Error Responses\n\nErrors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.\n\nCommon error codes:\n\n- `500`: Internal server error\n- `501`: Subsystem unavailable\n- `503`: Scheduled maintenance\n- `601`: Data not found\n- `602`: Customer not authorized\n- `701`: Account not found\n- `703`: Invalid input (including invalid date ranges)\n- `704`: Account type not supported\n- `705`: Account is closed\n- `801`: Transaction not found\n\n\nContact Support:\n Name: Meow\n Email: support@meow.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Meow Accounts API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Bank Accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/accounts",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a list of bank accounts."
+        },
+        {
+          "info": {
+            "name": "Create Bank Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/accounts",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Opens an additional bank account under the given `product`. You must already have an open account of that product, and your business must have completed verification. The account may open immediately (status `created`, with `account_id`) or in the background (status `processing`); when `processing`, poll `GET /accounts` until the account appears."
+        },
+        {
+          "info": {
+            "name": "Get Account Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/accounts/:account_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns detailed information about a specified bank account."
+        },
+        {
+          "info": {
+            "name": "Update Bank Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.meow.com/v1/accounts/:account_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the bank account to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates a bank account's `nickname` (display name), shown in the dashboard to distinguish it from other accounts. Supported for checking accounts (grasshopper, tcb, firstbank) and crb accounts. The nickname must be unique among your accounts."
+        },
+        {
+          "info": {
+            "name": "Close a Bank Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/accounts/:account_id/close",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the bank account to close."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Closes a bank account. The account must have a zero balance and no active cards, scheduled payments, or open invoices. Cancel or remove those first. Supported for checking accounts (grasshopper, tcb, firstbank) and crb accounts. Some accounts close immediately (status `closed`); others process the close asynchronously (status `close_pending`), in which case poll `GET /accounts/{account_id}` until its `status` reads `CLOSED`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

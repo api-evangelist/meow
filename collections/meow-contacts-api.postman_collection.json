@@ -1,0 +1,1003 @@
+{
+  "item": [
+    {
+      "id": "f91bd8fe-c101-4467-8e3c-a09237153a08",
+      "name": "Contacts",
+      "description": {
+        "content": "Manage contacts for crypto and USDC transfers.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ef79509c-a4fa-465e-bcef-faef4e9bca9e",
+          "name": "Create Contact",
+          "request": {
+            "name": "Create Contact",
+            "description": {
+              "content": "Creates a new contact with either ACH, wire, or check payment details or a USDC crypto address.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nickname\": \"<string>\",\n  \"email\": \"<email>\",\n  \"address\": {\n    \"street_line_1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"street_line_2\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postal_code\": \"<string>\"\n  },\n  \"counterparty\": {\n    \"name_on_account\": \"<string>\",\n    \"nickname\": \"<string>\",\n    \"ach\": {\n      \"account_number\": \"<string>\",\n      \"account_type\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"wire\": {\n      \"account_number\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"<string>\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_address\": {\n        \"street_line_1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"<string>\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_name\": \"<string>\",\n      \"intermediary_bank\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"routing_number\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"check\": {\n      \"address\": {\n        \"street_line_1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"<string>\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"created_time\": \"<dateTime>\",\n      \"updated_time\": \"<dateTime>\"\n    },\n    \"tch\": {\n      \"account_number\": \"<string>\",\n      \"account_type\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"fednow\": {\n      \"account_number\": \"<string>\",\n      \"account_type\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"crnow\": {\n      \"account_number\": \"<string>\",\n      \"account_type\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"plaid_processor_token\": \"<string>\",\n    \"email\": \"<email>\",\n    \"company_ids\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"conduit_counterparty_profile\": {\n      \"type\": \"<string>\",\n      \"business_name\": \"<string>\",\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"date_of_birth\": \"<date>\",\n      \"identification_type\": \"<string>\",\n      \"identification_number\": \"<string>\"\n    }\n  },\n  \"crypto_address\": {\n    \"address\": \"<string>\",\n    \"payment_rail\": \"<string>\",\n    \"currency\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fc495fc5-f5bf-44af-ac19-88d4f2cc393e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nickname\": \"<string>\",\n  \"email\": \"<email>\",\n  \"address\": {\n    \"street_line_1\": \"string\",\n    \"city\": \"string\",\n    \"country\": \"DO\",\n    \"street_line_2\": \"string\",\n    \"state\": \"string\",\n    \"postal_code\": \"string\"\n  },\n  \"counterparty\": {\n    \"name_on_account\": \"string\",\n    \"nickname\": \"string\",\n    \"ach\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"wire\": {\n      \"account_number\": \"string\",\n      \"routing_number\": \"stringst\",\n      \"address_on_account\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_name\": \"string\",\n      \"intermediary_bank\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"routing_number\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"check\": {\n      \"address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"stri\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"created_time\": \"2002-03-11T23:55:34.790Z\",\n      \"updated_time\": \"2011-06-06T10:01:35.579Z\"\n    },\n    \"tch\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"checking\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"fednow\": {\n      \"account_number\": \"stri\",\n      \"account_type\": \"checking\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"crnow\": {\n      \"account_number\": \"strin\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"plaid_processor_token\": \"string\",\n    \"email\": \"RRTGXyp46Zk@SMzLUdPDRHjTSTnA.kxu\",\n    \"company_ids\": [\n      \"string\",\n      \"string\"\n    ],\n    \"conduit_counterparty_profile\": {\n      \"type\": \"business\",\n      \"business_name\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"date_of_birth\": \"1961-08-26\",\n      \"identification_type\": \"passport\",\n      \"identification_number\": \"str\"\n    }\n  },\n  \"crypto_address\": {\n    \"address\": \"stringstring\",\n    \"payment_rail\": \"ethereum\",\n    \"currency\": \"usdt\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7f36fa38-46ac-40c3-4d9b-ae1d906526f7\",\n  \"nickname\": \"string\",\n  \"payment_methods\": {\n    \"ach\": {\n      \"counterparty_id\": \"0d25c284-c434-3c9f-2546-6f936114cd7e\",\n      \"name_on_account\": \"string\",\n      \"nickname\": \"string\",\n      \"account_type\": \"checking\",\n      \"account_number\": \"string\",\n      \"routing_number\": \"string\",\n      \"address_on_account\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"stri\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"wire\": {\n      \"counterparty_id\": \"e6a2618c-b34b-fe21-50e7-cb95226181d8\",\n      \"name_on_account\": \"string\",\n      \"nickname\": \"string\",\n      \"bank_name\": \"string\",\n      \"account_number\": \"string\",\n      \"routing_number\": \"string\",\n      \"beneficiary_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"stri\",\n        \"country\": \"GD\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"s\"\n      },\n      \"bank_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": \"MY\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"s\"\n      },\n      \"intermediary_bank\": {\n        \"name\": \"string\",\n        \"routing_number\": \"string\",\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"check\": {\n      \"counterparty_id\": \"3fd46ca3-d253-2878-fd7a-1a79dd2e9f03\",\n      \"name_on_account\": \"string\",\n      \"nickname\": \"string\",\n      \"mailing_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": \"WS\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"\"\n      }\n    },\n    \"international\": {\n      \"beneficiary_id\": \"string\",\n      \"preferred_currency\": \"TRY\"\n    },\n    \"crypto\": [\n      {\n        \"id\": \"1fa32dbd-6de7-8077-ca55-26311bef2597\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"tempo\",\n        \"destination_currency\": \"pyusd\",\n        \"currency\": \"usdt\",\n        \"network\": \"base\"\n      },\n      {\n        \"id\": \"5e9c55ca-e7bf-15f7-34c6-158e5b4d7f52\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"ach\",\n        \"destination_currency\": \"cash\",\n        \"currency\": \"btc\",\n        \"network\": \"avalanche_c_chain\"\n      }\n    ],\n    \"static_memos\": [\n      {\n        \"id\": \"6da3d224-63c7-eeb3-5d8d-9bced18c7273\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"ach\",\n        \"destination_payment_currency\": \"usdg\"\n      },\n      {\n        \"id\": \"2d33c933-5e2d-5f5a-1f86-b5951e31c83a\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"ethereum\",\n        \"destination_payment_currency\": \"usd\"\n      }\n    ]\n  },\n  \"supported_payment_methods\": [\n    \"crypto\",\n    \"check\"\n  ],\n  \"email\": \"lXqXF3@hqxqMvFPOIQwzdWQY.sg\",\n  \"address\": {\n    \"street_line_1\": \"string\",\n    \"city\": \"str\",\n    \"country\": \"BR\",\n    \"postal_code\": \"stri\",\n    \"street_line_2\": \"string\",\n    \"state\": \"s\"\n  },\n  \"last_payment_reason\": \"professional_business_services\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "edbcfbb0-7e2a-4498-a81b-69ef67f4eea5",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nickname\": \"<string>\",\n  \"email\": \"<email>\",\n  \"address\": {\n    \"street_line_1\": \"string\",\n    \"city\": \"string\",\n    \"country\": \"DO\",\n    \"street_line_2\": \"string\",\n    \"state\": \"string\",\n    \"postal_code\": \"string\"\n  },\n  \"counterparty\": {\n    \"name_on_account\": \"string\",\n    \"nickname\": \"string\",\n    \"ach\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"wire\": {\n      \"account_number\": \"string\",\n      \"routing_number\": \"stringst\",\n      \"address_on_account\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_name\": \"string\",\n      \"intermediary_bank\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"routing_number\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"check\": {\n      \"address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"stri\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"created_time\": \"2002-03-11T23:55:34.790Z\",\n      \"updated_time\": \"2011-06-06T10:01:35.579Z\"\n    },\n    \"tch\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"checking\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"fednow\": {\n      \"account_number\": \"stri\",\n      \"account_type\": \"checking\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"crnow\": {\n      \"account_number\": \"strin\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"plaid_processor_token\": \"string\",\n    \"email\": \"RRTGXyp46Zk@SMzLUdPDRHjTSTnA.kxu\",\n    \"company_ids\": [\n      \"string\",\n      \"string\"\n    ],\n    \"conduit_counterparty_profile\": {\n      \"type\": \"business\",\n      \"business_name\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"date_of_birth\": \"1961-08-26\",\n      \"identification_type\": \"passport\",\n      \"identification_number\": \"str\"\n    }\n  },\n  \"crypto_address\": {\n    \"address\": \"stringstring\",\n    \"payment_rail\": \"ethereum\",\n    \"currency\": \"usdt\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9f12ce03-2af2-44e5-8275-de5be0c624ec",
+          "name": "List Contacts",
+          "request": {
+            "name": "List Contacts",
+            "description": {
+              "content": "Returns a paginated list of contacts, ordered by nickname. Use the `limit` and `offset` query parameters to page through results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "nickname_query",
+                  "value": "<string>",
+                  "description": "Optional filter to search contacts by nickname."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<string>",
+                  "description": "Opaque offset identifier for pagination. Use the nextOffset from a previous response."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2d4aa741-be87-4146-b68a-52a48eedcba0",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "nickname_query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"contacts\": [\n    {\n      \"id\": \"75fd89dd-f325-18bd-d285-13925a148f75\",\n      \"nickname\": \"string\",\n      \"payment_methods\": {\n        \"ach\": {\n          \"counterparty_id\": \"aef687b9-b2d7-1f4a-f720-e837f8b56116\",\n          \"name_on_account\": \"string\",\n          \"nickname\": \"string\",\n          \"account_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"account_number\": \"string\",\n          \"routing_number\": \"string\",\n          \"address_on_account\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"wire\": {\n          \"counterparty_id\": \"6871bbdc-3d7f-1b84-bbda-170b15c22afa\",\n          \"name_on_account\": \"string\",\n          \"nickname\": \"string\",\n          \"bank_name\": \"string\",\n          \"account_number\": \"string\",\n          \"routing_number\": \"string\",\n          \"beneficiary_address\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bank_address\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"intermediary_bank\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"check\": {\n          \"counterparty_id\": \"07cf733c-2a0e-5fe9-d880-442b4b1f2786\",\n          \"name_on_account\": \"string\",\n          \"nickname\": \"string\",\n          \"mailing_address\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"international\": {\n          \"beneficiary_id\": \"string\",\n          \"preferred_currency\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"crypto\": [\n          {\n            \"id\": \"e3613371-719b-a719-862f-d5f96b0edec6\",\n            \"destination_address\": \"string\",\n            \"destination_payment_rail\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"destination_currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"56679739-c727-82fc-138d-26e33124af9c\",\n            \"destination_address\": \"string\",\n            \"destination_payment_rail\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"destination_currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"static_memos\": [\n          {\n            \"id\": \"7abadc52-4352-968b-d7eb-27799780e7c1\",\n            \"destination_address\": \"string\",\n            \"destination_payment_rail\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"destination_payment_currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"ff0ab6b0-da90-5af3-e1fc-af1817f00561\",\n            \"destination_address\": \"string\",\n            \"destination_payment_rail\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"destination_payment_currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"supported_payment_methods\": [\n        \"ach\",\n        \"wire\"\n      ],\n      \"email\": \"q71DI7S3@onpofQLNoTobtheaStvOtAmK.jr\",\n      \"address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"st\",\n        \"country\": \"SD\",\n        \"postal_code\": \"s\",\n        \"street_line_2\": \"string\",\n        \"state\": \"\"\n      },\n      \"last_payment_reason\": \"family_support\"\n    },\n    {\n      \"id\": \"f95d6fca-a578-4db0-cd1e-c8a639b47aa3\",\n      \"nickname\": \"string\",\n      \"payment_methods\": {\n        \"ach\": {\n          \"counterparty_id\": \"03572a4b-e2e3-0734-e20c-a2a57780f904\",\n          \"name_on_account\": \"string\",\n          \"nickname\": \"string\",\n          \"account_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"account_number\": \"string\",\n          \"routing_number\": \"string\",\n          \"address_on_account\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"wire\": {\n          \"counterparty_id\": \"75e08cb9-a5ea-c114-af00-28f5b8860b9e\",\n          \"name_on_account\": \"string\",\n          \"nickname\": \"string\",\n          \"bank_name\": \"string\",\n          \"account_number\": \"string\",\n          \"routing_number\": \"string\",\n          \"beneficiary_address\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bank_address\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"intermediary_bank\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"check\": {\n          \"counterparty_id\": \"ea1fcd5f-aaf6-6f3c-209f-0eb191997735\",\n          \"name_on_account\": \"string\",\n          \"nickname\": \"string\",\n          \"mailing_address\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"international\": {\n          \"beneficiary_id\": \"string\",\n          \"preferred_currency\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"crypto\": [\n          {\n            \"id\": \"a69fa835-3a25-1127-1836-e89fef5e7efc\",\n            \"destination_address\": \"string\",\n            \"destination_payment_rail\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"destination_currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"7d6c0ba8-df28-bf6f-dd81-5674443e6ddf\",\n            \"destination_address\": \"string\",\n            \"destination_payment_rail\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"destination_currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"static_memos\": [\n          {\n            \"id\": \"c91125fa-4008-fc6b-7dfe-05b33923bc75\",\n            \"destination_address\": \"string\",\n            \"destination_payment_rail\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"destination_payment_currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": \"ca853378-bb29-8bb9-873b-b3b5f065e06c\",\n            \"destination_address\": \"string\",\n            \"destination_payment_rail\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"destination_payment_currency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"supported_payment_methods\": [\n        \"international\",\n        \"crypto\"\n      ],\n      \"email\": \"M9GPS@ixbmDbfWr.bme\",\n      \"address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": \"KR\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"str\"\n      },\n      \"last_payment_reason\": \"living_expenses\"\n    }\n  ],\n  \"page\": {\n    \"nextOffset\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dca87612-0a6a-4d1e-815f-add54107df19",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "nickname_query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "58646977-e368-4174-87b7-8efee8941585",
+          "name": "Delete Contact",
+          "request": {
+            "name": "Delete Contact",
+            "description": {
+              "content": "Deletes a contact.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "contacts",
+                ":contact_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "contact_id",
+                  "description": "(Required) The unique identifier of the contact."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "85ebbe32-9a65-42b6-a131-eb4e9cc6343c",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "contact_id",
+                      "description": "(Required) The unique identifier of the contact."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8ed06e24-ddf4-4b6d-bb11-5873fd79a7fa",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "contact_id",
+                      "description": "(Required) The unique identifier of the contact."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "21404cca-95a0-4943-8a73-975710dc3338",
+          "name": "Update Contact",
+          "request": {
+            "name": "Update Contact",
+            "description": {
+              "content": "Updates an existing contact and optionally adds new payment methods.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "contacts",
+                ":contact_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "contact_id",
+                  "description": "(Required) The unique identifier of the contact."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nickname\": \"<string>\",\n  \"email\": \"<email>\",\n  \"address\": {\n    \"street_line_1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"street_line_2\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postal_code\": \"<string>\"\n  },\n  \"counterparty\": {\n    \"name_on_account\": \"<string>\",\n    \"nickname\": \"<string>\",\n    \"ach\": {\n      \"account_number\": \"<string>\",\n      \"account_type\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"wire\": {\n      \"account_number\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"<string>\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_address\": {\n        \"street_line_1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"<string>\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_name\": \"<string>\",\n      \"intermediary_bank\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"routing_number\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"check\": {\n      \"address\": {\n        \"street_line_1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"<string>\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"created_time\": \"<dateTime>\",\n      \"updated_time\": \"<dateTime>\"\n    },\n    \"tch\": {\n      \"account_number\": \"<string>\",\n      \"account_type\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"fednow\": {\n      \"account_number\": \"<string>\",\n      \"account_type\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"crnow\": {\n      \"account_number\": \"<string>\",\n      \"account_type\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"plaid_processor_token\": \"<string>\",\n    \"email\": \"<email>\",\n    \"company_ids\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"conduit_counterparty_profile\": {\n      \"type\": \"<string>\",\n      \"business_name\": \"<string>\",\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"date_of_birth\": \"<date>\",\n      \"identification_type\": \"<string>\",\n      \"identification_number\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1d433e90-cb1c-4c22-87c2-a3c6683d071f",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "contact_id",
+                      "description": "(Required) The unique identifier of the contact."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nickname\": \"<string>\",\n  \"email\": \"<email>\",\n  \"address\": {\n    \"street_line_1\": \"string\",\n    \"city\": \"string\",\n    \"country\": \"AM\",\n    \"street_line_2\": \"string\",\n    \"state\": \"string\",\n    \"postal_code\": \"string\"\n  },\n  \"counterparty\": {\n    \"name_on_account\": \"string\",\n    \"nickname\": \"string\",\n    \"ach\": {\n      \"account_number\": \"stri\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"wire\": {\n      \"account_number\": \"string\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_name\": \"string\",\n      \"intermediary_bank\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"routing_number\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"check\": {\n      \"address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"created_time\": \"1982-06-18T18:20:17.781Z\",\n      \"updated_time\": \"1990-05-23T06:25:10.994Z\"\n    },\n    \"tch\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"checking\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"fednow\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"crnow\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"plaid_processor_token\": \"string\",\n    \"email\": \"Sv3ti3NqMRhFfGg@ZSKzcczzVhHXpFCrKagTEhO.pe\",\n    \"company_ids\": [\n      \"string\",\n      \"string\"\n    ],\n    \"conduit_counterparty_profile\": {\n      \"type\": \"business\",\n      \"business_name\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"date_of_birth\": \"2017-12-29\",\n      \"identification_type\": \"cc\",\n      \"identification_number\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7f36fa38-46ac-40c3-4d9b-ae1d906526f7\",\n  \"nickname\": \"string\",\n  \"payment_methods\": {\n    \"ach\": {\n      \"counterparty_id\": \"0d25c284-c434-3c9f-2546-6f936114cd7e\",\n      \"name_on_account\": \"string\",\n      \"nickname\": \"string\",\n      \"account_type\": \"checking\",\n      \"account_number\": \"string\",\n      \"routing_number\": \"string\",\n      \"address_on_account\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"stri\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"wire\": {\n      \"counterparty_id\": \"e6a2618c-b34b-fe21-50e7-cb95226181d8\",\n      \"name_on_account\": \"string\",\n      \"nickname\": \"string\",\n      \"bank_name\": \"string\",\n      \"account_number\": \"string\",\n      \"routing_number\": \"string\",\n      \"beneficiary_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"stri\",\n        \"country\": \"GD\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"s\"\n      },\n      \"bank_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": \"MY\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"s\"\n      },\n      \"intermediary_bank\": {\n        \"name\": \"string\",\n        \"routing_number\": \"string\",\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"check\": {\n      \"counterparty_id\": \"3fd46ca3-d253-2878-fd7a-1a79dd2e9f03\",\n      \"name_on_account\": \"string\",\n      \"nickname\": \"string\",\n      \"mailing_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": \"WS\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"\"\n      }\n    },\n    \"international\": {\n      \"beneficiary_id\": \"string\",\n      \"preferred_currency\": \"TRY\"\n    },\n    \"crypto\": [\n      {\n        \"id\": \"1fa32dbd-6de7-8077-ca55-26311bef2597\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"tempo\",\n        \"destination_currency\": \"pyusd\",\n        \"currency\": \"usdt\",\n        \"network\": \"base\"\n      },\n      {\n        \"id\": \"5e9c55ca-e7bf-15f7-34c6-158e5b4d7f52\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"ach\",\n        \"destination_currency\": \"cash\",\n        \"currency\": \"btc\",\n        \"network\": \"avalanche_c_chain\"\n      }\n    ],\n    \"static_memos\": [\n      {\n        \"id\": \"6da3d224-63c7-eeb3-5d8d-9bced18c7273\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"ach\",\n        \"destination_payment_currency\": \"usdg\"\n      },\n      {\n        \"id\": \"2d33c933-5e2d-5f5a-1f86-b5951e31c83a\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"ethereum\",\n        \"destination_payment_currency\": \"usd\"\n      }\n    ]\n  },\n  \"supported_payment_methods\": [\n    \"crypto\",\n    \"check\"\n  ],\n  \"email\": \"lXqXF3@hqxqMvFPOIQwzdWQY.sg\",\n  \"address\": {\n    \"street_line_1\": \"string\",\n    \"city\": \"str\",\n    \"country\": \"BR\",\n    \"postal_code\": \"stri\",\n    \"street_line_2\": \"string\",\n    \"state\": \"s\"\n  },\n  \"last_payment_reason\": \"professional_business_services\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ccb7c6da-5a50-42e1-9f6b-c6e2998a9fd3",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "contact_id",
+                      "description": "(Required) The unique identifier of the contact."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nickname\": \"<string>\",\n  \"email\": \"<email>\",\n  \"address\": {\n    \"street_line_1\": \"string\",\n    \"city\": \"string\",\n    \"country\": \"AM\",\n    \"street_line_2\": \"string\",\n    \"state\": \"string\",\n    \"postal_code\": \"string\"\n  },\n  \"counterparty\": {\n    \"name_on_account\": \"string\",\n    \"nickname\": \"string\",\n    \"ach\": {\n      \"account_number\": \"stri\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"wire\": {\n      \"account_number\": \"string\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"bank_name\": \"string\",\n      \"intermediary_bank\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"routing_number\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"check\": {\n      \"address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"string\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"created_time\": \"1982-06-18T18:20:17.781Z\",\n      \"updated_time\": \"1990-05-23T06:25:10.994Z\"\n    },\n    \"tch\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"checking\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"fednow\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"crnow\": {\n      \"account_number\": \"string\",\n      \"account_type\": \"savings\",\n      \"routing_number\": \"stringstr\",\n      \"address_on_account\": {\n        \"street_line_1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"plaid_processor_token\": \"string\",\n    \"email\": \"Sv3ti3NqMRhFfGg@ZSKzcczzVhHXpFCrKagTEhO.pe\",\n    \"company_ids\": [\n      \"string\",\n      \"string\"\n    ],\n    \"conduit_counterparty_profile\": {\n      \"type\": \"business\",\n      \"business_name\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"date_of_birth\": \"2017-12-29\",\n      \"identification_type\": \"cc\",\n      \"identification_number\": \"string\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "48e6e833-bf0b-4313-aeb5-87871835459f",
+          "name": "Get Contact",
+          "request": {
+            "name": "Get Contact",
+            "description": {
+              "content": "Returns details of a specific contact.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "contacts",
+                ":contact_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "contact_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1a4bc99f-87a5-43cf-afc9-99d52491bf7a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "contact_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7f36fa38-46ac-40c3-4d9b-ae1d906526f7\",\n  \"nickname\": \"string\",\n  \"payment_methods\": {\n    \"ach\": {\n      \"counterparty_id\": \"0d25c284-c434-3c9f-2546-6f936114cd7e\",\n      \"name_on_account\": \"string\",\n      \"nickname\": \"string\",\n      \"account_type\": \"checking\",\n      \"account_number\": \"string\",\n      \"routing_number\": \"string\",\n      \"address_on_account\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postal_code\": \"stri\",\n        \"street_line_2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"wire\": {\n      \"counterparty_id\": \"e6a2618c-b34b-fe21-50e7-cb95226181d8\",\n      \"name_on_account\": \"string\",\n      \"nickname\": \"string\",\n      \"bank_name\": \"string\",\n      \"account_number\": \"string\",\n      \"routing_number\": \"string\",\n      \"beneficiary_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"stri\",\n        \"country\": \"GD\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"s\"\n      },\n      \"bank_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": \"MY\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"s\"\n      },\n      \"intermediary_bank\": {\n        \"name\": \"string\",\n        \"routing_number\": \"string\",\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"check\": {\n      \"counterparty_id\": \"3fd46ca3-d253-2878-fd7a-1a79dd2e9f03\",\n      \"name_on_account\": \"string\",\n      \"nickname\": \"string\",\n      \"mailing_address\": {\n        \"street_line_1\": \"string\",\n        \"city\": \"string\",\n        \"country\": \"WS\",\n        \"postal_code\": \"string\",\n        \"street_line_2\": \"string\",\n        \"state\": \"\"\n      }\n    },\n    \"international\": {\n      \"beneficiary_id\": \"string\",\n      \"preferred_currency\": \"TRY\"\n    },\n    \"crypto\": [\n      {\n        \"id\": \"1fa32dbd-6de7-8077-ca55-26311bef2597\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"tempo\",\n        \"destination_currency\": \"pyusd\",\n        \"currency\": \"usdt\",\n        \"network\": \"base\"\n      },\n      {\n        \"id\": \"5e9c55ca-e7bf-15f7-34c6-158e5b4d7f52\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"ach\",\n        \"destination_currency\": \"cash\",\n        \"currency\": \"btc\",\n        \"network\": \"avalanche_c_chain\"\n      }\n    ],\n    \"static_memos\": [\n      {\n        \"id\": \"6da3d224-63c7-eeb3-5d8d-9bced18c7273\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"ach\",\n        \"destination_payment_currency\": \"usdg\"\n      },\n      {\n        \"id\": \"2d33c933-5e2d-5f5a-1f86-b5951e31c83a\",\n        \"destination_address\": \"string\",\n        \"destination_payment_rail\": \"ethereum\",\n        \"destination_payment_currency\": \"usd\"\n      }\n    ]\n  },\n  \"supported_payment_methods\": [\n    \"crypto\",\n    \"check\"\n  ],\n  \"email\": \"lXqXF3@hqxqMvFPOIQwzdWQY.sg\",\n  \"address\": {\n    \"street_line_1\": \"string\",\n    \"city\": \"str\",\n    \"country\": \"BR\",\n    \"postal_code\": \"stri\",\n    \"street_line_2\": \"string\",\n    \"state\": \"s\"\n  },\n  \"last_payment_reason\": \"professional_business_services\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33a06659-c475-4186-900c-51bd899403d1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "contact_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.meow.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e9c575cf-ac81-48f5-a7f1-be204539994d",
+    "name": "Meow Accounts Contacts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Overview\n\nThe Meow API provides financial services and billing capabilities for your business.\n\n### Core Features\n\n- **Financial data access**: access account information, transactions, balances, and payment networks.\n- **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.\n\n### Billing API\n\nThe Billing API lets you create and manage invoices and collect payments:\n\n- **Product management**: create and manage products with custom pricing.\n- **Customer management**: maintain invoicing customers with their addresses.\n- **Invoice creation**: generate invoices with line items, discounts, and custom notes.\n- **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.\n- **Collection accounts**: configure accounts for payment collection.\n\n### Getting Started\n\nAuthenticate by sending your API key in the `x-api-key` request header.\n\nTo scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.\n\n### Error Responses\n\nErrors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.\n\nCommon error codes:\n\n- `500`: Internal server error\n- `501`: Subsystem unavailable\n- `503`: Scheduled maintenance\n- `601`: Data not found\n- `602`: Customer not authorized\n- `701`: Account not found\n- `703`: Invalid input (including invalid date ranges)\n- `704`: Account type not supported\n- `705`: Account is closed\n- `801`: Transaction not found\n\n\nContact Support:\n Name: Meow\n Email: support@meow.com",
+      "type": "text/plain"
+    }
+  }
+}

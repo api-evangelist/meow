@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Meow Accounts Tax Forms API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tax Forms",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search Tax Forms",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/tax-forms",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "query",
+                "description": "The account ID to list tax forms for."
+              },
+              {
+                "name": "taxYear",
+                "value": "",
+                "type": "query",
+                "description": "Optional filter to a specific tax year."
+              },
+              {
+                "name": "taxForms",
+                "value": "",
+                "type": "query",
+                "description": "Filter to one or more form types, such as `Tax1099Int` or `Tax1099Div`. Repeat the parameter to pass several."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns IRS tax forms (the 1099 family) issued for the specified account. Currently supports `Tax1099Int` for bank accounts; brokerage and wallet accounts return an empty list until additional form types are exposed."
+        },
+        {
+          "info": {
+            "name": "Retrieve Tax Form",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/tax-forms/:taxFormId",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "taxFormId",
+                "value": "",
+                "type": "path",
+                "description": "The tax form ID. Use a value from the search endpoint; it is opaque, so do not construct it yourself."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a time-limited download URL for the tax form. Use a `taxFormId` from the search endpoint; the value is opaque, so do not construct it yourself."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

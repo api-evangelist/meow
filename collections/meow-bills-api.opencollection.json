@@ -1,0 +1,311 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Meow Accounts Bills API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Bills",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Bills",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/bills",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "contact_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "amount_min",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "amount_max",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "bill_date_from",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "bill_date_to",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "due_date_from",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "due_date_to",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort_descending",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Opaque offset identifier for pagination. Use the nextOffset from a previous response."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a paginated list of bills with optional status filtering."
+        },
+        {
+          "info": {
+            "name": "Create Bill",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/bills",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a bill as a draft for approval. The bill is not paid until someone approves it in the Meow dashboard; this never moves money on its own."
+        },
+        {
+          "info": {
+            "name": "Get Bill",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/bills/:bill_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "bill_id",
+                "value": "",
+                "type": "path",
+                "description": "The bill ID."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns details for a specific bill by ID, including all line items."
+        },
+        {
+          "info": {
+            "name": "Update Bill",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.meow.com/v1/bills/:bill_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "bill_id",
+                "value": "",
+                "type": "path",
+                "description": "The bill ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates an editable bill. Only the fields you send are changed, and the bill stays a draft pending approval; this never moves money."
+        },
+        {
+          "info": {
+            "name": "Delete Bill",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.meow.com/v1/bills/:bill_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "bill_id",
+                "value": "",
+                "type": "path",
+                "description": "The bill ID."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Cancels a bill that has not yet been approved. Approved or paid bills cannot be deleted here."
+        },
+        {
+          "info": {
+            "name": "Create Bill Document Upload URLs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/bills/:bill_id/documents/presigned-urls",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "bill_id",
+                "value": "",
+                "type": "path",
+                "description": "The bill ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns short-lived upload URLs for attaching documents (for example, an invoice) to a bill. Upload each file to its URL, then call the confirm endpoint."
+        },
+        {
+          "info": {
+            "name": "Confirm Bill Documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/bills/:bill_id/documents",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "bill_id",
+                "value": "",
+                "type": "path",
+                "description": "The bill ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Attaches documents to the bill after you have uploaded them to the URLs from the presigned-urls endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

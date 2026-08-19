@@ -1,0 +1,426 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Meow Accounts Transfers API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create USDC Transaction (Legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/accounts/:account_id/usdc",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Legacy endpoint for USDC transactions. Requires the `transfers:usdc:write` scope. For new integrations, use `POST /accounts/{account_id}/crypto` with `currency` in the request body."
+        },
+        {
+          "info": {
+            "name": "Create Crypto Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/accounts/:account_id/crypto",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new crypto transaction from a specified account. The currency and network are determined automatically from the destination's payment method. Provide exactly one of `static_memo_id` or `crypto_id` to identify the destination:\n\n- **`static_memo_id`**: Use the ID from the contact's `payment_methods.static_memos` array. Required for traditional banking accounts; also supported for wallet accounts.\n- **`crypto_id`**: Use the ID from the contact's `payment_methods.crypto` array. Only suppor"
+        },
+        {
+          "info": {
+            "name": "Create Book Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/accounts/:account_id/book",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new internal book transfer between bank accounts."
+        },
+        {
+          "info": {
+            "name": "Create ACH Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/accounts/:account_id/ach",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new ACH transfer to an external counterparty."
+        },
+        {
+          "info": {
+            "name": "List Scheduled ACH Transfers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/accounts/:account_id/ach/scheduled",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Opaque offset identifier for pagination. Use the nextOffset from a previous response."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a list of scheduled ACH transfers for a specified account."
+        },
+        {
+          "info": {
+            "name": "Create Scheduled ACH Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/accounts/:account_id/ach/scheduled",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new scheduled ACH transfer to an external counterparty."
+        },
+        {
+          "info": {
+            "name": "Create Wire Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/accounts/:account_id/wire",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new wire transfer to an external counterparty."
+        },
+        {
+          "info": {
+            "name": "Get USDC Transaction (Legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/accounts/:account_id/transactions/:transaction_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              },
+              {
+                "name": "transaction_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the USDC transaction."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Legacy endpoint for retrieving USDC transaction details. For new integrations, use `GET /accounts/{account_id}/crypto/{transaction_id}`."
+        },
+        {
+          "info": {
+            "name": "Get Crypto Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/accounts/:account_id/crypto/:transaction_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              },
+              {
+                "name": "transaction_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the crypto transaction."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns details about a crypto transaction by transaction ID, including the status of an outgoing crypto transfer after it has been initiated."
+        },
+        {
+          "info": {
+            "name": "Get Wire Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/accounts/:account_id/wires/:wire_transfer_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              },
+              {
+                "name": "wire_transfer_id",
+                "value": "",
+                "type": "path",
+                "description": "The transaction group ID for the wire transfer."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns details about a wire transfer (incoming or outgoing) for the specified account by wire transfer ID, including the status of an outgoing wire after it has been initiated."
+        },
+        {
+          "info": {
+            "name": "Get ACH Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/accounts/:account_id/achs/:ach_transfer_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the account."
+              },
+              {
+                "name": "ach_transfer_id",
+                "value": "",
+                "type": "path",
+                "description": "The transaction group ID for the ACH transfer (e.g. `withdrawal_ach_...`), or the ACH ID returned when you created the transfer (e.g. `ach_...`)."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns details about an ACH transfer (incoming or outgoing) for the specified account by ACH transfer ID, including the status of an outgoing ACH transfer after it has been initiated."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

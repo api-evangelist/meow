@@ -1,0 +1,445 @@
+{
+  "item": [
+    {
+      "id": "8dfeebb0-c104-4139-8394-0005a2b40067",
+      "name": "Tax Forms",
+      "description": {
+        "content": "Retrieve IRS tax forms (1099 family) issued for accounts.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "383852a5-c915-4850-b194-330bbcb5b87b",
+          "name": "Search Tax Forms",
+          "request": {
+            "name": "Search Tax Forms",
+            "description": {
+              "content": "Returns IRS tax forms (the 1099 family) issued for the specified account. Currently supports `Tax1099Int` for bank accounts; brokerage and wallet accounts return an empty list until additional form types are exposed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tax-forms"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "accountId",
+                  "value": "<string>",
+                  "description": "(Required) The account ID to list tax forms for."
+                },
+                {
+                  "disabled": false,
+                  "key": "taxYear",
+                  "value": "<integer>",
+                  "description": "Optional filter to a specific tax year."
+                },
+                {
+                  "disabled": false,
+                  "key": "taxForms",
+                  "value": "<string>",
+                  "description": "Filter to one or more form types, such as `Tax1099Int` or `Tax1099Div`. Repeat the parameter to pass several."
+                },
+                {
+                  "disabled": false,
+                  "key": "taxForms",
+                  "value": "<string>",
+                  "description": "Filter to one or more form types, such as `Tax1099Int` or `Tax1099Div`. Repeat the parameter to pass several."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e67cdeaa-af33-44a5-a51c-7fea91b46c22",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tax-forms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "accountId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "taxYear",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "taxForms",
+                      "value": "Tax1099B"
+                    },
+                    {
+                      "key": "taxForms",
+                      "value": "Tax1099Div"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tax_forms\": [\n    {\n      \"tax_form_id\": \"string\",\n      \"tax_year\": 7201,\n      \"tax_form_type\": \"Tax1099\"\n    },\n    {\n      \"tax_form_id\": \"string\",\n      \"tax_year\": 4038,\n      \"tax_form_type\": \"Tax1099B\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c82fce64-6d7d-43ae-9a10-6cc08089d08e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tax-forms"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "accountId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "taxYear",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "taxForms",
+                      "value": "Tax1099B"
+                    },
+                    {
+                      "key": "taxForms",
+                      "value": "Tax1099Div"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d7d2223f-fa1a-421c-a9bf-88844bb480f4",
+          "name": "Retrieve Tax Form",
+          "request": {
+            "name": "Retrieve Tax Form",
+            "description": {
+              "content": "Returns a time-limited download URL for the tax form. Use a `taxFormId` from the search endpoint; the value is opaque, so do not construct it yourself.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tax-forms",
+                ":taxFormId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "taxFormId",
+                  "description": "(Required) The tax form ID. Use a value from the search endpoint; it is opaque, so do not construct it yourself."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a4f1ecad-353e-42c0-967d-7bd91712e2ae",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tax-forms",
+                    ":taxFormId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "taxFormId",
+                      "description": "(Required) The tax form ID. Use a value from the search endpoint; it is opaque, so do not construct it yourself."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tax_form_id\": \"string\",\n  \"account_id\": \"string\",\n  \"tax_year\": 2681,\n  \"tax_form_type\": \"Tax1099Div\",\n  \"download_url\": \"string\",\n  \"expires_at\": \"1959-05-15T00:13:03.376Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef193868-1700-45ea-a6a1-5e004124ce42",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tax-forms",
+                    ":taxFormId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "taxFormId",
+                      "description": "(Required) The tax form ID. Use a value from the search endpoint; it is opaque, so do not construct it yourself."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.meow.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4eb1dbcd-0515-4d7c-bf8f-d9eeef802903",
+    "name": "Meow Accounts Tax Forms API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Overview\n\nThe Meow API provides financial services and billing capabilities for your business.\n\n### Core Features\n\n- **Financial data access**: access account information, transactions, balances, and payment networks.\n- **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.\n\n### Billing API\n\nThe Billing API lets you create and manage invoices and collect payments:\n\n- **Product management**: create and manage products with custom pricing.\n- **Customer management**: maintain invoicing customers with their addresses.\n- **Invoice creation**: generate invoices with line items, discounts, and custom notes.\n- **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.\n- **Collection accounts**: configure accounts for payment collection.\n\n### Getting Started\n\nAuthenticate by sending your API key in the `x-api-key` request header.\n\nTo scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.\n\n### Error Responses\n\nErrors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.\n\nCommon error codes:\n\n- `500`: Internal server error\n- `501`: Subsystem unavailable\n- `503`: Scheduled maintenance\n- `601`: Data not found\n- `602`: Customer not authorized\n- `701`: Account not found\n- `703`: Invalid input (including invalid date ranges)\n- `704`: Account type not supported\n- `705`: Account is closed\n- `801`: Transaction not found\n\n\nContact Support:\n Name: Meow\n Email: support@meow.com",
+      "type": "text/plain"
+    }
+  }
+}

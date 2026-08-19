@@ -1,0 +1,271 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Meow Accounts Simulations API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Simulations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Simulate Application Approval",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/simulations/entities/:entity_id/application_approval",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "> ⚠️ **Sandbox & development only.** Simulation endpoints are not available in production and return `404 Not Found` there.\n\nApproves a submitted onboarding application in the sandbox as if the compliance review had passed, and kicks off checking-account onboarding for the selected product. Every representative must have passed identity verification (`kyc_status` is `approved`) first: like real review, the simulation will not approve an application whose beneficial owner failed KYC, and returns "
+        },
+        {
+          "info": {
+            "name": "Simulate Inbound Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/simulations/inbound_transfers",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "> ⚠️ **Sandbox & development only.** Simulation endpoints are not available in production and return `404 Not Found` there.\n\nSimulates an inbound ACH, wire, RTP, or FedNow transfer into a cash account in the sandbox. Only cash accounts support this simulation."
+        },
+        {
+          "info": {
+            "name": "Simulate Card Authorization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/simulations/card_authorizations",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "> ⚠️ **Sandbox & development only.** Simulation endpoints are not available in production and return `404 Not Found` there.\n\nSimulates a card authorization in the sandbox and returns the resulting authorization, its status, and whether it was approved."
+        },
+        {
+          "info": {
+            "name": "Simulate Card Authorization Capture",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/simulations/card_authorizations/:authorization_id/capture",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "authorization_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "> ⚠️ **Sandbox & development only.** Simulation endpoints are not available in production and return `404 Not Found` there.\n\nSimulates capturing a previously simulated card authorization in the sandbox. Pass the `authorization_id` returned when you created the authorization."
+        },
+        {
+          "info": {
+            "name": "Simulate Card Authorization Increment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/simulations/card_authorizations/:authorization_id/increment",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "authorization_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "> ⚠️ **Sandbox & development only.** Simulation endpoints are not available in production and return `404 Not Found` there.\n\nSimulates incrementing the amount of a previously simulated card authorization in the sandbox. Pass the `authorization_id` returned when you created the authorization."
+        },
+        {
+          "info": {
+            "name": "Simulate Card Authorization Reversal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/simulations/card_authorizations/:authorization_id/reverse",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "authorization_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "> ⚠️ **Sandbox & development only.** Simulation endpoints are not available in production and return `404 Not Found` there.\n\nSimulates reversing a previously simulated card authorization in the sandbox. Pass the `authorization_id` returned when you created the authorization."
+        },
+        {
+          "info": {
+            "name": "Simulate Card Transaction Refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/simulations/card_transactions/:transaction_id/refund",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transaction_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "> ⚠️ **Sandbox & development only.** Simulation endpoints are not available in production and return `404 Not Found` there.\n\nSimulates refunding a previously simulated card transaction in the sandbox. Pass the `transaction_id` of the transaction to refund."
+        },
+        {
+          "info": {
+            "name": "Simulate Stablecoin Account Funding",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/simulations/fund_financial_account",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "> ⚠️ **Sandbox & development only.** Simulation endpoints are not available in production and return `404 Not Found` there.\n\nSimulates funding your stablecoin account in the sandbox so you can test stablecoin flows with available balance."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

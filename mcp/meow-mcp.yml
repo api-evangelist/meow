@@ -30,11 +30,11 @@ scopes:
 - meow.cards
 - meow.billing
 safety:
-  human_in_the_loop: >-
-    Transfer tools never move money; each creates a draft in a pending-approval
-    state that a human must approve on the Meow dashboard.
+  human_in_the_loop: Transfer tools never move money; each creates a draft in a pending-approval state
+    that a human must approve on the Meow dashboard.
   annotations: Tools carry readOnlyHint / destructiveHint for client confirmation prompts.
-  enforcement: Per-call checks of token authenticity, role on the target entity, granted scope, entity status, session revocation, and MFA.
+  enforcement: Per-call checks of token authenticity, role on the target entity, granted scope, entity
+    status, session revocation, and MFA.
 tools:
 - name: list_my_entities
   scope: meow.read
@@ -267,3 +267,10 @@ tools:
   type: read
   surface: both
   source_operation: openapi/meow-openapi.yaml#validate_routing_number_routing_numbers__routing_number__get
+deployment:
+  mode: remote
+  endpoint: https://mcp.meow.com
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census

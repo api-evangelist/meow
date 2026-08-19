@@ -1,0 +1,783 @@
+{
+  "item": [
+    {
+      "id": "45b2df95-f96c-4153-b083-6f2715b640ba",
+      "name": "Invoices",
+      "description": {
+        "content": "Create and manage invoices.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2df76c57-9d8b-4b68-8f85-ff70ee71b41d",
+          "name": "List Invoices",
+          "request": {
+            "name": "List Invoices",
+            "description": {
+              "content": "Lists all invoices.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "billing",
+                "invoices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a51aab7f-3d7e-4379-a13f-fe67f632cff8",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billing",
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"d23fd13f-cbfd-a0cd-6206-079536c68aa4\",\n    \"customer_id\": \"de68e9cb-312f-7d65-5388-ec7b26ca3857\",\n    \"status\": \"Open\",\n    \"amount\": \"+027684199.059200\",\n    \"amount_paid\": \"+0000078182394\",\n    \"amount_due\": \"-00000000098\",\n    \"line_item_ids\": [\n      \"efc4f68d-8157-c268-4739-352984043219\",\n      \"df01ddcf-6a4d-6a5b-6e43-ac98d571aed7\"\n    ],\n    \"payment_method_types\": [\n      \"CARD\",\n      \"USDT_SOLANA\"\n    ],\n    \"send_email_on_creation\": false,\n    \"additional_recipient_emails\": [\n      \"string\",\n      \"string\"\n    ],\n    \"collection_account_id\": \"179ddec7-631c-fec5-2e25-549800f0c5e8\",\n    \"created_at\": \"1954-06-25T20:50:19.562Z\",\n    \"name\": \"string\",\n    \"invoice_number\": \"string\",\n    \"invoice_date\": \"2011-07-04\",\n    \"due_date\": \"2019-06-01\",\n    \"note\": \"string\",\n    \"updated_at\": \"2026-03-20T20:00:10.691Z\",\n    \"paid_at\": \"2008-03-13T15:43:26.152Z\",\n    \"canceled_at\": \"1947-02-25T20:33:59.374Z\",\n    \"sent_at\": \"1971-01-30T01:57:23.669Z\",\n    \"expired_at\": \"1996-07-13T05:51:18.368Z\"\n  },\n  {\n    \"id\": \"c54cdea0-8e70-1d60-50b6-96772dc45661\",\n    \"customer_id\": \"896e8a78-1f29-51fe-4b09-01fb31c2c0de\",\n    \"status\": \"Open\",\n    \"amount\": \"000441\",\n    \"amount_paid\": \"-0000077414203\",\n    \"amount_due\": \"9261988.607542\",\n    \"line_item_ids\": [\n      \"289ba296-5d50-11dd-22db-2dc83a5b0ea8\",\n      \"beb77dfd-7cdb-a2f6-37f6-b62058a2872f\"\n    ],\n    \"payment_method_types\": [\n      \"USDC_BASE\",\n      \"ACH_DIRECT_DEBIT\"\n    ],\n    \"send_email_on_creation\": false,\n    \"additional_recipient_emails\": [\n      \"string\",\n      \"string\"\n    ],\n    \"collection_account_id\": \"b00c5193-f62a-5709-640b-a0b0b394b8ba\",\n    \"created_at\": \"2006-12-02T22:11:16.813Z\",\n    \"name\": \"string\",\n    \"invoice_number\": \"string\",\n    \"invoice_date\": \"1970-02-15\",\n    \"due_date\": \"2024-04-16\",\n    \"note\": \"string\",\n    \"updated_at\": \"2026-08-11T02:59:43.660Z\",\n    \"paid_at\": \"1975-09-18T01:03:50.784Z\",\n    \"canceled_at\": \"2018-09-08T07:48:59.182Z\",\n    \"sent_at\": \"1954-11-09T00:16:51.147Z\",\n    \"expired_at\": \"2005-07-06T07:21:50.071Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9921ce47-4fec-4c68-b6ab-be547c6565b9",
+          "name": "Create Invoice",
+          "request": {
+            "name": "Create Invoice",
+            "description": {
+              "content": "Creates a new invoice.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "billing",
+                "invoices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"<uuid>\",\n  \"line_items\": [\n    {\n      \"product_id\": \"<uuid>\",\n      \"quantity\": \"<number>\",\n      \"price\": \"<number>\",\n      \"description\": \"<string>\",\n      \"discount_percentage\": \"<number>\",\n      \"discount_description\": \"<string>\"\n    },\n    {\n      \"product_id\": \"<uuid>\",\n      \"quantity\": \"<number>\",\n      \"price\": \"<number>\",\n      \"description\": \"<string>\",\n      \"discount_percentage\": \"<number>\",\n      \"discount_description\": \"<string>\"\n    }\n  ],\n  \"invoice_date\": \"<date>\",\n  \"due_date\": \"<date>\",\n  \"payment_method_types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"send_email_on_creation\": \"<boolean>\",\n  \"collection_account_id\": \"<uuid>\",\n  \"recurring_schedule\": \"<string>\",\n  \"additional_recipient_emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"note\": \"<string>\",\n  \"name\": \"<string>\",\n  \"show_contact_address\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "99315c04-4bcb-4be6-98de-98db5a67d1a4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billing",
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customer_id\": \"<uuid>\",\n  \"line_items\": [\n    {\n      \"product_id\": \"9dd23994-963f-b971-425d-7682672fedb9\",\n      \"quantity\": 2238462.516744104,\n      \"price\": 89381777.58272786,\n      \"description\": \"string\",\n      \"discount_percentage\": 80.98481577930053,\n      \"discount_description\": \"string\"\n    },\n    {\n      \"product_id\": \"b931debf-06d3-5eb6-885e-403b899d79a3\",\n      \"quantity\": 45773290.631660216,\n      \"price\": 17266453.996724956,\n      \"description\": \"string\",\n      \"discount_percentage\": 13.300933507395719,\n      \"discount_description\": \"string\"\n    }\n  ],\n  \"invoice_date\": \"1971-05-12\",\n  \"due_date\": \"1962-05-10\",\n  \"payment_method_types\": [\n    \"USDT_ETHEREUM\",\n    \"CARD\"\n  ],\n  \"send_email_on_creation\": \"<boolean>\",\n  \"collection_account_id\": \"<uuid>\",\n  \"recurring_schedule\": \"<string>\",\n  \"additional_recipient_emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"note\": \"<string>\",\n  \"name\": \"<string>\",\n  \"show_contact_address\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"78eb2826-fed7-f44a-b0ce-fa9167c46f73\",\n  \"customer_id\": \"93ab4c0e-4a4d-682e-9fd9-65058059d096\",\n  \"status\": \"Paid\",\n  \"amount\": \"-00000000005086.205\",\n  \"amount_paid\": \"-000009756966805781363\",\n  \"amount_due\": \"00000000003.01692726\",\n  \"line_item_ids\": [\n    \"b7851e01-8bb6-1a42-99ab-c8ff79b4b11e\",\n    \"171b441c-0df3-2673-3963-5f14190ef9f7\"\n  ],\n  \"payment_method_types\": [\n    \"CASH_SOLANA\",\n    \"ACH_DIRECT_DEBIT\"\n  ],\n  \"send_email_on_creation\": true,\n  \"additional_recipient_emails\": [\n    \"string\",\n    \"string\"\n  ],\n  \"collection_account_id\": \"ce4746ed-823b-5fcb-6253-9d33fbd043f6\",\n  \"created_at\": \"2002-04-29T19:05:19.958Z\",\n  \"name\": \"string\",\n  \"invoice_number\": \"string\",\n  \"invoice_date\": \"2004-09-27\",\n  \"due_date\": \"1995-06-27\",\n  \"note\": \"string\",\n  \"updated_at\": \"2005-02-26T07:28:16.444Z\",\n  \"paid_at\": \"2001-11-12T04:49:01.161Z\",\n  \"canceled_at\": \"1985-04-22T07:06:17.758Z\",\n  \"sent_at\": \"1959-06-17T06:31:09.592Z\",\n  \"expired_at\": \"1953-11-06T19:16:40.448Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93e0d483-fde0-48dc-9742-6ab94af06128",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billing",
+                    "invoices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customer_id\": \"<uuid>\",\n  \"line_items\": [\n    {\n      \"product_id\": \"9dd23994-963f-b971-425d-7682672fedb9\",\n      \"quantity\": 2238462.516744104,\n      \"price\": 89381777.58272786,\n      \"description\": \"string\",\n      \"discount_percentage\": 80.98481577930053,\n      \"discount_description\": \"string\"\n    },\n    {\n      \"product_id\": \"b931debf-06d3-5eb6-885e-403b899d79a3\",\n      \"quantity\": 45773290.631660216,\n      \"price\": 17266453.996724956,\n      \"description\": \"string\",\n      \"discount_percentage\": 13.300933507395719,\n      \"discount_description\": \"string\"\n    }\n  ],\n  \"invoice_date\": \"1971-05-12\",\n  \"due_date\": \"1962-05-10\",\n  \"payment_method_types\": [\n    \"USDT_ETHEREUM\",\n    \"CARD\"\n  ],\n  \"send_email_on_creation\": \"<boolean>\",\n  \"collection_account_id\": \"<uuid>\",\n  \"recurring_schedule\": \"<string>\",\n  \"additional_recipient_emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"note\": \"<string>\",\n  \"name\": \"<string>\",\n  \"show_contact_address\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b52c4f15-a6a6-46f3-8d25-57072c49ace2",
+          "name": "Get Invoice",
+          "request": {
+            "name": "Get Invoice",
+            "description": {
+              "content": "Gets an invoice by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "billing",
+                "invoices",
+                ":invoice_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "invoice_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6eedf29b-64e9-4bf8-9b4b-e73007a6e227",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billing",
+                    "invoices",
+                    ":invoice_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "invoice_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"78eb2826-fed7-f44a-b0ce-fa9167c46f73\",\n  \"customer_id\": \"93ab4c0e-4a4d-682e-9fd9-65058059d096\",\n  \"status\": \"Paid\",\n  \"amount\": \"-00000000005086.205\",\n  \"amount_paid\": \"-000009756966805781363\",\n  \"amount_due\": \"00000000003.01692726\",\n  \"line_item_ids\": [\n    \"b7851e01-8bb6-1a42-99ab-c8ff79b4b11e\",\n    \"171b441c-0df3-2673-3963-5f14190ef9f7\"\n  ],\n  \"payment_method_types\": [\n    \"CASH_SOLANA\",\n    \"ACH_DIRECT_DEBIT\"\n  ],\n  \"send_email_on_creation\": true,\n  \"additional_recipient_emails\": [\n    \"string\",\n    \"string\"\n  ],\n  \"collection_account_id\": \"ce4746ed-823b-5fcb-6253-9d33fbd043f6\",\n  \"created_at\": \"2002-04-29T19:05:19.958Z\",\n  \"name\": \"string\",\n  \"invoice_number\": \"string\",\n  \"invoice_date\": \"2004-09-27\",\n  \"due_date\": \"1995-06-27\",\n  \"note\": \"string\",\n  \"updated_at\": \"2005-02-26T07:28:16.444Z\",\n  \"paid_at\": \"2001-11-12T04:49:01.161Z\",\n  \"canceled_at\": \"1985-04-22T07:06:17.758Z\",\n  \"sent_at\": \"1959-06-17T06:31:09.592Z\",\n  \"expired_at\": \"1953-11-06T19:16:40.448Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72fe1097-a4cf-4f24-8b16-2eb3b5a968c2",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billing",
+                    "invoices",
+                    ":invoice_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "invoice_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ca409107-3bdb-4cd3-8aa1-33480907f8fa",
+          "name": "Download Invoice PDF",
+          "request": {
+            "name": "Download Invoice PDF",
+            "description": {
+              "content": "Downloads an invoice as a PDF file.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "billing",
+                "invoices",
+                ":invoice_id",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "invoice_id",
+                  "description": "(Required) The unique identifier of the invoice to download."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/pdf"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "014b73c2-3de0-4359-b87d-e59e95b406f9",
+              "name": "The invoice as a PDF file. Returns binary data (raw bytes).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billing",
+                    "invoices",
+                    ":invoice_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "invoice_id",
+                      "description": "(Required) The unique identifier of the invoice to download."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/pdf"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `Content-Disposition` header that triggers a file download with the invoice filename.",
+                  "key": "Content-Disposition",
+                  "value": "attachment; filename=\"Invoice - INV-2024-001.pdf\""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/pdf"
+                }
+              ],
+              "body": "Binary PDF content",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "35521264-f131-4886-88f1-1586f8c6222b",
+              "name": "Invoice not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billing",
+                    "invoices",
+                    ":invoice_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "invoice_id",
+                      "description": "(Required) The unique identifier of the invoice to download."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"code\": 7465\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e025d76-b3e8-4451-aa85-a30f57834fa7",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "billing",
+                    "invoices",
+                    ":invoice_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "invoice_id",
+                      "description": "(Required) The unique identifier of the invoice to download."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.meow.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "340b9b5c-8981-4c0d-afb4-1aa6e25b45b4",
+    "name": "Meow Accounts Invoices API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Overview\n\nThe Meow API provides financial services and billing capabilities for your business.\n\n### Core Features\n\n- **Financial data access**: access account information, transactions, balances, and payment networks.\n- **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.\n\n### Billing API\n\nThe Billing API lets you create and manage invoices and collect payments:\n\n- **Product management**: create and manage products with custom pricing.\n- **Customer management**: maintain invoicing customers with their addresses.\n- **Invoice creation**: generate invoices with line items, discounts, and custom notes.\n- **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.\n- **Collection accounts**: configure accounts for payment collection.\n\n### Getting Started\n\nAuthenticate by sending your API key in the `x-api-key` request header.\n\nTo scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.\n\n### Error Responses\n\nErrors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.\n\nCommon error codes:\n\n- `500`: Internal server error\n- `501`: Subsystem unavailable\n- `503`: Scheduled maintenance\n- `601`: Data not found\n- `602`: Customer not authorized\n- `701`: Account not found\n- `703`: Invalid input (including invalid date ranges)\n- `704`: Account type not supported\n- `705`: Account is closed\n- `801`: Transaction not found\n\n\nContact Support:\n Name: Meow\n Email: support@meow.com",
+      "type": "text/plain"
+    }
+  }
+}

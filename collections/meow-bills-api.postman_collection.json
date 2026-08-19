@@ -1,0 +1,1593 @@
+{
+  "item": [
+    {
+      "id": "e456f7be-26ad-4948-a4c0-3cba2bec7f01",
+      "name": "Bills",
+      "description": {
+        "content": "View and manage bills for vendor payments.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "55342de3-1b4b-45f2-9ded-fa2b7303b0b0",
+          "name": "List Bills",
+          "request": {
+            "name": "List Bills",
+            "description": {
+              "content": "Returns a paginated list of bills with optional status filtering.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bills"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "contact_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "contact_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "amount_min",
+                  "value": "<number>"
+                },
+                {
+                  "disabled": false,
+                  "key": "amount_max",
+                  "value": "<number>"
+                },
+                {
+                  "disabled": false,
+                  "key": "bill_date_from",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "bill_date_to",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "due_date_from",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "due_date_to",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_descending",
+                  "value": "false"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<string>",
+                  "description": "Opaque offset identifier for pagination. Use the nextOffset from a previous response."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4e9b91a3-37fd-4799-9a32-815d4f68af09",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "statuses",
+                      "value": "PAYMENT_INITIATED"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "APPROVED"
+                    },
+                    {
+                      "key": "contact_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "contact_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "amount_min",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "amount_max",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "bill_date_from",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "bill_date_to",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "due_date_from",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "due_date_to",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "CATEGORY"
+                    },
+                    {
+                      "key": "sort_descending",
+                      "value": "false"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"bills\": [\n    {\n      \"id\": \"fdf5d321-ec06-180f-d748-c1692cd433da\",\n      \"status\": \"DRAFT\",\n      \"vendor_name\": \"string\",\n      \"creation_source\": \"USER\",\n      \"created_by\": \"string\",\n      \"created_at\": \"1947-10-06T19:35:57.963Z\",\n      \"invoice_number\": \"string\",\n      \"description\": \"string\",\n      \"memo\": \"string\",\n      \"bill_date\": \"2018-06-09\",\n      \"bill_due_date\": \"1980-09-17\",\n      \"bill_total\": \"0000000006410099917197\",\n      \"currency\": \"AOA\",\n      \"payment_type\": \"ACH\",\n      \"contact_id\": \"7de24837-ebf2-1902-8281-471be6f4a920\",\n      \"category_id\": \"e673bc34-c720-314c-194a-a200d5f29873\",\n      \"category_name\": \"string\",\n      \"updated_at\": \"2005-04-23T00:25:43.982Z\",\n      \"submitted_at\": \"1963-07-07T21:00:05.008Z\",\n      \"submitted_by\": \"string\",\n      \"paid_at\": \"1988-07-11T15:45:20.076Z\",\n      \"paid_by\": \"string\",\n      \"scheduled_at\": \"1964-01-06T07:33:40.506Z\",\n      \"resolved_at\": \"1989-01-27T20:43:54.742Z\",\n      \"canceled_at\": \"1957-10-16T20:38:08.826Z\",\n      \"canceled_by\": \"string\",\n      \"bill_schedule_id\": \"780f17f0-717e-caff-622f-1ee7784e09c9\",\n      \"ordinal\": 3639\n    },\n    {\n      \"id\": \"ae98c6dc-1090-bd7e-290a-0e18b9c1ddc9\",\n      \"status\": \"SCHEDULED\",\n      \"vendor_name\": \"string\",\n      \"creation_source\": \"SCHEDULE\",\n      \"created_by\": \"string\",\n      \"created_at\": \"1954-05-19T00:40:16.538Z\",\n      \"invoice_number\": \"string\",\n      \"description\": \"string\",\n      \"memo\": \"string\",\n      \"bill_date\": \"2007-09-25\",\n      \"bill_due_date\": \"1998-08-08\",\n      \"bill_total\": \"-000064567444\",\n      \"currency\": \"UZS\",\n      \"payment_type\": \"CRYPTO\",\n      \"contact_id\": \"0610d50c-d717-85fa-fdc7-a82658b033b9\",\n      \"category_id\": \"277ce8c4-704f-dde1-e8e3-7b7b8ba47b6c\",\n      \"category_name\": \"string\",\n      \"updated_at\": \"1994-01-28T00:57:53.516Z\",\n      \"submitted_at\": \"1950-11-18T00:07:50.212Z\",\n      \"submitted_by\": \"string\",\n      \"paid_at\": \"2017-01-03T08:52:00.469Z\",\n      \"paid_by\": \"string\",\n      \"scheduled_at\": \"2011-01-27T04:23:58.448Z\",\n      \"resolved_at\": \"1949-07-02T15:01:00.227Z\",\n      \"canceled_at\": \"2001-02-04T07:48:51.456Z\",\n      \"canceled_by\": \"string\",\n      \"bill_schedule_id\": \"52412ed1-4875-7b2e-6303-80d1cebe2a23\",\n      \"ordinal\": 4967\n    }\n  ],\n  \"page\": {\n    \"nextOffset\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "78d13af4-863b-40ad-92f8-bb3afcbd079c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "statuses",
+                      "value": "PAYMENT_INITIATED"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "APPROVED"
+                    },
+                    {
+                      "key": "contact_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "contact_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "amount_min",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "amount_max",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "bill_date_from",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "bill_date_to",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "due_date_from",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "due_date_to",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "CATEGORY"
+                    },
+                    {
+                      "key": "sort_descending",
+                      "value": "false"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "19552bef-80e8-4f91-89e2-1dfdf7dcb49b",
+          "name": "Create Bill",
+          "request": {
+            "name": "Create Bill",
+            "description": {
+              "content": "Creates a bill as a draft for approval. The bill is not paid until someone approves it in the Meow dashboard; this never moves money on its own.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bills"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idempotency_key\": \"<string>\",\n  \"contact_id\": \"<uuid>\",\n  \"invoice_number\": \"<string>\",\n  \"bill_date\": \"<date>\",\n  \"bill_due_date\": \"<date>\",\n  \"description\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"payment_type\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"rrule\": \"<string>\",\n  \"line_items\": [\n    {\n      \"type\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"description\": \"<string>\",\n      \"quantity\": \"<number>\"\n    },\n    {\n      \"type\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"description\": \"<string>\",\n      \"quantity\": \"<number>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2d84f78d-a4fe-4d8d-b5af-aa2513114f45",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"idempotency_key\": \"<string>\",\n  \"contact_id\": \"<uuid>\",\n  \"invoice_number\": \"<string>\",\n  \"bill_date\": \"<date>\",\n  \"bill_due_date\": \"<date>\",\n  \"description\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"payment_type\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"currency\": \"BWP\",\n  \"rrule\": \"<string>\",\n  \"line_items\": [\n    {\n      \"type\": \"ITEM\",\n      \"amount\": 7963.959366378386,\n      \"description\": \"strin\",\n      \"quantity\": 5724.438362693892\n    },\n    {\n      \"type\": \"ITEM\",\n      \"amount\": 4446.387054660654,\n      \"description\": \"string\",\n      \"quantity\": 7032.647766453756\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"a6d0d942-3bce-eb16-3ad4-0a069b633852\",\n  \"status\": \"DRAFT_PROCESSING\",\n  \"vendor_name\": \"string\",\n  \"creation_source\": \"SCHEDULE\",\n  \"created_by\": \"string\",\n  \"created_at\": \"1999-05-04T04:05:03.741Z\",\n  \"invoice_number\": \"string\",\n  \"description\": \"string\",\n  \"memo\": \"string\",\n  \"bill_date\": \"2018-12-13\",\n  \"bill_due_date\": \"1999-08-25\",\n  \"bill_total\": \"-00424597\",\n  \"currency\": \"USN\",\n  \"payment_type\": \"INTERNATIONAL_PAYMENT_FX\",\n  \"contact_id\": \"a223ab0e-b19d-944a-2ac6-170850e62d2f\",\n  \"category_id\": \"da4c2ba7-999a-0278-ea87-626437a3e2dd\",\n  \"category_name\": \"string\",\n  \"updated_at\": \"1994-06-07T21:27:13.310Z\",\n  \"submitted_at\": \"2002-08-25T05:44:21.036Z\",\n  \"submitted_by\": \"string\",\n  \"paid_at\": \"1978-10-05T03:18:01.257Z\",\n  \"paid_by\": \"string\",\n  \"scheduled_at\": \"2016-04-07T01:28:55.816Z\",\n  \"resolved_at\": \"1954-01-12T23:10:15.797Z\",\n  \"canceled_at\": \"1971-11-05T01:37:46.869Z\",\n  \"canceled_by\": \"string\",\n  \"bill_schedule_id\": \"dfd66df7-29e0-a327-37ef-650a1eab22c7\",\n  \"ordinal\": 1744,\n  \"line_items\": [\n    {\n      \"id\": \"8dd399fb-37bb-a65e-a01a-96e4f885b5cb\",\n      \"amount\": \"022757211\",\n      \"description\": \"string\",\n      \"type\": \"ITEM\",\n      \"amount_total\": \"00000.6284818\",\n      \"quantity\": \"+000.2494059397\"\n    },\n    {\n      \"id\": \"13ec8895-a7b2-ee9a-ffa7-cdbf320f2a80\",\n      \"amount\": \"0847764.93716359\",\n      \"description\": \"string\",\n      \"type\": \"EXPENSE\",\n      \"amount_total\": \"-00000000772.0104003\",\n      \"quantity\": \"0000000000675061227\"\n    }\n  ],\n  \"bill_payment_details\": {\n    \"account_id\": \"string\",\n    \"payment_type\": \"CRYPTO\",\n    \"currency\": \"CDF\",\n    \"scheduled_payment_date\": \"2024-05-21\"\n  },\n  \"additional_documents\": [\n    {\n      \"id\": \"d58e2870-11b7-c1d6-45d1-65a221e22060\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"2011-07-05T10:42:24.806Z\"\n    },\n    {\n      \"id\": \"0e46b97c-a4e0-a317-a1ac-527e6f61c1bf\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"1947-04-18T08:41:57.885Z\"\n    }\n  ],\n  \"img_url\": \"string\",\n  \"rrule\": \"string\",\n  \"auto_approval_enabled\": false,\n  \"bill_sync_status\": \"synced\",\n  \"payment_sync_status\": \"sync_complete\",\n  \"accounting_vendor\": \"Mastercard\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e85eae6e-f59d-4dfc-a975-fdb96550a624",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"idempotency_key\": \"<string>\",\n  \"contact_id\": \"<uuid>\",\n  \"invoice_number\": \"<string>\",\n  \"bill_date\": \"<date>\",\n  \"bill_due_date\": \"<date>\",\n  \"description\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"payment_type\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"currency\": \"BWP\",\n  \"rrule\": \"<string>\",\n  \"line_items\": [\n    {\n      \"type\": \"ITEM\",\n      \"amount\": 7963.959366378386,\n      \"description\": \"strin\",\n      \"quantity\": 5724.438362693892\n    },\n    {\n      \"type\": \"ITEM\",\n      \"amount\": 4446.387054660654,\n      \"description\": \"string\",\n      \"quantity\": 7032.647766453756\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7890d478-744b-4c42-afac-527242e69876",
+          "name": "Get Bill",
+          "request": {
+            "name": "Get Bill",
+            "description": {
+              "content": "Returns details for a specific bill by ID, including all line items.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bills",
+                ":bill_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "bill_id",
+                  "description": "(Required) The bill ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "bcb0a630-3c98-46e3-a17d-31a2ef6e75c2",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"a6d0d942-3bce-eb16-3ad4-0a069b633852\",\n  \"status\": \"DRAFT_PROCESSING\",\n  \"vendor_name\": \"string\",\n  \"creation_source\": \"SCHEDULE\",\n  \"created_by\": \"string\",\n  \"created_at\": \"1999-05-04T04:05:03.741Z\",\n  \"invoice_number\": \"string\",\n  \"description\": \"string\",\n  \"memo\": \"string\",\n  \"bill_date\": \"2018-12-13\",\n  \"bill_due_date\": \"1999-08-25\",\n  \"bill_total\": \"-00424597\",\n  \"currency\": \"USN\",\n  \"payment_type\": \"INTERNATIONAL_PAYMENT_FX\",\n  \"contact_id\": \"a223ab0e-b19d-944a-2ac6-170850e62d2f\",\n  \"category_id\": \"da4c2ba7-999a-0278-ea87-626437a3e2dd\",\n  \"category_name\": \"string\",\n  \"updated_at\": \"1994-06-07T21:27:13.310Z\",\n  \"submitted_at\": \"2002-08-25T05:44:21.036Z\",\n  \"submitted_by\": \"string\",\n  \"paid_at\": \"1978-10-05T03:18:01.257Z\",\n  \"paid_by\": \"string\",\n  \"scheduled_at\": \"2016-04-07T01:28:55.816Z\",\n  \"resolved_at\": \"1954-01-12T23:10:15.797Z\",\n  \"canceled_at\": \"1971-11-05T01:37:46.869Z\",\n  \"canceled_by\": \"string\",\n  \"bill_schedule_id\": \"dfd66df7-29e0-a327-37ef-650a1eab22c7\",\n  \"ordinal\": 1744,\n  \"line_items\": [\n    {\n      \"id\": \"8dd399fb-37bb-a65e-a01a-96e4f885b5cb\",\n      \"amount\": \"022757211\",\n      \"description\": \"string\",\n      \"type\": \"ITEM\",\n      \"amount_total\": \"00000.6284818\",\n      \"quantity\": \"+000.2494059397\"\n    },\n    {\n      \"id\": \"13ec8895-a7b2-ee9a-ffa7-cdbf320f2a80\",\n      \"amount\": \"0847764.93716359\",\n      \"description\": \"string\",\n      \"type\": \"EXPENSE\",\n      \"amount_total\": \"-00000000772.0104003\",\n      \"quantity\": \"0000000000675061227\"\n    }\n  ],\n  \"bill_payment_details\": {\n    \"account_id\": \"string\",\n    \"payment_type\": \"CRYPTO\",\n    \"currency\": \"CDF\",\n    \"scheduled_payment_date\": \"2024-05-21\"\n  },\n  \"additional_documents\": [\n    {\n      \"id\": \"d58e2870-11b7-c1d6-45d1-65a221e22060\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"2011-07-05T10:42:24.806Z\"\n    },\n    {\n      \"id\": \"0e46b97c-a4e0-a317-a1ac-527e6f61c1bf\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"1947-04-18T08:41:57.885Z\"\n    }\n  ],\n  \"img_url\": \"string\",\n  \"rrule\": \"string\",\n  \"auto_approval_enabled\": false,\n  \"bill_sync_status\": \"synced\",\n  \"payment_sync_status\": \"sync_complete\",\n  \"accounting_vendor\": \"Mastercard\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c2f8007-066c-4f53-bd4f-31434d6d6026",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6ae12354-a4fd-4981-9f17-2cebe7bd9b31",
+          "name": "Update Bill",
+          "request": {
+            "name": "Update Bill",
+            "description": {
+              "content": "Updates an editable bill. Only the fields you send are changed, and the bill stays a draft pending approval; this never moves money.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bills",
+                ":bill_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "bill_id",
+                  "description": "(Required) The bill ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"invoice_number\": \"<string>\",\n  \"contact_id\": \"<uuid>\",\n  \"bill_date\": \"<date>\",\n  \"bill_due_date\": \"<date>\",\n  \"payment_type\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"line_items\": [\n    {\n      \"type\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"description\": \"<string>\",\n      \"quantity\": \"<number>\"\n    },\n    {\n      \"type\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"description\": \"<string>\",\n      \"quantity\": \"<number>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "554acf67-4ed6-4cab-9b9a-f8cfd6214f88",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"invoice_number\": \"<string>\",\n  \"contact_id\": \"<uuid>\",\n  \"bill_date\": \"<date>\",\n  \"bill_due_date\": \"<date>\",\n  \"payment_type\": \"<string>\",\n  \"currency\": \"MVR\",\n  \"line_items\": [\n    {\n      \"type\": \"EXPENSE\",\n      \"amount\": 3388.7612988000433,\n      \"description\": \"string\",\n      \"quantity\": 238.09808001544943\n    },\n    {\n      \"type\": \"ITEM\",\n      \"amount\": 9525.788785218865,\n      \"description\": \"string\",\n      \"quantity\": 7174.1336395233175\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"a6d0d942-3bce-eb16-3ad4-0a069b633852\",\n  \"status\": \"DRAFT_PROCESSING\",\n  \"vendor_name\": \"string\",\n  \"creation_source\": \"SCHEDULE\",\n  \"created_by\": \"string\",\n  \"created_at\": \"1999-05-04T04:05:03.741Z\",\n  \"invoice_number\": \"string\",\n  \"description\": \"string\",\n  \"memo\": \"string\",\n  \"bill_date\": \"2018-12-13\",\n  \"bill_due_date\": \"1999-08-25\",\n  \"bill_total\": \"-00424597\",\n  \"currency\": \"USN\",\n  \"payment_type\": \"INTERNATIONAL_PAYMENT_FX\",\n  \"contact_id\": \"a223ab0e-b19d-944a-2ac6-170850e62d2f\",\n  \"category_id\": \"da4c2ba7-999a-0278-ea87-626437a3e2dd\",\n  \"category_name\": \"string\",\n  \"updated_at\": \"1994-06-07T21:27:13.310Z\",\n  \"submitted_at\": \"2002-08-25T05:44:21.036Z\",\n  \"submitted_by\": \"string\",\n  \"paid_at\": \"1978-10-05T03:18:01.257Z\",\n  \"paid_by\": \"string\",\n  \"scheduled_at\": \"2016-04-07T01:28:55.816Z\",\n  \"resolved_at\": \"1954-01-12T23:10:15.797Z\",\n  \"canceled_at\": \"1971-11-05T01:37:46.869Z\",\n  \"canceled_by\": \"string\",\n  \"bill_schedule_id\": \"dfd66df7-29e0-a327-37ef-650a1eab22c7\",\n  \"ordinal\": 1744,\n  \"line_items\": [\n    {\n      \"id\": \"8dd399fb-37bb-a65e-a01a-96e4f885b5cb\",\n      \"amount\": \"022757211\",\n      \"description\": \"string\",\n      \"type\": \"ITEM\",\n      \"amount_total\": \"00000.6284818\",\n      \"quantity\": \"+000.2494059397\"\n    },\n    {\n      \"id\": \"13ec8895-a7b2-ee9a-ffa7-cdbf320f2a80\",\n      \"amount\": \"0847764.93716359\",\n      \"description\": \"string\",\n      \"type\": \"EXPENSE\",\n      \"amount_total\": \"-00000000772.0104003\",\n      \"quantity\": \"0000000000675061227\"\n    }\n  ],\n  \"bill_payment_details\": {\n    \"account_id\": \"string\",\n    \"payment_type\": \"CRYPTO\",\n    \"currency\": \"CDF\",\n    \"scheduled_payment_date\": \"2024-05-21\"\n  },\n  \"additional_documents\": [\n    {\n      \"id\": \"d58e2870-11b7-c1d6-45d1-65a221e22060\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"2011-07-05T10:42:24.806Z\"\n    },\n    {\n      \"id\": \"0e46b97c-a4e0-a317-a1ac-527e6f61c1bf\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"1947-04-18T08:41:57.885Z\"\n    }\n  ],\n  \"img_url\": \"string\",\n  \"rrule\": \"string\",\n  \"auto_approval_enabled\": false,\n  \"bill_sync_status\": \"synced\",\n  \"payment_sync_status\": \"sync_complete\",\n  \"accounting_vendor\": \"Mastercard\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e004969-cb0d-4a7f-9626-0cca5e74807c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"memo\": \"<string>\",\n  \"invoice_number\": \"<string>\",\n  \"contact_id\": \"<uuid>\",\n  \"bill_date\": \"<date>\",\n  \"bill_due_date\": \"<date>\",\n  \"payment_type\": \"<string>\",\n  \"currency\": \"MVR\",\n  \"line_items\": [\n    {\n      \"type\": \"EXPENSE\",\n      \"amount\": 3388.7612988000433,\n      \"description\": \"string\",\n      \"quantity\": 238.09808001544943\n    },\n    {\n      \"type\": \"ITEM\",\n      \"amount\": 9525.788785218865,\n      \"description\": \"string\",\n      \"quantity\": 7174.1336395233175\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "27995ae4-3298-41a6-b0c6-abde8fb07479",
+          "name": "Delete Bill",
+          "request": {
+            "name": "Delete Bill",
+            "description": {
+              "content": "Cancels a bill that has not yet been approved. Approved or paid bills cannot be deleted here.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bills",
+                ":bill_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "bill_id",
+                  "description": "(Required) The bill ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d8567a50-d912-4f6a-b132-958e9100a3c7",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"a6d0d942-3bce-eb16-3ad4-0a069b633852\",\n  \"status\": \"DRAFT_PROCESSING\",\n  \"vendor_name\": \"string\",\n  \"creation_source\": \"SCHEDULE\",\n  \"created_by\": \"string\",\n  \"created_at\": \"1999-05-04T04:05:03.741Z\",\n  \"invoice_number\": \"string\",\n  \"description\": \"string\",\n  \"memo\": \"string\",\n  \"bill_date\": \"2018-12-13\",\n  \"bill_due_date\": \"1999-08-25\",\n  \"bill_total\": \"-00424597\",\n  \"currency\": \"USN\",\n  \"payment_type\": \"INTERNATIONAL_PAYMENT_FX\",\n  \"contact_id\": \"a223ab0e-b19d-944a-2ac6-170850e62d2f\",\n  \"category_id\": \"da4c2ba7-999a-0278-ea87-626437a3e2dd\",\n  \"category_name\": \"string\",\n  \"updated_at\": \"1994-06-07T21:27:13.310Z\",\n  \"submitted_at\": \"2002-08-25T05:44:21.036Z\",\n  \"submitted_by\": \"string\",\n  \"paid_at\": \"1978-10-05T03:18:01.257Z\",\n  \"paid_by\": \"string\",\n  \"scheduled_at\": \"2016-04-07T01:28:55.816Z\",\n  \"resolved_at\": \"1954-01-12T23:10:15.797Z\",\n  \"canceled_at\": \"1971-11-05T01:37:46.869Z\",\n  \"canceled_by\": \"string\",\n  \"bill_schedule_id\": \"dfd66df7-29e0-a327-37ef-650a1eab22c7\",\n  \"ordinal\": 1744,\n  \"line_items\": [\n    {\n      \"id\": \"8dd399fb-37bb-a65e-a01a-96e4f885b5cb\",\n      \"amount\": \"022757211\",\n      \"description\": \"string\",\n      \"type\": \"ITEM\",\n      \"amount_total\": \"00000.6284818\",\n      \"quantity\": \"+000.2494059397\"\n    },\n    {\n      \"id\": \"13ec8895-a7b2-ee9a-ffa7-cdbf320f2a80\",\n      \"amount\": \"0847764.93716359\",\n      \"description\": \"string\",\n      \"type\": \"EXPENSE\",\n      \"amount_total\": \"-00000000772.0104003\",\n      \"quantity\": \"0000000000675061227\"\n    }\n  ],\n  \"bill_payment_details\": {\n    \"account_id\": \"string\",\n    \"payment_type\": \"CRYPTO\",\n    \"currency\": \"CDF\",\n    \"scheduled_payment_date\": \"2024-05-21\"\n  },\n  \"additional_documents\": [\n    {\n      \"id\": \"d58e2870-11b7-c1d6-45d1-65a221e22060\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"2011-07-05T10:42:24.806Z\"\n    },\n    {\n      \"id\": \"0e46b97c-a4e0-a317-a1ac-527e6f61c1bf\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"1947-04-18T08:41:57.885Z\"\n    }\n  ],\n  \"img_url\": \"string\",\n  \"rrule\": \"string\",\n  \"auto_approval_enabled\": false,\n  \"bill_sync_status\": \"synced\",\n  \"payment_sync_status\": \"sync_complete\",\n  \"accounting_vendor\": \"Mastercard\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd2b6f88-ce76-4c3d-8984-ce192f9409b6",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f23efe20-7ae8-40b3-8e59-cff1246a2365",
+          "name": "Create Bill Document Upload URLs",
+          "request": {
+            "name": "Create Bill Document Upload URLs",
+            "description": {
+              "content": "Returns short-lived upload URLs for attaching documents (for example, an invoice) to a bill. Upload each file to its URL, then call the confirm endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bills",
+                ":bill_id",
+                "documents",
+                "presigned-urls"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "bill_id",
+                  "description": "(Required) The bill ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"files\": [\n    {\n      \"filename\": \"<string>\",\n      \"content_type\": \"<string>\",\n      \"size\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1931732d-4590-4047-93f2-47d5d168a959",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id",
+                    "documents",
+                    "presigned-urls"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"files\": [\n    {\n      \"filename\": \"string\",\n      \"content_type\": \"string\",\n      \"size\": 8178\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uploads\": [\n    {\n      \"url\": \"string\",\n      \"fields\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"object_key\": \"string\",\n      \"filename\": \"string\",\n      \"max_bytes\": 7816\n    },\n    {\n      \"url\": \"string\",\n      \"fields\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"object_key\": \"string\",\n      \"filename\": \"string\",\n      \"max_bytes\": 4108\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46f2a434-d1d0-4fb4-9206-2514bc17eab9",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id",
+                    "documents",
+                    "presigned-urls"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"files\": [\n    {\n      \"filename\": \"string\",\n      \"content_type\": \"string\",\n      \"size\": 8178\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84750cbd-cc6e-4437-a694-d0e4fd4c9766",
+          "name": "Confirm Bill Documents",
+          "request": {
+            "name": "Confirm Bill Documents",
+            "description": {
+              "content": "Attaches documents to the bill after you have uploaded them to the URLs from the presigned-urls endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bills",
+                ":bill_id",
+                "documents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "bill_id",
+                  "description": "(Required) The bill ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documents\": [\n    {\n      \"object_key\": \"<string>\",\n      \"filename\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2898521e-d5b0-4ee3-a50e-d6c740c5857b",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"documents\": [\n    {\n      \"object_key\": \"string\",\n      \"filename\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"a6d0d942-3bce-eb16-3ad4-0a069b633852\",\n  \"status\": \"DRAFT_PROCESSING\",\n  \"vendor_name\": \"string\",\n  \"creation_source\": \"SCHEDULE\",\n  \"created_by\": \"string\",\n  \"created_at\": \"1999-05-04T04:05:03.741Z\",\n  \"invoice_number\": \"string\",\n  \"description\": \"string\",\n  \"memo\": \"string\",\n  \"bill_date\": \"2018-12-13\",\n  \"bill_due_date\": \"1999-08-25\",\n  \"bill_total\": \"-00424597\",\n  \"currency\": \"USN\",\n  \"payment_type\": \"INTERNATIONAL_PAYMENT_FX\",\n  \"contact_id\": \"a223ab0e-b19d-944a-2ac6-170850e62d2f\",\n  \"category_id\": \"da4c2ba7-999a-0278-ea87-626437a3e2dd\",\n  \"category_name\": \"string\",\n  \"updated_at\": \"1994-06-07T21:27:13.310Z\",\n  \"submitted_at\": \"2002-08-25T05:44:21.036Z\",\n  \"submitted_by\": \"string\",\n  \"paid_at\": \"1978-10-05T03:18:01.257Z\",\n  \"paid_by\": \"string\",\n  \"scheduled_at\": \"2016-04-07T01:28:55.816Z\",\n  \"resolved_at\": \"1954-01-12T23:10:15.797Z\",\n  \"canceled_at\": \"1971-11-05T01:37:46.869Z\",\n  \"canceled_by\": \"string\",\n  \"bill_schedule_id\": \"dfd66df7-29e0-a327-37ef-650a1eab22c7\",\n  \"ordinal\": 1744,\n  \"line_items\": [\n    {\n      \"id\": \"8dd399fb-37bb-a65e-a01a-96e4f885b5cb\",\n      \"amount\": \"022757211\",\n      \"description\": \"string\",\n      \"type\": \"ITEM\",\n      \"amount_total\": \"00000.6284818\",\n      \"quantity\": \"+000.2494059397\"\n    },\n    {\n      \"id\": \"13ec8895-a7b2-ee9a-ffa7-cdbf320f2a80\",\n      \"amount\": \"0847764.93716359\",\n      \"description\": \"string\",\n      \"type\": \"EXPENSE\",\n      \"amount_total\": \"-00000000772.0104003\",\n      \"quantity\": \"0000000000675061227\"\n    }\n  ],\n  \"bill_payment_details\": {\n    \"account_id\": \"string\",\n    \"payment_type\": \"CRYPTO\",\n    \"currency\": \"CDF\",\n    \"scheduled_payment_date\": \"2024-05-21\"\n  },\n  \"additional_documents\": [\n    {\n      \"id\": \"d58e2870-11b7-c1d6-45d1-65a221e22060\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"2011-07-05T10:42:24.806Z\"\n    },\n    {\n      \"id\": \"0e46b97c-a4e0-a317-a1ac-527e6f61c1bf\",\n      \"name\": \"string\",\n      \"url\": \"string\",\n      \"created_at\": \"1947-04-18T08:41:57.885Z\"\n    }\n  ],\n  \"img_url\": \"string\",\n  \"rrule\": \"string\",\n  \"auto_approval_enabled\": false,\n  \"bill_sync_status\": \"synced\",\n  \"payment_sync_status\": \"sync_complete\",\n  \"accounting_vendor\": \"Mastercard\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80cee7a1-8fa4-408a-80f3-5e6da722da3a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bills",
+                    ":bill_id",
+                    "documents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "bill_id",
+                      "description": "(Required) The bill ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"documents\": [\n    {\n      \"object_key\": \"string\",\n      \"filename\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.meow.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c74f466c-b72e-4d48-83d8-9f1c4754716f",
+    "name": "Meow Accounts Bills API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Overview\n\nThe Meow API provides financial services and billing capabilities for your business.\n\n### Core Features\n\n- **Financial data access**: access account information, transactions, balances, and payment networks.\n- **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.\n\n### Billing API\n\nThe Billing API lets you create and manage invoices and collect payments:\n\n- **Product management**: create and manage products with custom pricing.\n- **Customer management**: maintain invoicing customers with their addresses.\n- **Invoice creation**: generate invoices with line items, discounts, and custom notes.\n- **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.\n- **Collection accounts**: configure accounts for payment collection.\n\n### Getting Started\n\nAuthenticate by sending your API key in the `x-api-key` request header.\n\nTo scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.\n\n### Error Responses\n\nErrors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.\n\nCommon error codes:\n\n- `500`: Internal server error\n- `501`: Subsystem unavailable\n- `503`: Scheduled maintenance\n- `601`: Data not found\n- `602`: Customer not authorized\n- `701`: Account not found\n- `703`: Invalid input (including invalid date ranges)\n- `704`: Account type not supported\n- `705`: Account is closed\n- `801`: Transaction not found\n\n\nContact Support:\n Name: Meow\n Email: support@meow.com",
+      "type": "text/plain"
+    }
+  }
+}

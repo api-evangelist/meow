@@ -1,0 +1,2316 @@
+{
+  "item": [
+    {
+      "id": "3083aeec-f206-4c82-9574-df0fb6ca5a66",
+      "name": "Cards",
+      "description": {
+        "content": "Manage virtual and physical cards, and view transactions and insights.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "812c6031-807b-49d1-82e3-c6c38cd4a83b",
+          "name": "Create Card",
+          "request": {
+            "name": "Create Card",
+            "description": {
+              "content": "Creates a virtual card scoped to a single merchant and spend limit. Set `single_use` to `true` (default) for a one-shot card that auto-cancels after the first authorization, or `false` for a multi-use card that stays active until expiry or explicit revoke. Retrieve the PAN by calling `POST /cards/{card_id}/pan`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<integer>\",\n  \"merchant_name\": \"<string>\",\n  \"task_description\": \"<string>\",\n  \"currency\": \"USD\",\n  \"nickname\": \"<string>\",\n  \"allowed_categories\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"expires_in_minutes\": 60,\n  \"single_use\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2946f76f-e527-4425-b370-cf8c0db99b2e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<integer>\",\n  \"merchant_name\": \"<string>\",\n  \"task_description\": \"<string>\",\n  \"currency\": \"USD\",\n  \"nickname\": \"<string>\",\n  \"allowed_categories\": [\n    \"Recruiting\",\n    \"Vehicle Expenses\"\n  ],\n  \"expires_in_minutes\": 60,\n  \"single_use\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"controls\": {\n    \"spending_limit\": 6162,\n    \"single_use\": false,\n    \"expires_at\": \"1992-07-12T15:26:56.409Z\"\n  },\n  \"metadata\": {\n    \"card_id\": \"bc37841b-21d4-dc68-a2cc-be4ea73b352f\",\n    \"task_description\": \"string\"\n  },\n  \"payment_type\": \"card\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bdd85aaa-5b3e-473a-ba39-692ba04389f3",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<integer>\",\n  \"merchant_name\": \"<string>\",\n  \"task_description\": \"<string>\",\n  \"currency\": \"USD\",\n  \"nickname\": \"<string>\",\n  \"allowed_categories\": [\n    \"Recruiting\",\n    \"Vehicle Expenses\"\n  ],\n  \"expires_in_minutes\": 60,\n  \"single_use\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b109ec2a-4a11-4b62-97c8-a8e178329256",
+          "name": "List Cards",
+          "request": {
+            "name": "List Cards",
+            "description": {
+              "content": "Returns the cards you have access to. As an admin or viewer you see all entity cards; as a card manager you see your team's cards; as a card user you see only your own.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "from_created_time",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "to_created_time",
+                  "value": "<dateTime>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7a1c94cc-a889-4db1-9a07-35bb2bef22f5",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "suspended"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "closed"
+                    },
+                    {
+                      "key": "from_created_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to_created_time",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"de2def72-7440-78b9-6b93-29a4e3275fef\",\n      \"display_name\": \"string\",\n      \"last_four\": \"string\",\n      \"status\": \"suspended\",\n      \"platform\": \"awx\",\n      \"is_physical\": false,\n      \"cardholder\": {\n        \"name\": \"string\",\n        \"public_id\": \"c43bc645-16cf-cc25-684f-2eb61ade08e4\"\n      },\n      \"created_at\": \"1993-06-20T09:44:58.684Z\",\n      \"is_single_use\": false,\n      \"expiration\": \"2003-08-13T01:18:16.045Z\",\n      \"spending_restriction\": {\n        \"type\": \"allow\",\n        \"merchants\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    },\n    {\n      \"id\": \"bdc2c34b-dfde-c48a-0850-9de64c20a9ac\",\n      \"display_name\": \"string\",\n      \"last_four\": \"string\",\n      \"status\": \"failed\",\n      \"platform\": \"awx\",\n      \"is_physical\": false,\n      \"cardholder\": {\n        \"name\": \"string\",\n        \"public_id\": \"48a73bdf-62b8-72ab-e529-e2ab00745248\"\n      },\n      \"created_at\": \"1997-06-30T17:15:36.816Z\",\n      \"is_single_use\": false,\n      \"expiration\": \"2002-12-24T07:33:46.387Z\",\n      \"spending_restriction\": {\n        \"type\": \"block\",\n        \"merchants\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    }\n  ],\n  \"total\": 8784,\n  \"page\": {\n    \"limit\": 10,\n    \"offset\": 0\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9adbe1ba-288e-43f9-b3af-ecf317fd08fa",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "suspended"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "closed"
+                    },
+                    {
+                      "key": "from_created_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to_created_time",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e21fd543-5aa9-4883-9f09-11dfb53b67f9",
+          "name": "Create Payment Token",
+          "request": {
+            "name": "Create Payment Token",
+            "description": {
+              "content": "Creates a Shared Payment Token for merchants that support the Agentic Commerce Protocol. Returns a token string, not full card details. Use a payment token instead of a card when the merchant accepts one. This endpoint is not yet available.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards",
+                "payment-token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<integer>\",\n  \"merchant_name\": \"<string>\",\n  \"task_description\": \"<string>\",\n  \"currency\": \"USD\",\n  \"expires_in_minutes\": 60\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2299b2a9-96bd-4199-a491-ae14cb2b8aa4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    "payment-token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<integer>\",\n  \"merchant_name\": \"<string>\",\n  \"task_description\": \"<string>\",\n  \"currency\": \"USD\",\n  \"expires_in_minutes\": 60\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"token\": \"string\",\n  \"usage_limits\": {\n    \"max_amount\": 4133,\n    \"currency\": \"PKR\",\n    \"expires_at\": \"1954-06-14T18:52:47.184Z\"\n  },\n  \"metadata\": {\n    \"card_id\": \"ba9f7300-ebe5-a692-a835-f6bdf9484af0\",\n    \"task_description\": \"string\"\n  },\n  \"payment_type\": \"spt\",\n  \"provider\": \"stripe\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48bbd74c-8e85-496d-bcee-1e43420baa5e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    "payment-token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<integer>\",\n  \"merchant_name\": \"<string>\",\n  \"task_description\": \"<string>\",\n  \"currency\": \"USD\",\n  \"expires_in_minutes\": 60\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "152474d6-fd59-4a8b-bc49-08121ade14b9",
+          "name": "Revoke Card",
+          "request": {
+            "name": "Revoke Card",
+            "description": {
+              "content": "Immediately revoke a card. Revoke a card whose purchase failed to close it before it expires.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards",
+                ":card_id",
+                "revoke"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "card_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9e6048f6-a22a-4d38-91df-157d71ec7d0d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id",
+                    "revoke"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"card_id\": \"6349d8e4-615c-9f5a-10ed-70f611705569\",\n  \"status\": \"failed\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd04cd88-df26-4fa8-b1e7-15c669fe1d98",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id",
+                    "revoke"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9739ae05-bc20-4843-9a6a-26f280a26690",
+          "name": "Get Card PAN",
+          "request": {
+            "name": "Get Card PAN",
+            "description": {
+              "content": "Returns the full card number (PAN), CVC, and expiration for a card created via the API. Requires the `cards:write` scope. Pass the `card_id` returned by Create Card. This can be called only once per card; subsequent calls return an error. Revoke and recreate the card if the PAN is needed again.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards",
+                ":card_id",
+                "pan"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "card_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5a654a6e-bfa5-4a98-a605-584a14e9cd4c",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id",
+                    "pan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"cvc\": \"string\",\n  \"exp_month\": 4725,\n  \"exp_year\": 4143\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f59ff67b-ad3c-4491-91a0-2ed435fe01e3",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id",
+                    "pan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6b51c08b-f00b-4b9b-aa84-8fdb755fc071",
+          "name": "List Card Transactions",
+          "request": {
+            "name": "List Card Transactions",
+            "description": {
+              "content": "Returns transactions for cards you have access to. Supports filtering by card, date range, status, merchant, and amount.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "merchant_name",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "merchant_ids",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "merchant_ids",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "cardholder_name",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "cardholder_emails",
+                  "value": "<email>"
+                },
+                {
+                  "disabled": false,
+                  "key": "cardholder_emails",
+                  "value": "<email>"
+                },
+                {
+                  "disabled": false,
+                  "key": "card_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "card_ids",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "card_ids",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "card_nickname",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "card_is_physical",
+                  "value": "<boolean>"
+                },
+                {
+                  "disabled": false,
+                  "key": "card_last_4",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "from_original_created_time",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "to_original_created_time",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "is_missing_requirements",
+                  "value": "<boolean>"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "ORIGINAL_CREATED_TIME"
+                },
+                {
+                  "disabled": false,
+                  "key": "is_ascending",
+                  "value": "false"
+                },
+                {
+                  "disabled": false,
+                  "key": "network_transaction_id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "amount_min",
+                  "value": "<number>"
+                },
+                {
+                  "disabled": false,
+                  "key": "amount_max",
+                  "value": "<number>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2a90e880-6913-4378-89d4-43fb5a019eda",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchant_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchant_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "merchant_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "cardholder_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cardholder_emails",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "cardholder_emails",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "card_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "card_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "card_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "card_nickname",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "card_is_physical",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "card_last_4",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from_original_created_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to_original_created_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "CLEARED"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "CLEARED"
+                    },
+                    {
+                      "key": "is_missing_requirements",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "ORIGINAL_CREATED_TIME"
+                    },
+                    {
+                      "key": "is_ascending",
+                      "value": "false"
+                    },
+                    {
+                      "key": "network_transaction_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "amount_min",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "amount_max",
+                      "value": "<number>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"6cb6e521-2773-0c90-780e-27b5dab81be7\",\n      \"status\": \"APPROVED\",\n      \"tx_type\": \"REVERSAL\",\n      \"detail\": \"string\",\n      \"amount\": \"+0000097745.4935\",\n      \"created_time\": \"1956-12-21T14:54:42.798Z\",\n      \"attachments\": [\n        {\n          \"id\": \"351543ac-0f2e-7d13-5140-79ff963714bc\",\n          \"transaction_id\": \"ef3b1e1a-77c1-2f1a-96f7-6786d8009f5e\",\n          \"file_name\": \"string\",\n          \"url\": \"string\"\n        },\n        {\n          \"id\": \"e383afef-7e4c-2537-b758-961ea39c7965\",\n          \"transaction_id\": \"c3777fec-da01-6d50-bec8-4d5bf826323f\",\n          \"file_name\": \"string\",\n          \"url\": \"string\"\n        }\n      ],\n      \"merchant\": {\n        \"id\": \"e7104058-86a1-2891-0c58-1e6b700771a6\",\n        \"enriched_merchant_name\": \"string\",\n        \"logo_url\": \"string\",\n        \"labels\": [\n          \"string\",\n          \"string\"\n        ],\n        \"website\": \"string\",\n        \"industry\": {\n          \"mcc\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"irs_description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"is_missing_memo\": false,\n      \"is_missing_receipt\": false,\n      \"original_created_time\": \"2020-02-22T10:13:07.434Z\",\n      \"card_id\": \"83406d2f-9dea-afd0-1e29-bec12fc0f240\",\n      \"cardholder_name\": \"string\",\n      \"card_nickname\": \"string\",\n      \"is_physical\": false,\n      \"card_last_4\": \"string\",\n      \"original_amount\": \"046796043851\",\n      \"original_currency\": \"IDR\",\n      \"trace_id\": \"f5c7f054-46f0-c347-5310-80aaa5d4d20a\",\n      \"updated_time\": \"2019-01-10T11:17:43.012Z\",\n      \"note\": \"string\",\n      \"cashback\": {\n        \"dollars\": \"000000019316.79085989\",\n        \"percentage\": \"01.8000\"\n      },\n      \"network_transaction_id\": \"string\",\n      \"industry\": {\n        \"mcc\": \"7161\",\n        \"description\": \"string\",\n        \"irs_description\": \"string\"\n      },\n      \"category\": \"Lodging\",\n      \"failure_reason_user_friendly\": \"string\",\n      \"hold_id\": \"43c99e7f-4e2c-43e0-2464-e293a0206e85\",\n      \"credit_id\": \"7180b0bf-5343-6eff-d775-fed9eda5a3ae\",\n      \"release_transaction_id\": \"string\",\n      \"hold_book_transfer_id\": \"string\"\n    },\n    {\n      \"id\": \"d25030b9-d3eb-99e8-c28a-5752283d4f5b\",\n      \"status\": \"EXPIRED\",\n      \"tx_type\": \"ORIGINAL_CREDIT\",\n      \"detail\": \"string\",\n      \"amount\": \"7349996699.8293\",\n      \"created_time\": \"2002-11-16T04:51:44.929Z\",\n      \"attachments\": [\n        {\n          \"id\": \"536dccb2-f412-b7d3-8039-3ed6a4414ae6\",\n          \"transaction_id\": \"e8493cf4-4e65-60bf-1584-7bb2e87ce11b\",\n          \"file_name\": \"string\",\n          \"url\": \"string\"\n        },\n        {\n          \"id\": \"cfc4de29-aedc-2e14-8a7f-b1891bb8f9d2\",\n          \"transaction_id\": \"9334c222-b6b0-2204-2e30-e3c6ac4d7b44\",\n          \"file_name\": \"string\",\n          \"url\": \"string\"\n        }\n      ],\n      \"merchant\": {\n        \"id\": \"a003479d-ac48-8b2c-339f-f4237f7d4d35\",\n        \"enriched_merchant_name\": \"string\",\n        \"logo_url\": \"string\",\n        \"labels\": [\n          \"string\",\n          \"string\"\n        ],\n        \"website\": \"string\",\n        \"industry\": {\n          \"mcc\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"irs_description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"is_missing_memo\": true,\n      \"is_missing_receipt\": false,\n      \"original_created_time\": \"2024-03-08T19:47:17.134Z\",\n      \"card_id\": \"11a904c8-efa3-041f-904f-d3b24aef3a90\",\n      \"cardholder_name\": \"string\",\n      \"card_nickname\": \"string\",\n      \"is_physical\": false,\n      \"card_last_4\": \"string\",\n      \"original_amount\": \"+0000080999\",\n      \"original_currency\": \"XAF\",\n      \"trace_id\": \"cf4b3d3f-c6c2-2042-957e-44d1e7f3e485\",\n      \"updated_time\": \"2006-12-29T22:39:39.850Z\",\n      \"note\": \"string\",\n      \"cashback\": {\n        \"dollars\": \"00002.7\",\n        \"percentage\": \"000801080760000000000\"\n      },\n      \"network_transaction_id\": \"string\",\n      \"industry\": {\n        \"mcc\": \"3978\",\n        \"description\": \"string\",\n        \"irs_description\": \"string\"\n      },\n      \"category\": \"Electronics\",\n      \"failure_reason_user_friendly\": \"string\",\n      \"hold_id\": \"664e1316-aafd-7af5-ee44-a4f231190a52\",\n      \"credit_id\": \"8c51b6cc-7f7f-94ac-813e-0b5548750914\",\n      \"release_transaction_id\": \"string\",\n      \"hold_book_transfer_id\": \"string\"\n    }\n  ],\n  \"total\": 9976,\n  \"page\": {\n    \"limit\": 10,\n    \"offset\": 0\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "829c4f20-fe14-4635-a88d-938639a2a02a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchant_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "merchant_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "merchant_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "cardholder_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cardholder_emails",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "cardholder_emails",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "card_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "card_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "card_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "card_nickname",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "card_is_physical",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "card_last_4",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from_original_created_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to_original_created_time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "CLEARED"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "CLEARED"
+                    },
+                    {
+                      "key": "is_missing_requirements",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "ORIGINAL_CREATED_TIME"
+                    },
+                    {
+                      "key": "is_ascending",
+                      "value": "false"
+                    },
+                    {
+                      "key": "network_transaction_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "amount_min",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "amount_max",
+                      "value": "<number>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8cc1fc98-bf6b-4ffc-9ef0-9b7b6a664861",
+          "name": "Get Card Spending Insights",
+          "request": {
+            "name": "Get Card Spending Insights",
+            "description": {
+              "content": "Returns entity-wide spending analytics for your entity: total spend, cashback earned, top merchants, top expenses, and weekly trends. Requires admin, viewer, or card manager access.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards",
+                "insights"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from_date",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "to_date",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit_top_expenses",
+                  "value": "5"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit_top_merchants",
+                  "value": "5"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dac17239-23f1-4195-b743-e33b2559605e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    "insights"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit_top_expenses",
+                      "value": "5"
+                    },
+                    {
+                      "key": "limit_top_merchants",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total_spend\": \"-000000000093206.77\",\n  \"total_cashback\": \"745903324.9192066031\",\n  \"top_expenses\": [\n    {\n      \"id\": \"89c0a0ca-f051-b53a-48ed-67b40ced32e3\",\n      \"amount\": \"224473.41281881\",\n      \"detail\": \"string\",\n      \"cardholder\": \"string\",\n      \"posted_time\": \"1966-01-19T04:04:51.459Z\",\n      \"logo_url\": \"string\",\n      \"website\": \"string\",\n      \"card_id\": \"8533a5d1-2535-9b9f-ac63-da098991dc3a\",\n      \"network_transaction_id\": \"string\"\n    },\n    {\n      \"id\": \"8106d951-382b-4890-fcc2-89469fe28f75\",\n      \"amount\": \"00000000008206252\",\n      \"detail\": \"string\",\n      \"cardholder\": \"string\",\n      \"posted_time\": \"1971-12-12T18:01:31.064Z\",\n      \"logo_url\": \"string\",\n      \"website\": \"string\",\n      \"card_id\": \"8d1e8d1a-b8af-b06e-b6fa-049eb9f01397\",\n      \"network_transaction_id\": \"string\"\n    }\n  ],\n  \"top_merchants\": [\n    {\n      \"total\": \"000004232409\",\n      \"count\": 9053,\n      \"merchant\": \"string\",\n      \"logo_url\": \"string\",\n      \"website\": \"string\"\n    },\n    {\n      \"total\": \"-0000000002378969.5407213275\",\n      \"count\": 657,\n      \"merchant\": \"string\",\n      \"logo_url\": \"string\",\n      \"website\": \"string\"\n    }\n  ],\n  \"weekly_cardholder_spend\": [\n    {\n      \"week\": \"1992-07-15\",\n      \"data\": [\n        {\n          \"total\": \"000000027633.7694611260\",\n          \"value\": \"string\"\n        },\n        {\n          \"total\": \"538653530537\",\n          \"value\": \"string\"\n        }\n      ]\n    },\n    {\n      \"week\": \"2012-02-25\",\n      \"data\": [\n        {\n          \"total\": \"+0.156\",\n          \"value\": \"string\"\n        },\n        {\n          \"total\": \"+8.\",\n          \"value\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"weekly_merchant_spend\": [\n    {\n      \"week\": \"2025-10-13\",\n      \"data\": [\n        {\n          \"total\": \"534900489\",\n          \"value\": \"string\"\n        },\n        {\n          \"total\": \"000000002107135181.9334570\",\n          \"value\": \"string\"\n        }\n      ]\n    },\n    {\n      \"week\": \"1967-09-08\",\n      \"data\": [\n        {\n          \"total\": \"-0000000242.635174\",\n          \"value\": \"string\"\n        },\n        {\n          \"total\": \"-029755192.541346\",\n          \"value\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "deb59fe5-ff92-4866-8603-3dace4f17563",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    "insights"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit_top_expenses",
+                      "value": "5"
+                    },
+                    {
+                      "key": "limit_top_merchants",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f1a39d47-750c-43a8-bd15-ef26d7e44a17",
+          "name": "Get Card",
+          "request": {
+            "name": "Get Card",
+            "description": {
+              "content": "Returns details of a specific card you have access to.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards",
+                ":card_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "card_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "84f8c7dc-3c54-462e-a4f5-b86be9dd15a1",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d46543a7-4f99-4721-f8f6-9ef71716bd70\",\n  \"display_name\": \"string\",\n  \"last_four\": \"string\",\n  \"status\": \"failed\",\n  \"platform\": \"stripe\",\n  \"is_physical\": true,\n  \"cardholder\": {\n    \"name\": \"string\",\n    \"public_id\": \"ffb4e4f0-de67-3e6d-1bc8-2bc8f77b8b95\"\n  },\n  \"created_at\": \"1977-12-14T03:47:47.853Z\",\n  \"is_single_use\": false,\n  \"expiration\": \"1985-02-28T09:00:39.013Z\",\n  \"spending_restriction\": {\n    \"type\": \"allow\",\n    \"merchants\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "38bd38b9-0900-4512-aac6-5325a489fc34",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "14dd7c29-16c3-4eff-8b78-a73d1c31caf6",
+          "name": "Update Card",
+          "request": {
+            "name": "Update Card",
+            "description": {
+              "content": "Updates a card you created via the API. Freeze or unfreeze it with the `status` field, replace its spend limits with `spending_controls`, or change its allowed merchant categories. All fields are optional; omitted fields are left unchanged.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards",
+                ":card_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "card_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"nickname\": \"<string>\",\n  \"spending_controls\": {\n    \"per_transaction_limit\": \"<integer>\",\n    \"daily_limit\": \"<integer>\",\n    \"weekly_limit\": \"<integer>\",\n    \"monthly_limit\": \"<integer>\",\n    \"yearly_limit\": \"<integer>\",\n    \"all_time_limit\": \"<integer>\"\n  },\n  \"allowed_categories\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "27293605-e9fd-463f-99fa-704aca735cb6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"inactive\",\n  \"nickname\": \"<string>\",\n  \"spending_controls\": {\n    \"per_transaction_limit\": 12179,\n    \"daily_limit\": 86889810,\n    \"weekly_limit\": 958908526,\n    \"monthly_limit\": 495238215,\n    \"yearly_limit\": 997784196,\n    \"all_time_limit\": 386260348\n  },\n  \"allowed_categories\": [\n    \"Medical\",\n    \"Grocery\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d46543a7-4f99-4721-f8f6-9ef71716bd70\",\n  \"display_name\": \"string\",\n  \"last_four\": \"string\",\n  \"status\": \"failed\",\n  \"platform\": \"stripe\",\n  \"is_physical\": true,\n  \"cardholder\": {\n    \"name\": \"string\",\n    \"public_id\": \"ffb4e4f0-de67-3e6d-1bc8-2bc8f77b8b95\"\n  },\n  \"created_at\": \"1977-12-14T03:47:47.853Z\",\n  \"is_single_use\": false,\n  \"expiration\": \"1985-02-28T09:00:39.013Z\",\n  \"spending_restriction\": {\n    \"type\": \"allow\",\n    \"merchants\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a9157983-a2f5-44b1-ad4f-4d825cd787b2",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"inactive\",\n  \"nickname\": \"<string>\",\n  \"spending_controls\": {\n    \"per_transaction_limit\": 12179,\n    \"daily_limit\": 86889810,\n    \"weekly_limit\": 958908526,\n    \"monthly_limit\": 495238215,\n    \"yearly_limit\": 997784196,\n    \"all_time_limit\": 386260348\n  },\n  \"allowed_categories\": [\n    \"Medical\",\n    \"Grocery\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b1bb8157-e25c-44d6-81c6-62207b5556db",
+          "name": "Get Card Details",
+          "request": {
+            "name": "Get Card Details",
+            "description": {
+              "content": "Returns operational details of a card: billing address, delivery address, linked banking account, and shipping tracking URL.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cards",
+                ":card_id",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "card_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional `entity_id` to scope requests to a specific entity.",
+                "key": "x-entity-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fd509170-ca12-4c7a-bd44-ae7d9303c99a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"91d0572d-1273-5b14-146f-76e6d00a71ab\",\n  \"billing_address\": {\n    \"street_line_1\": \"string\",\n    \"street_line_2\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"postal_code\": \"string\",\n    \"country\": \"string\"\n  },\n  \"debit_account\": {\n    \"id\": \"e6ef3158-23a9-5894-a5e3-4e4dfee13572\",\n    \"name\": \"string\",\n    \"bank\": \"firstbank\"\n  },\n  \"delivery_address\": \"string\",\n  \"tracking_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "86cdc653-ec8b-44c6-bfee-68e30c86c767",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cards",
+                    ":card_id",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "card_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional `entity_id` to scope requests to a specific entity.",
+                    "key": "x-entity-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.meow.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "fb4a5496-8258-4985-bc90-d473f2b32a85",
+    "name": "Meow Accounts Cards API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Overview\n\nThe Meow API provides financial services and billing capabilities for your business.\n\n### Core Features\n\n- **Financial data access**: access account information, transactions, balances, and payment networks.\n- **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.\n\n### Billing API\n\nThe Billing API lets you create and manage invoices and collect payments:\n\n- **Product management**: create and manage products with custom pricing.\n- **Customer management**: maintain invoicing customers with their addresses.\n- **Invoice creation**: generate invoices with line items, discounts, and custom notes.\n- **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.\n- **Collection accounts**: configure accounts for payment collection.\n\n### Getting Started\n\nAuthenticate by sending your API key in the `x-api-key` request header.\n\nTo scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.\n\n### Error Responses\n\nErrors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.\n\nCommon error codes:\n\n- `500`: Internal server error\n- `501`: Subsystem unavailable\n- `503`: Scheduled maintenance\n- `601`: Data not found\n- `602`: Customer not authorized\n- `701`: Account not found\n- `703`: Invalid input (including invalid date ranges)\n- `704`: Account type not supported\n- `705`: Account is closed\n- `801`: Transaction not found\n\n\nContact Support:\n Name: Meow\n Email: support@meow.com",
+      "type": "text/plain"
+    }
+  }
+}

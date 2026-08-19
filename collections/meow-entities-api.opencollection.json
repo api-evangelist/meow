@@ -1,0 +1,437 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Meow Accounts Entities API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Entities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Onboarding Entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/entities",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Opaque offset identifier for pagination. Use the nextOffset from a previous response."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Lists the business entities being onboarded by your API key's user."
+        },
+        {
+          "info": {
+            "name": "Create Business Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/entities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new business entity owned by your API key's user. Send an empty body to create a bare not-started entity, or seed any KYB business details up front: legal name, incorporation, the registered legal and (optional) physical address, and the business profile fields (phone, tax ID, website, description, industry, account purpose, and digital-currency questions). The creating user is granted admin on the new entity, so the same API key can immediately act on it by passing the returned entity"
+        },
+        {
+          "info": {
+            "name": "Get Entity Onboarding Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/entities/:entity_id",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns the onboarding status of a business entity, including uploaded documents and each representative's KYC status in the `representatives` array. The top-level `kyc_status` reflects the primary representative."
+        },
+        {
+          "info": {
+            "name": "Update Business Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.meow.com/v1/entities/:entity_id/business-details",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a business entity's KYB details before its application is submitted. Send only the fields you want to change; anything you omit keeps its current value. Use this to fill in the business phone, tax ID, website, description, industry, account purpose, and digital-currency questions, and the registered legal and physical addresses, or to correct details captured at creation. Send `physical_address` together with `business_address`; omitting it keeps any physical address already on file, or u"
+        },
+        {
+          "info": {
+            "name": "List Entity Representatives",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/entities/:entity_id/representatives",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List the representatives (beneficial owners and officers) on a business entity's application, each with their identity verification (KYC) status. The primary representative (signer) is returned first. Use each `representative_id` to submit KYC, mint a verification link, or make it primary."
+        },
+        {
+          "info": {
+            "name": "Add Entity Representative",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/entities/:entity_id/representatives",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add a representative (a beneficial owner or officer) to a business entity. Set `is_primary` to mark the primary representative (signer); exactly one primary is required before the application can be submitted. Verify the representative separately by submitting their KYC data or minting a self-serve verification link. This is allowed only before the application is submitted for review."
+        },
+        {
+          "info": {
+            "name": "Submit Representative KYC Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/entities/:entity_id/representatives/:representative_id/kyc",
+            "params": [
+              {
+                "name": "representative_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Submit identity (KYC) data for a representative you added. Verification runs server-side; poll the entity onboarding status endpoint for the result. Use this when you hold the representative's identity details; otherwise mint a verification link for them to self-verify."
+        },
+        {
+          "info": {
+            "name": "Create Representative Verification Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/entities/:entity_id/representatives/:representative_id/verification-link",
+            "params": [
+              {
+                "name": "representative_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Mint a shareable identity-verification link the representative opens to complete KYC themselves. The alternative to submitting their KYC data directly."
+        },
+        {
+          "info": {
+            "name": "Make Representative Primary",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/entities/:entity_id/representatives/:representative_id/make-primary",
+            "params": [
+              {
+                "name": "representative_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Make an existing representative the primary representative (signer). Any current primary is demoted, so exactly one remains. Allowed only before the application is submitted for review. Returns the updated onboarding status."
+        },
+        {
+          "info": {
+            "name": "Get Entity Document Upload URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/entities/:entity_id/documents/upload-url",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a pre-signed URL to upload a KYB document. Use HTTP PUT to upload the file to the returned URL, then confirm it. For a document that belongs to a specific representative (e.g. their ID or proof of address), pass their `representative_id` here and again on the confirm call, which records the link."
+        },
+        {
+          "info": {
+            "name": "Confirm Entity Document Upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/entities/:entity_id/documents/confirm",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Confirm that a KYB document was uploaded successfully. Pass the same `representative_id` given when the upload URL was generated (if any) to record which representative the document belongs to; it is echoed back on the entity's onboarding status under `documents`."
+        },
+        {
+          "info": {
+            "name": "Submit Entity Application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/entities/:entity_id/submit",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Submit a fully prepared business entity for review. Choose the checking account product to open. The application must have everything it needs first (check `next_step.can_submit` on the onboarding status); otherwise this returns the outstanding requirements. Once submitted, the application moves to review and can no longer be edited. Pass `product_features` to request additional products alongside the checking account (for example `stablecoins` for USDC access); they are enabled once the applica"
+        },
+        {
+          "info": {
+            "name": "Get Due Diligence Requirements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/entities/:entity_id/due-diligence",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List the enhanced due diligence forms required for a business entity, each with its completion status and whether it must be completed in the web app (forms that collect document uploads cannot be submitted through the API). Fetch each submittable form's schema, then submit it."
+        },
+        {
+          "info": {
+            "name": "Submit Due Diligence Form",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/entities/:entity_id/due-diligence",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Submit an enhanced due diligence form for a business entity. Some industries require additional due diligence before the application can be submitted (check `next_step.missing` on the onboarding status). Only forms that collect plain data are accepted here; forms that require document uploads must be completed in the web app. Returns the updated onboarding status."
+        },
+        {
+          "info": {
+            "name": "Get Due Diligence Form Schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/entities/:entity_id/due-diligence/schema/:form_type",
+            "params": [
+              {
+                "name": "form_type",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the field schema for a due diligence form: its pages and elements with types, choices, validation, and conditional visibility. Use it to build a valid submission body. Only forms submittable through the API have a schema; others must be completed in the web app."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

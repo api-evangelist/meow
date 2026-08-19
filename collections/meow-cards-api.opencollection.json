@@ -1,0 +1,469 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Meow Accounts Cards API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Cards",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/cards",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "card_types",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from_created_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "to_created_time",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns the cards you have access to. As an admin or viewer you see all entity cards; as a card manager you see your team's cards; as a card user you see only your own."
+        },
+        {
+          "info": {
+            "name": "Create Card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/cards",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a virtual card scoped to a single merchant and spend limit. Set `single_use` to `true` (default) for a one-shot card that auto-cancels after the first authorization, or `false` for a multi-use card that stays active until expiry or explicit revoke. Retrieve the PAN by calling `POST /cards/{card_id}/pan`."
+        },
+        {
+          "info": {
+            "name": "Create Payment Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/cards/payment-token",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a Shared Payment Token for merchants that support the Agentic Commerce Protocol. Returns a token string, not full card details. Use a payment token instead of a card when the merchant accepts one. This endpoint is not yet available."
+        },
+        {
+          "info": {
+            "name": "Revoke Card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/cards/:card_id/revoke",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Immediately revoke a card. Revoke a card whose purchase failed to close it before it expires."
+        },
+        {
+          "info": {
+            "name": "Get Card PAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.meow.com/v1/cards/:card_id/pan",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns the full card number (PAN), CVC, and expiration for a card created via the API. Requires the `cards:write` scope. Pass the `card_id` returned by Create Card. This can be called only once per card; subsequent calls return an error. Revoke and recreate the card if the PAN is needed again."
+        },
+        {
+          "info": {
+            "name": "List Card Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/cards/transactions",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "merchant_name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "merchant_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cardholder_name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cardholder_emails",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "card_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "card_nickname",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "card_is_physical",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "card_last_4",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from_original_created_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "to_original_created_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_missing_requirements",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "is_ascending",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "network_transaction_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "amount_min",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "amount_max",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns transactions for cards you have access to. Supports filtering by card, date range, status, merchant, and amount."
+        },
+        {
+          "info": {
+            "name": "Get Card Spending Insights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/cards/insights",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "from_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "to_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit_top_expenses",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit_top_merchants",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns entity-wide spending analytics for your entity: total spend, cashback earned, top merchants, top expenses, and weekly trends. Requires admin, viewer, or card manager access."
+        },
+        {
+          "info": {
+            "name": "Get Card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/cards/:card_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns details of a specific card you have access to."
+        },
+        {
+          "info": {
+            "name": "Update Card",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.meow.com/v1/cards/:card_id",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates a card you created via the API. Freeze or unfreeze it with the `status` field, replace its spend limits with `spending_controls`, or change its allowed merchant categories. All fields are optional; omitted fields are left unchanged."
+        },
+        {
+          "info": {
+            "name": "Get Card Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.meow.com/v1/cards/:card_id/details",
+            "headers": [
+              {
+                "name": "x-entity-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "x-api-key",
+              "value": "{{x-api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns operational details of a card: billing address, delivery address, linked banking account, and shipping tracking URL."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
