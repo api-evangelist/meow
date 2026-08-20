@@ -21,6 +21,8 @@ apis:
   name: Meow Accounts API
   description: Access and manage accounts.
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -29,6 +31,8 @@ apis:
   name: Meow API Keys API
   description: Retrieve metadata about API keys and their accessible entities.
   tags:
+  - APIKeys
+  tags_raw:
   - API Keys
   properties:
   - type: OpenAPI
@@ -165,6 +169,8 @@ apis:
   name: Meow Products API
   description: Manage products and pricing for invoicing.
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
@@ -208,6 +214,8 @@ apis:
   name: Meow Transactions API
   description: Retrieve account transaction history and details.
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
@@ -224,6 +232,8 @@ apis:
   name: Meow Webhooks API
   description: Manage webhook subscriptions and inspect delivery history.
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
