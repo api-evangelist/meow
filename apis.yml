@@ -255,6 +255,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/meow-capability-edges.yml
+  name: Meow Business Capability Map
 - type: AgentSkill
   url: skills/meow-create-and-send-invoice.md
 - type: MCPServer
