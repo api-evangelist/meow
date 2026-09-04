@@ -1,38 +1,45 @@
-# Kin Score artifact — meow — 2026-08-04T083143
+# Kin Score artifact — meow — 2026-09-03T161828
 # The API Evangelist rating (https://github.com/api-evangelist/kin-score). Generated; do not edit.
 ---
 kin_score:
   slug: meow
-  schema_version: 0.9
-  scored_at: '2026-08-04'
-  run_ts: 2026-08-04T083143
-  composite: 26.8
+  schema_version: 0.18.1
+  scored_at: '2026-09-03'
+  run_ts: 2026-09-03T161828
+  composite: 22.6
   band: emerging
   facets:
-    discoverability: 61.1
-    contract_quality: 74.0
-    governance: 11.5
+    discoverability: 44.4
+    contract_quality: 68.7
+    governance: 4.5
     operational_transparency: 0.0
-    developer_ergonomics: 0.0
+    developer_ergonomics: 1.8
     commercial_clarity: 0.0
+    contract_governance: 4.5
+    access_clarity: 0.0
   agent_readiness:
-    score: 40.1
-    band: agent-ready
+    score: 49.0
+    band: agent-native
     dimensions:
       spec_presence: true
       agentic_access: derived
-      mcp_server: false
-      auth_clarity: false
+      reversibility_documented: documented
+      mcp_server: verified
+      auth_clarity: bearer
       idempotency: verified
       error_semantics: verified
       openapi_examples: partial
       rate_limit_signal: false
-      event_surface_described: derived
-      agent_skills: false
+      event_surface_described: true
+      agent_skills: derived
       well_known_catalog: false
       consent_identity: false
       agent_card: flavored
       dry_run_mode: false
+      delegated_identity: false
+      protected_resource_metadata: false
+      dynamic_client_registration: false
+      agentic_commerce: false
   regulatory:
     applies: true
     regime: Banking & Open Finance
