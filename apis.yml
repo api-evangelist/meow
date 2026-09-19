@@ -224,6 +224,8 @@ apis:
     integrations end-to-end without real money movement. **Not available in production**: these endpoints
     exist only in sandbox and development environments and return `404 Not Found` in production.
   tags:
+  - Simulation
+  tags_raw:
   - Simulations
   properties:
   - type: OpenAPI
