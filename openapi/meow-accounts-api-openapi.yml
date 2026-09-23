@@ -1,76 +1,10 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Meow Accounts API
   description: '## Overview
 
 
-    The Meow API provides financial services and billing capabilities for your business.
-
-
-    ### Core Features
-
-
-    - **Financial data access**: access account information, transactions, balances, and payment networks.
-
-    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
-
-
-    ### Billing API
-
-
-    The Billing API lets you create and manage invoices and collect payments:
-
-
-    - **Product management**: create and manage products with custom pricing.
-
-    - **Customer management**: maintain invoicing customers with their addresses.
-
-    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
-
-    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
-
-    - **Collection accounts**: configure accounts for payment collection.
-
-
-    ### Getting Started
-
-
-    Authenticate by sending your API key in the `x-api-key` request header.
-
-
-    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
-
-
-    ### Error Responses
-
-
-    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
-
-
-    Common error codes:
-
-
-    - `500`: Internal server error
-
-    - `501`: Subsystem unavailable
-
-    - `503`: Scheduled maintenance
-
-    - `601`: Data not found
-
-    - `602`: Customer not authorized
-
-    - `701`: Account not found
-
-    - `703`: Invalid input (including invalid date ranges)
-
-    - `704`: Account type not supported
-
-    - `705`: Account is closed
-
-    - `801`: Transaction not found
-
-    '
+    The Meow API provides financial services and billing capabilities for your business.'
   contact:
     name: Meow
     url: https://meow.com/
@@ -245,59 +179,145 @@ paths:
         - accounts:write
 components:
   schemas:
-    UpdateAccountResponse:
+    DepositAccountWithDetail:
       properties:
-        account_id:
-          type: string
-          title: Account Id
-          description: The `account_id` of the updated account.
-          examples:
-          - cash_account_3f9c1b2e-7a4d-4e88-9c21-0b6f5d8e1a2c
-        nickname:
-          type: string
-          title: Nickname
-          description: The account's display name after the update.
-          examples:
-          - Payroll
+        depositAccount:
+          $ref: '#/components/schemas/DepositAccount'
+          description: Deposit account with balances.
+      additionalProperties: false
       type: object
       required:
-      - account_id
-      - nickname
-      title: UpdateAccountResponse
+      - depositAccount
+      title: DepositAccountWithDetail
+    DigitalWalletInfo:
+      properties:
+        accountId:
+          $ref: '#/components/schemas/Identifier'
+          description: Unique identifier for this wallet.
+        accountCategory:
+          $ref: '#/components/schemas/AccountCategory'
+          description: Account category.
+          default: DIGITAL_WALLET
+        accountType:
+          $ref: '#/components/schemas/DigitalWalletType'
+          description: The type of digital wallet.
+        accountNumberDisplay:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accountnumberdisplay
+          description: Last 4 digits of the wallet address.
+          examples:
+          - 4321
+        productName:
+          type: string
+          title: Productname
+          description: Product name (e.g., USDC Wallet).
+        nickname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nickname
+          description: Custom display name for the wallet.
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+          description: Current wallet status.
+        currency:
+          $ref: '#/components/schemas/Currency'
+          description: Currency of the wallet.
+      type: object
+      required:
+      - accountId
+      - accountType
+      - productName
+      - status
+      - currency
+      title: DigitalWalletInfo
     DateString:
       type: string
       format: date
       title: DateString
       description: ISO 8601 full-date in the format `YYYY-MM-DD` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    DigitalWalletType:
+    AccountStatus:
       type: string
       enum:
-      - DIGITALWALLET
-      title: DigitalWalletType
-    UpdateAccountRequest:
+      - CLOSED
+      - DELINQUENT
+      - NEGATIVECURRENTBALANCE
+      - OPEN
+      - PAID
+      - PENDINGCLOSE
+      - PENDINGOPEN
+      - RESTRICTED
+      title: AccountStatus
+    Currency:
       properties:
-        nickname:
-          type: string
-          maxLength: 25
-          minLength: 2
-          pattern: ^[A-Za-z0-9\-' ]+$
-          title: Nickname
-          description: A custom display name for the account, shown in the dashboard to distinguish it from other accounts. 2-25 characters; letters, numbers, hyphens, apostrophes, and spaces only. Must be unique among your accounts.
-          examples:
-          - Payroll
+        currencyCode:
+          $ref: '#/components/schemas/Iso4217Code'
+          description: ISO 4217 currency code.
       type: object
       required:
-      - nickname
-      title: UpdateAccountRequest
-    AccountType:
-      type: string
-      enum:
-      - BROKERAGEPRODUCT
-      - CHECKING
-      - MONEYMARKET
-      - SAVINGS
-      - TAXABLE
-      title: AccountType
+      - currencyCode
+      title: Currency
+    CreateAccountResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/CreateAccountStatus'
+          description: '`created` when the new account is ready immediately and its `account_id` is returned. `processing` when the account is still being opened; poll `GET /accounts` until it appears.'
+          examples:
+          - created
+        account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Id
+          description: The new `account_id`, returned only when status is `created`. Null when status is `processing`; fetch it from `GET /accounts` once the account appears.
+          examples:
+          - cash_account_3f9c1b2e-7a4d-4e88-9c21-0b6f5d8e1a2c
+      type: object
+      required:
+      - status
+      title: CreateAccountResponse
+    DigitalWalletDescriptor:
+      properties:
+        digitalWallet:
+          $ref: '#/components/schemas/DigitalWalletInfo'
+          description: Digital wallet details.
+      additionalProperties: false
+      type: object
+      required:
+      - digitalWallet
+      title: DigitalWalletDescriptor
+    DepositAccountDescriptor:
+      properties:
+        depositAccount:
+          $ref: '#/components/schemas/DepositAccountInfo'
+          description: Deposit account details.
+      additionalProperties: false
+      type: object
+      required:
+      - depositAccount
+      title: DepositAccountDescriptor
+    DigitalWalletWithDetail:
+      properties:
+        digitalWallet:
+          $ref: '#/components/schemas/DigitalWallet'
+          description: Digital wallet with balances.
+      additionalProperties: false
+      type: object
+      required:
+      - digitalWallet
+      title: DigitalWalletWithDetail
+    InvestmentAccountWithDetail:
+      properties:
+        investmentAccount:
+          $ref: '#/components/schemas/InvestmentAccount'
+          description: Investment account with balances and holdings.
+      additionalProperties: false
+      type: object
+      required:
+      - investmentAccount
+      title: InvestmentAccountWithDetail
     Iso4217Code:
       type: string
       enum:
@@ -484,6 +504,16 @@ components:
       - ZWG
       - ZWL
       title: Iso4217Code
+    InvestmentAccountDescriptor:
+      properties:
+        investmentAccount:
+          $ref: '#/components/schemas/AccountDescriptor'
+          description: Investment account details.
+      additionalProperties: false
+      type: object
+      required:
+      - investmentAccount
+      title: InvestmentAccountDescriptor
     CreateAccountRequest:
       properties:
         product:
@@ -495,6 +525,65 @@ components:
       required:
       - product
       title: CreateAccountRequest
+    AccountType:
+      type: string
+      enum:
+      - BROKERAGEPRODUCT
+      - CHECKING
+      - MONEYMARKET
+      - SAVINGS
+      - TAXABLE
+      title: AccountType
+    HoldingType-Output:
+      type: string
+      enum:
+      - ANNUITY
+      - BOND
+      - CD
+      - MUTUALFUND
+      - OPTION
+      - OTHER
+      - STOCK
+      title: HoldingType
+      description: 'Types of financial holdings or investments.
+
+
+        ANNUITY - A contract sold by financial institutions that provides fixed payments to the holder at specified intervals
+
+        BOND - A debt security where an investor loans money to an entity for a defined period at a fixed interest rate
+
+        CD - Certificate of Deposit, a time deposit with a bank with fixed term and interest rate
+
+        MUTUALFUND - An investment vehicle made up of a pool of funds collected from many investors
+
+        OPTION - A contract giving the buyer the right to buy or sell an underlying asset at a specific price
+
+        OTHER - Any holding type not covered by the other categories
+
+        STOCK - Shares or equity in a corporation'
+    SecurityIdType:
+      type: string
+      enum:
+      - CUSIP
+      - ISIN
+      - SEDOL
+      - SICC
+      - VALOR
+      - WKN
+      title: SecurityIdType
+      description: 'Standard identifiers used for securities in financial markets.
+
+        CUSIP - Committee on Uniform Securities Identification Procedures (North American securities)
+
+        ISIN - International Securities Identification Number (global standard)
+
+        SEDOL - Stock Exchange Daily Official List (UK securities)
+
+        SICC - Standard Industrial Classification Code
+
+        VALOR - Swiss security identification number
+
+        WKN - Wertpapierkennnummer (German securities)'
     AccountDescriptor:
       properties:
         accountId:
@@ -535,52 +624,6 @@ components:
       - status
       - currency
       title: AccountDescriptor
-    AccountCategory:
-      type: string
-      enum:
-      - DEPOSIT_ACCOUNT
-      - DIGITAL_WALLET
-      - INVESTMENT_ACCOUNT
-      title: AccountCategory
-    AccountStatus:
-      type: string
-      enum:
-      - CLOSED
-      - DELINQUENT
-      - NEGATIVECURRENTBALANCE
-      - OPEN
-      - PAID
-      - PENDINGCLOSE
-      - PENDINGOPEN
-      - RESTRICTED
-      title: AccountStatus
-    HoldingType-Output:
-      type: string
-      enum:
-      - ANNUITY
-      - BOND
-      - CD
-      - MUTUALFUND
-      - OPTION
-      - OTHER
-      - STOCK
-      title: HoldingType
-      description: 'Types of financial holdings or investments.
-
-
-        ANNUITY - A contract sold by financial institutions that provides fixed payments to the holder at specified intervals
-
-        BOND - A debt security where an investor loans money to an entity for a defined period at a fixed interest rate
-
-        CD - Certificate of Deposit, a time deposit with a bank with fixed term and interest rate
-
-        MUTUALFUND - An investment vehicle made up of a pool of funds collected from many investors
-
-        OPTION - A contract giving the buyer the right to buy or sell an underlying asset at a specific price
-
-        OTHER - Any holding type not covered by the other categories
-
-        STOCK - Shares or equity in a corporation'
     DepositAccount:
       properties:
         accountId:
@@ -637,109 +680,6 @@ components:
       - currentBalance
       - availableBalance
       title: DepositAccount
-    AccountWithDetails:
-      anyOf:
-      - $ref: '#/components/schemas/DepositAccountWithDetail'
-      - $ref: '#/components/schemas/InvestmentAccountWithDetail'
-      - $ref: '#/components/schemas/DigitalWalletWithDetail'
-      title: AccountWithDetails
-      description: Account with balance details.
-    DigitalWalletInfo:
-      properties:
-        accountId:
-          $ref: '#/components/schemas/Identifier'
-          description: Unique identifier for this wallet.
-        accountCategory:
-          $ref: '#/components/schemas/AccountCategory'
-          description: Account category.
-          default: DIGITAL_WALLET
-        accountType:
-          $ref: '#/components/schemas/DigitalWalletType'
-          description: The type of digital wallet.
-        accountNumberDisplay:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Accountnumberdisplay
-          description: Last 4 digits of the wallet address.
-          examples:
-          - 4321
-        productName:
-          type: string
-          title: Productname
-          description: Product name (e.g., USDC Wallet).
-        nickname:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nickname
-          description: Custom display name for the wallet.
-        status:
-          $ref: '#/components/schemas/AccountStatus'
-          description: Current wallet status.
-        currency:
-          $ref: '#/components/schemas/Currency'
-          description: Currency of the wallet.
-      type: object
-      required:
-      - accountId
-      - accountType
-      - productName
-      - status
-      - currency
-      title: DigitalWalletInfo
-    CloseAccountStatus:
-      type: string
-      enum:
-      - closed
-      - close_pending
-      title: CloseAccountStatus
-    DepositAccountInfo:
-      properties:
-        accountId:
-          $ref: '#/components/schemas/Identifier'
-          description: Unique identifier for this account.
-        accountType:
-          $ref: '#/components/schemas/AccountType'
-          description: The type of account.
-        accountNumberDisplay:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Accountnumberdisplay
-          description: Last 4 digits of the account number.
-          examples:
-          - 4321
-        productName:
-          type: string
-          title: Productname
-          description: Product name (e.g., Business Checking, Treasury).
-        nickname:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nickname
-          description: Custom display name for the account.
-        status:
-          $ref: '#/components/schemas/AccountStatus'
-          description: Current account status.
-        currency:
-          $ref: '#/components/schemas/Currency'
-          description: Currency of the account.
-        bankProductType:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Bankproducttype
-          description: The name of the bank this account is held at.
-      type: object
-      required:
-      - accountId
-      - accountType
-      - productName
-      - status
-      - currency
-      title: DepositAccountInfo
     DigitalWallet:
       properties:
         accountId:
@@ -794,87 +734,34 @@ components:
       - currentBalance
       - availableBalance
       title: DigitalWallet
-    Currency:
+    ValidationError:
       properties:
-        currencyCode:
-          $ref: '#/components/schemas/Iso4217Code'
-          description: ISO 4217 currency code.
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - currencyCode
-      title: Currency
-    CloseAccountResponse:
-      properties:
-        status:
-          $ref: '#/components/schemas/CloseAccountStatus'
-      type: object
-      required:
-      - status
-      title: CloseAccountResponse
-    HoldingSubType:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AccountCategory:
       type: string
       enum:
-      - CASH
-      - MONEYMARKET
-      title: HoldingSubType
-      description: The subtype of an investment holding. Set `holdingSubType` to `CASH` or `MONEYMARKET` to indicate cash-type holdings.
-    OpenableBankProduct:
-      type: string
-      enum:
-      - grasshopper
-      - tcb
-      - firstbank
-      - crb
-      title: OpenableBankProduct
-      x-enum-varnames:
-      - grasshopper
-      - tcb
-      - firstbank
-      - crb
-    DigitalWalletWithDetail:
-      properties:
-        digitalWallet:
-          $ref: '#/components/schemas/DigitalWallet'
-          description: Digital wallet with balances.
-      additionalProperties: false
-      type: object
-      required:
-      - digitalWallet
-      title: DigitalWalletWithDetail
-    DepositAccountWithDetail:
-      properties:
-        depositAccount:
-          $ref: '#/components/schemas/DepositAccount'
-          description: Deposit account with balances.
-      additionalProperties: false
-      type: object
-      required:
-      - depositAccount
-      title: DepositAccountWithDetail
-    CreateAccountResponse:
-      properties:
-        status:
-          $ref: '#/components/schemas/CreateAccountStatus'
-          description: '`created` when the new account is ready immediately and its `account_id` is returned. `processing` when the account is still being opened; poll `GET /accounts` until it appears.'
-          examples:
-          - created
-        account_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Account Id
-          description: The new `account_id`, returned only when status is `created`. Null when status is `processing`; fetch it from `GET /accounts` once the account appears.
-          examples:
-          - cash_account_3f9c1b2e-7a4d-4e88-9c21-0b6f5d8e1a2c
-      type: object
-      required:
-      - status
-      title: CreateAccountResponse
-    Identifier:
-      type: string
-      maxLength: 256
-      title: Identifier
-      description: Value for a unique identifier.
+      - DEPOSIT_ACCOUNT
+      - DIGITAL_WALLET
+      - INVESTMENT_ACCOUNT
+      title: AccountCategory
     Holding:
       properties:
         securityId:
@@ -958,69 +845,6 @@ components:
       - marketValue
       title: Holding
       description: A holding in an investment account.
-    PageMetadata:
-      properties:
-        nextOffset:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nextoffset
-          description: Opaque offset identifier.
-          examples:
-          - qwer123454q2f
-      type: object
-      title: PageMetadata
-    InvestmentAccountDescriptor:
-      properties:
-        investmentAccount:
-          $ref: '#/components/schemas/AccountDescriptor'
-          description: Investment account details.
-      additionalProperties: false
-      type: object
-      required:
-      - investmentAccount
-      title: InvestmentAccountDescriptor
-    DigitalWalletDescriptor:
-      properties:
-        digitalWallet:
-          $ref: '#/components/schemas/DigitalWalletInfo'
-          description: Digital wallet details.
-      additionalProperties: false
-      type: object
-      required:
-      - digitalWallet
-      title: DigitalWalletDescriptor
-    InvestmentAccountWithDetail:
-      properties:
-        investmentAccount:
-          $ref: '#/components/schemas/InvestmentAccount'
-          description: Investment account with balances and holdings.
-      additionalProperties: false
-      type: object
-      required:
-      - investmentAccount
-      title: InvestmentAccountWithDetail
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     CreateAccountStatus:
       type: string
       enum:
@@ -1030,22 +854,127 @@ components:
       x-enum-varnames:
       - processing
       - created
-    HTTPValidationError:
+    CloseAccountResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        status:
+          $ref: '#/components/schemas/CloseAccountStatus'
       type: object
-      title: HTTPValidationError
-    AccountWithDescriptor:
+      required:
+      - status
+      title: CloseAccountResponse
+    DepositAccountInfo:
+      properties:
+        accountId:
+          $ref: '#/components/schemas/Identifier'
+          description: Unique identifier for this account.
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+          description: The type of account.
+        accountNumberDisplay:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accountnumberdisplay
+          description: Last 4 digits of the account number.
+          examples:
+          - 4321
+        productName:
+          type: string
+          title: Productname
+          description: Product name (e.g., Business Checking, Treasury).
+        nickname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nickname
+          description: Custom display name for the account.
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+          description: Current account status.
+        currency:
+          $ref: '#/components/schemas/Currency'
+          description: Currency of the account.
+        bankProductType:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bankproducttype
+          description: The name of the bank this account is held at.
+      type: object
+      required:
+      - accountId
+      - accountType
+      - productName
+      - status
+      - currency
+      title: DepositAccountInfo
+    UpdateAccountResponse:
+      properties:
+        account_id:
+          type: string
+          title: Account Id
+          description: The `account_id` of the updated account.
+          examples:
+          - cash_account_3f9c1b2e-7a4d-4e88-9c21-0b6f5d8e1a2c
+        nickname:
+          type: string
+          title: Nickname
+          description: The account's display name after the update.
+          examples:
+          - Payroll
+      type: object
+      required:
+      - account_id
+      - nickname
+      title: UpdateAccountResponse
+    CloseAccountStatus:
+      type: string
+      enum:
+      - closed
+      - close_pending
+      title: CloseAccountStatus
+    AccountWithDetails:
       anyOf:
-      - $ref: '#/components/schemas/DepositAccountDescriptor'
-      - $ref: '#/components/schemas/InvestmentAccountDescriptor'
-      - $ref: '#/components/schemas/DigitalWalletDescriptor'
-      title: AccountWithDescriptor
-      description: Account summary without balance details.
+      - $ref: '#/components/schemas/DepositAccountWithDetail'
+      - $ref: '#/components/schemas/InvestmentAccountWithDetail'
+      - $ref: '#/components/schemas/DigitalWalletWithDetail'
+      title: AccountWithDetails
+      description: Account with balance details.
+    HoldingSubType:
+      type: string
+      enum:
+      - CASH
+      - MONEYMARKET
+      title: HoldingSubType
+      description: The subtype of an investment holding. Set `holdingSubType` to `CASH` or `MONEYMARKET` to indicate cash-type holdings.
+    OpenableBankProduct:
+      type: string
+      enum:
+      - grasshopper
+      - tcb
+      - firstbank
+      - crb
+      title: OpenableBankProduct
+      x-enum-varnames:
+      - grasshopper
+      - tcb
+      - firstbank
+      - crb
+    UpdateAccountRequest:
+      properties:
+        nickname:
+          type: string
+          maxLength: 25
+          minLength: 2
+          pattern: ^[A-Za-z0-9\-' ]+$
+          title: Nickname
+          description: A custom display name for the account, shown in the dashboard to distinguish it from other accounts. 2-25 characters; letters, numbers, hyphens, apostrophes, and spaces only. Must be unique among your accounts.
+          examples:
+          - Payroll
+      type: object
+      required:
+      - nickname
+      title: UpdateAccountRequest
     InvestmentAccount:
       properties:
         accountId:
@@ -1105,29 +1034,6 @@ components:
       - currentValue
       - holdings
       title: InvestmentAccount
-    SecurityIdType:
-      type: string
-      enum:
-      - CUSIP
-      - ISIN
-      - SEDOL
-      - SICC
-      - VALOR
-      - WKN
-      title: SecurityIdType
-      description: 'Standard identifiers used for securities in financial markets.
-
-        CUSIP - Committee on Uniform Securities Identification Procedures (North American securities)
-
-        ISIN - International Securities Identification Number (global standard)
-
-        SEDOL - Stock Exchange Daily Official List (UK securities)
-
-        SICC - Standard Industrial Classification Code
-
-        VALOR - Swiss security identification number
-
-        WKN - Wertpapierkennnummer (German securities)'
     Accounts:
       properties:
         page:
@@ -1165,16 +1071,44 @@ components:
       required:
       - accounts
       title: Accounts
-    DepositAccountDescriptor:
+    AccountWithDescriptor:
+      anyOf:
+      - $ref: '#/components/schemas/DepositAccountDescriptor'
+      - $ref: '#/components/schemas/InvestmentAccountDescriptor'
+      - $ref: '#/components/schemas/DigitalWalletDescriptor'
+      title: AccountWithDescriptor
+      description: Account summary without balance details.
+    DigitalWalletType:
+      type: string
+      enum:
+      - DIGITALWALLET
+      title: DigitalWalletType
+    HTTPValidationError:
       properties:
-        depositAccount:
-          $ref: '#/components/schemas/DepositAccountInfo'
-          description: Deposit account details.
-      additionalProperties: false
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - depositAccount
-      title: DepositAccountDescriptor
+      title: HTTPValidationError
+    Identifier:
+      type: string
+      maxLength: 256
+      title: Identifier
+      description: Value for a unique identifier.
+    PageMetadata:
+      properties:
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
+      type: object
+      title: PageMetadata
   parameters:
     EntityIdHeader:
       name: x-entity-id

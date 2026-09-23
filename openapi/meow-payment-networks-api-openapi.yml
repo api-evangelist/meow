@@ -1,76 +1,10 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Meow Accounts Payment Networks API
+  title: Meow Payment Networks API
   description: '## Overview
 
 
-    The Meow API provides financial services and billing capabilities for your business.
-
-
-    ### Core Features
-
-
-    - **Financial data access**: access account information, transactions, balances, and payment networks.
-
-    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
-
-
-    ### Billing API
-
-
-    The Billing API lets you create and manage invoices and collect payments:
-
-
-    - **Product management**: create and manage products with custom pricing.
-
-    - **Customer management**: maintain invoicing customers with their addresses.
-
-    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
-
-    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
-
-    - **Collection accounts**: configure accounts for payment collection.
-
-
-    ### Getting Started
-
-
-    Authenticate by sending your API key in the `x-api-key` request header.
-
-
-    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
-
-
-    ### Error Responses
-
-
-    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
-
-
-    Common error codes:
-
-
-    - `500`: Internal server error
-
-    - `501`: Subsystem unavailable
-
-    - `503`: Scheduled maintenance
-
-    - `601`: Data not found
-
-    - `602`: Customer not authorized
-
-    - `701`: Account not found
-
-    - `703`: Invalid input (including invalid date ranges)
-
-    - `704`: Account type not supported
-
-    - `705`: Account is closed
-
-    - `801`: Transaction not found
-
-    '
+    The Meow API provides financial services and billing capabilities for your business.'
   contact:
     name: Meow
     url: https://meow.com/
@@ -140,7 +74,33 @@ paths:
       - apiKeyAuth:
         - accounts:payment-networks
 components:
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
+    IntermediaryBankSWIFT:
+      properties:
+        swift:
+          type: string
+          title: Swift
+        bank_name:
+          type: string
+          title: Bank Name
+        bank_address:
+          type: string
+          title: Bank Address
+      type: object
+      required:
+      - swift
+      - bank_name
+      - bank_address
+      title: IntermediaryBankSWIFT
     ValidationError:
       properties:
         loc:
@@ -171,45 +131,6 @@ components:
       - SAVINGS
       - TAXABLE
       title: AccountType
-    AccountPaymentNetworkList:
-      properties:
-        page:
-          anyOf:
-          - $ref: '#/components/schemas/PageMetadata'
-          - type: 'null'
-          description: Metadata for pagination.
-        paymentNetworks:
-          items:
-            $ref: '#/components/schemas/AccountPaymentNetwork'
-          type: array
-          minItems: 0
-          title: Paymentnetworks
-          description: Array of payment networks, or an empty array if none are available. Not all accounts support every network; for example, a prepaid debit card account does not support ACH.
-          examples:
-          - - bankId: 010088889
-              identifier: '1111222233335820'
-              transferIn: true
-              transferOut: true
-              type: US_ACH
-          - - bankId: 010088889
-              identifier: '1111222233335820'
-              transferIn: true
-              transferOut: true
-              type: US_ACH
-            - identifier: '0x1234567890abcdef1234567890abcdef12345678'
-              network: ETHEREUM
-              transferIn: true
-              transferOut: true
-              type: USDC
-          - - identifier: 8xDc123456789abcdef123456789abcdef123456789abcdef
-              network: SOLANA
-              transferIn: true
-              transferOut: true
-              type: USDC
-      type: object
-      required:
-      - paymentNetworks
-      title: AccountPaymentNetworkList
     PaymentNetworkType:
       type: string
       enum:
@@ -312,6 +233,45 @@ components:
       - transferIn
       - transferOut
       title: AccountPaymentNetwork
+    AccountPaymentNetworkList:
+      properties:
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+          description: Metadata for pagination.
+        paymentNetworks:
+          items:
+            $ref: '#/components/schemas/AccountPaymentNetwork'
+          type: array
+          minItems: 0
+          title: Paymentnetworks
+          description: Array of payment networks, or an empty array if none are available. Not all accounts support every network; for example, a prepaid debit card account does not support ACH.
+          examples:
+          - - bankId: 010088889
+              identifier: '1111222233335820'
+              transferIn: true
+              transferOut: true
+              type: US_ACH
+          - - bankId: 010088889
+              identifier: '1111222233335820'
+              transferIn: true
+              transferOut: true
+              type: US_ACH
+            - identifier: '0x1234567890abcdef1234567890abcdef12345678'
+              network: ETHEREUM
+              transferIn: true
+              transferOut: true
+              type: USDC
+          - - identifier: 8xDc123456789abcdef123456789abcdef123456789abcdef
+              network: SOLANA
+              transferIn: true
+              transferOut: true
+              type: USDC
+      type: object
+      required:
+      - paymentNetworks
+      title: AccountPaymentNetworkList
     PageMetadata:
       properties:
         nextOffset:
@@ -339,32 +299,6 @@ components:
       - TEMPO
       - TRON
       title: BlockchainNetwork
-    IntermediaryBankSWIFT:
-      properties:
-        swift:
-          type: string
-          title: Swift
-        bank_name:
-          type: string
-          title: Bank Name
-        bank_address:
-          type: string
-          title: Bank Address
-      type: object
-      required:
-      - swift
-      - bank_name
-      - bank_address
-      title: IntermediaryBankSWIFT
-  parameters:
-    EntityIdHeader:
-      name: x-entity-id
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uuid
-      description: Optional `entity_id` to scope requests to a specific entity.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

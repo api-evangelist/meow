@@ -1,76 +1,10 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Meow Accounts Limits API
+  title: Meow Limits API
   description: '## Overview
 
 
-    The Meow API provides financial services and billing capabilities for your business.
-
-
-    ### Core Features
-
-
-    - **Financial data access**: access account information, transactions, balances, and payment networks.
-
-    - **Crypto operations**: create and manage crypto contacts, and initiate USDC transfers across blockchain networks.
-
-
-    ### Billing API
-
-
-    The Billing API lets you create and manage invoices and collect payments:
-
-
-    - **Product management**: create and manage products with custom pricing.
-
-    - **Customer management**: maintain invoicing customers with their addresses.
-
-    - **Invoice creation**: generate invoices with line items, discounts, and custom notes.
-
-    - **Payment options**: accept payments via ACH, wire, international wire, card, and USDC.
-
-    - **Collection accounts**: configure accounts for payment collection.
-
-
-    ### Getting Started
-
-
-    Authenticate by sending your API key in the `x-api-key` request header.
-
-
-    To scope requests to a specific entity, include the `x-entity-id` header. Use the `/api-keys/accessible-entities` endpoint to list all entities accessible by your API key.
-
-
-    ### Error Responses
-
-
-    Errors return JSON with `code`, `message`, and `debug_message`. The `code` aligns with FDX where possible; use `debug_message` for troubleshooting only.
-
-
-    Common error codes:
-
-
-    - `500`: Internal server error
-
-    - `501`: Subsystem unavailable
-
-    - `503`: Scheduled maintenance
-
-    - `601`: Data not found
-
-    - `602`: Customer not authorized
-
-    - `701`: Account not found
-
-    - `703`: Invalid input (including invalid date ranges)
-
-    - `704`: Account type not supported
-
-    - `705`: Account is closed
-
-    - `801`: Transaction not found
-
-    '
+    The Meow API provides financial services and billing capabilities for your business.'
   contact:
     name: Meow
     url: https://meow.com/
@@ -139,28 +73,16 @@ paths:
       parameters:
       - $ref: '#/components/parameters/EntityIdHeader'
 components:
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -170,24 +92,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    UpdateDailyWithdrawalLimitRequest:
-      properties:
-        daily_withdrawal_limit:
-          anyOf:
-          - type: number
-            multipleOf: 1.0
-            maximum: 1000000000.0
-            minimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,0}0*$
-          title: Daily Withdrawal Limit
-          description: The most, in USD, that can be withdrawn from your accounts in a single day across all transfer types. Must be a whole dollar amount from 0 up to the maximum set for your entity. Set it to 0 to block all outbound transfers while you collect funds.
-          examples:
-          - '25000'
-      type: object
-      required:
-      - daily_withdrawal_limit
-      title: UpdateDailyWithdrawalLimitRequest
     DailyWithdrawalLimitResponse:
       properties:
         daily_withdrawal_limit:
@@ -227,15 +131,45 @@ components:
       - spent_today
       - remaining_today
       title: DailyWithdrawalLimitResponse
-  parameters:
-    EntityIdHeader:
-      name: x-entity-id
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uuid
-      description: Optional `entity_id` to scope requests to a specific entity.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    UpdateDailyWithdrawalLimitRequest:
+      properties:
+        daily_withdrawal_limit:
+          anyOf:
+          - type: number
+            multipleOf: 1.0
+            maximum: 1000000000.0
+            minimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,0}0*$
+          title: Daily Withdrawal Limit
+          description: The most, in USD, that can be withdrawn from your accounts in a single day across all transfer types. Must be a whole dollar amount from 0 up to the maximum set for your entity. Set it to 0 to block all outbound transfers while you collect funds.
+          examples:
+          - '25000'
+      type: object
+      required:
+      - daily_withdrawal_limit
+      title: UpdateDailyWithdrawalLimitRequest
   securitySchemes:
     apiKeyAuth:
       type: apiKey

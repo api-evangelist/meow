@@ -1,11 +1,9 @@
-generated: '2026-07-20'
+generated: '2026-09-19'
 method: probed
-notes: >-
-  Probed the /.well-known/ discovery surface on the marketing host and the API
-  host. Nothing was served on www.meow.com (all 404). The API host
-  api.meow.com returns 401 (the host exists but gates every path behind auth),
-  so no discovery document could be captured. No raw files saved; absence is
-  valid recorded data.
+notes: Probed the /.well-known/ discovery surface on the marketing host and the API host. Nothing was
+  served on www.meow.com (all 404). The API host api.meow.com returns 401 (the host exists but gates every
+  path behind auth), so no discovery document could be captured. No raw files saved; absence is valid
+  recorded data.
 hosts:
 - host: https://www.meow.com
   documents:
@@ -27,3 +25,30 @@ hosts:
     status: 401
   - path: /.well-known/oauth-authorization-server
     status: 401
+- host: https://mcp.meow.com
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: meow-mcp-oauth-protected-resource.json
+    bytes: 383
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: meow-mcp-oauth-authorization-server.json
+    bytes: 947
+  path_echo_control: passed
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://mcp.meow.com
+    path: /.well-known/oauth-protected-resource
+    file: meow-mcp-oauth-protected-resource.json
+  - host: https://mcp.meow.com
+    path: /.well-known/oauth-authorization-server
+    file: meow-mcp-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host
+note: 'MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s
+  primary hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed
+  and were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'

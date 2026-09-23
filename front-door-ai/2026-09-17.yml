@@ -1,0 +1,30 @@
+# Front Door AI Index — meow — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: meow
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.meow.com
+  final_host: www.meow.com
+  ownership: own
+  owner: meow
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 16
+  host_score: 16
+  density: 7.34
+  words: 2181
+  tiers:
+    agentic: 5
+    core: 9
+    model: 2
+  ambiguous: 7
+  top_terms:
+    AI: 9
+    agent: 7
+    AI agent: 4
+    ChatGPT: 1
+    Claude: 1
+    agentic: 1
