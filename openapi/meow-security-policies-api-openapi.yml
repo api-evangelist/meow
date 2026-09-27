@@ -69,16 +69,40 @@ paths:
       - apiKeyAuth:
         - accounts:read
 components:
-  parameters:
-    EntityIdHeader:
-      name: x-entity-id
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uuid
-      description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
+    PageMetadata:
+      properties:
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
+      type: object
+      title: PageMetadata
+    ActionType:
+      type: string
+      enum:
+      - manage_users_and_policies
+      - send_money
+      title: ActionType
+    CustomerApiSecurityPoliciesResponse:
+      properties:
+        security_policies:
+          items:
+            $ref: '#/components/schemas/CustomerApiSecurityPolicyResponse'
+          type: array
+          title: Security Policies
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - security_policies
+      title: CustomerApiSecurityPoliciesResponse
     CustomerApiSecurityPolicyResponse:
       properties:
         id:
@@ -154,39 +178,15 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    CustomerApiSecurityPoliciesResponse:
-      properties:
-        security_policies:
-          items:
-            $ref: '#/components/schemas/CustomerApiSecurityPolicyResponse'
-          type: array
-          title: Security Policies
-        page:
-          anyOf:
-          - $ref: '#/components/schemas/PageMetadata'
-          - type: 'null'
-      type: object
-      required:
-      - security_policies
-      title: CustomerApiSecurityPoliciesResponse
-    ActionType:
-      type: string
-      enum:
-      - manage_users_and_policies
-      - send_money
-      title: ActionType
-    PageMetadata:
-      properties:
-        nextOffset:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nextoffset
-          description: Opaque offset identifier.
-          examples:
-          - qwer123454q2f
-      type: object
-      title: PageMetadata
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

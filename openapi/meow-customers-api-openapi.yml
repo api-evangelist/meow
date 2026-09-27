@@ -109,64 +109,26 @@ paths:
       - apiKeyAuth:
         - billing:customers:read
 components:
-  parameters:
-    EntityIdHeader:
-      name: x-entity-id
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uuid
-      description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
-    HTTPValidationError:
+    CreateInvoicingCustomerRequest:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        nickname:
+          type: string
+          minLength: 1
+          title: Nickname
+        email:
+          type: string
+          format: email
+          title: Email
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/AddressRequest'
+          - type: 'null'
       type: object
-      title: HTTPValidationError
-    AddressResponse:
-      properties:
-        street_line_1:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Street Line 1
-          description: The primary address line.
-        street_line_2:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Street Line 2
-          description: The secondary address line.
-        city:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: City
-          description: The city.
-        state:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: State
-          description: The state or province.
-        country:
-          anyOf:
-          - $ref: '#/components/schemas/CountryCodeAlpha2'
-          - type: 'null'
-          description: The ISO 3166-1 alpha-2 country code.
-        postal_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Postal Code
-          description: The postal or ZIP code.
-      type: object
-      title: AddressResponse
+      required:
+      - nickname
+      - email
+      title: CreateInvoicingCustomerRequest
     AddressRequest:
       properties:
         street_line_1:
@@ -760,6 +722,45 @@ components:
       - nickname
       - created_time
       title: InvoicingCustomer
+    AddressResponse:
+      properties:
+        street_line_1:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Street Line 1
+          description: The primary address line.
+        street_line_2:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Street Line 2
+          description: The secondary address line.
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+          description: The city.
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+          description: The state or province.
+        country:
+          anyOf:
+          - $ref: '#/components/schemas/CountryCodeAlpha2'
+          - type: 'null'
+          description: The ISO 3166-1 alpha-2 country code.
+        postal_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postal Code
+          description: The postal or ZIP code.
+      type: object
+      title: AddressResponse
     ValidationError:
       properties:
         loc:
@@ -781,25 +782,24 @@ components:
       - msg
       - type
       title: ValidationError
-    CreateInvoicingCustomerRequest:
+    HTTPValidationError:
       properties:
-        nickname:
-          type: string
-          minLength: 1
-          title: Nickname
-        email:
-          type: string
-          format: email
-          title: Email
-        address:
-          anyOf:
-          - $ref: '#/components/schemas/AddressRequest'
-          - type: 'null'
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - nickname
-      - email
-      title: CreateInvoicingCustomerRequest
+      title: HTTPValidationError
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

@@ -73,25 +73,7 @@ paths:
       parameters:
       - $ref: '#/components/parameters/EntityIdHeader'
 components:
-  parameters:
-    EntityIdHeader:
-      name: x-entity-id
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uuid
-      description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     DailyWithdrawalLimitResponse:
       properties:
         daily_withdrawal_limit:
@@ -131,6 +113,24 @@ components:
       - spent_today
       - remaining_today
       title: DailyWithdrawalLimitResponse
+    UpdateDailyWithdrawalLimitRequest:
+      properties:
+        daily_withdrawal_limit:
+          anyOf:
+          - type: number
+            multipleOf: 1.0
+            maximum: 1000000000.0
+            minimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,0}0*$
+          title: Daily Withdrawal Limit
+          description: The most, in USD, that can be withdrawn from your accounts in a single day across all transfer types. Must be a whole dollar amount from 0 up to the maximum set for your entity. Set it to 0 to block all outbound transfers while you collect funds.
+          examples:
+          - '25000'
+      type: object
+      required:
+      - daily_withdrawal_limit
+      title: UpdateDailyWithdrawalLimitRequest
     ValidationError:
       properties:
         loc:
@@ -152,24 +152,24 @@ components:
       - msg
       - type
       title: ValidationError
-    UpdateDailyWithdrawalLimitRequest:
+    HTTPValidationError:
       properties:
-        daily_withdrawal_limit:
-          anyOf:
-          - type: number
-            multipleOf: 1.0
-            maximum: 1000000000.0
-            minimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,0}0*$
-          title: Daily Withdrawal Limit
-          description: The most, in USD, that can be withdrawn from your accounts in a single day across all transfer types. Must be a whole dollar amount from 0 up to the maximum set for your entity. Set it to 0 to block all outbound transfers while you collect funds.
-          examples:
-          - '25000'
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - daily_withdrawal_limit
-      title: UpdateDailyWithdrawalLimitRequest
+      title: HTTPValidationError
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

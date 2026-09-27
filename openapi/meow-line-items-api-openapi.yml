@@ -109,69 +109,6 @@ components:
         format: uuid
       description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    Timestamp:
-      type: string
-      format: date-time
-      title: Timestamp
-      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    Product:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: The unique identifier for the product.
-        name:
-          type: string
-          title: Name
-          description: The name of the product.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: The description of the product.
-        default_price:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Default Price
-          description: The default price of the product.
-      type: object
-      required:
-      - id
-      - name
-      - default_price
-      title: Product
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     LineItem:
       properties:
         id:
@@ -228,6 +165,69 @@ components:
       - price
       - created_at
       title: LineItem
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    Product:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: The unique identifier for the product.
+        name:
+          type: string
+          title: Name
+          description: The name of the product.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: The description of the product.
+        default_price:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Default Price
+          description: The default price of the product.
+      type: object
+      required:
+      - id
+      - name
+      - default_price
+      title: Product
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     apiKeyAuth:
       type: apiKey

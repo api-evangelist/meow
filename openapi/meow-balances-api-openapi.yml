@@ -92,27 +92,6 @@ components:
         format: uuid
       description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
-    Balances:
-      properties:
-        balances:
-          items:
-            $ref: '#/components/schemas/Balance'
-          type: array
-          title: Balances
-          description: An array of balances.
-      type: object
-      required:
-      - balances
-      title: Balances
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     Balance:
       properties:
         balance:
@@ -130,6 +109,18 @@ components:
       - balance
       - date
       title: Balance
+    Balances:
+      properties:
+        balances:
+          items:
+            $ref: '#/components/schemas/Balance'
+          type: array
+          title: Balances
+          description: An array of balances.
+      type: object
+      required:
+      - balances
+      title: Balances
     ValidationError:
       properties:
         loc:
@@ -151,6 +142,15 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     apiKeyAuth:
       type: apiKey

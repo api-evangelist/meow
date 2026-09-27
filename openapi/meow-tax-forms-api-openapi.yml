@@ -114,14 +114,6 @@ paths:
         - accounts:tax-documents
 components:
   schemas:
-    TaxFormType:
-      type: string
-      enum:
-      - Tax1099Int
-      - Tax1099Div
-      - Tax1099B
-      - Tax1099
-      title: TaxFormType
     TaxFormDescriptor:
       properties:
         tax_form_id:
@@ -141,6 +133,35 @@ components:
       - tax_year
       - tax_form_type
       title: TaxFormDescriptor
+    TaxFormType:
+      type: string
+      enum:
+      - Tax1099Int
+      - Tax1099Div
+      - Tax1099B
+      - Tax1099
+      title: TaxFormType
+    TaxFormList:
+      properties:
+        tax_forms:
+          items:
+            $ref: '#/components/schemas/TaxFormDescriptor'
+          type: array
+          title: Tax Forms
+          description: Tax forms issued for this account. Empty if none have been issued, or none match your year and form-type filters.
+      type: object
+      required:
+      - tax_forms
+      title: TaxFormList
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -162,15 +183,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     TaxFormDownload:
       properties:
         tax_form_id:
@@ -202,18 +214,6 @@ components:
       - download_url
       - expires_at
       title: TaxFormDownload
-    TaxFormList:
-      properties:
-        tax_forms:
-          items:
-            $ref: '#/components/schemas/TaxFormDescriptor'
-          type: array
-          title: Tax Forms
-          description: Tax forms issued for this account. Empty if none have been issued, or none match your year and form-type filters.
-      type: object
-      required:
-      - tax_forms
-      title: TaxFormList
   parameters:
     EntityIdHeader:
       name: x-entity-id

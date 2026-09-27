@@ -74,54 +74,34 @@ paths:
       - apiKeyAuth:
         - accounts:payment-networks
 components:
-  parameters:
-    EntityIdHeader:
-      name: x-entity-id
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uuid
-      description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
-    IntermediaryBankSWIFT:
+    BlockchainNetwork:
+      type: string
+      enum:
+      - ARBITRUM
+      - AVALANCHE_C_CHAIN
+      - BASE
+      - ETHEREUM
+      - OPTIMISM
+      - POLYGON
+      - SOLANA
+      - STELLAR
+      - SUI
+      - TEMPO
+      - TRON
+      title: BlockchainNetwork
+    PageMetadata:
       properties:
-        swift:
-          type: string
-          title: Swift
-        bank_name:
-          type: string
-          title: Bank Name
-        bank_address:
-          type: string
-          title: Bank Address
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
       type: object
-      required:
-      - swift
-      - bank_name
-      - bank_address
-      title: IntermediaryBankSWIFT
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: PageMetadata
     AccountType:
       type: string
       enum:
@@ -131,26 +111,6 @@ components:
       - SAVINGS
       - TAXABLE
       title: AccountType
-    PaymentNetworkType:
-      type: string
-      enum:
-      - US_ACH
-      - US_FEDWIRE
-      - US_CHIPS
-      - CA_ACSS
-      - CA_LVTS
-      - USDC
-      - USDT
-      title: PaymentNetworkType
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     AccountPaymentNetwork:
       properties:
         bankId:
@@ -233,6 +193,26 @@ components:
       - transferIn
       - transferOut
       title: AccountPaymentNetwork
+    PaymentNetworkType:
+      type: string
+      enum:
+      - US_ACH
+      - US_FEDWIRE
+      - US_CHIPS
+      - CA_ACSS
+      - CA_LVTS
+      - USDC
+      - USDT
+      title: PaymentNetworkType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     AccountPaymentNetworkList:
       properties:
         page:
@@ -272,33 +252,53 @@ components:
       required:
       - paymentNetworks
       title: AccountPaymentNetworkList
-    PageMetadata:
+    ValidationError:
       properties:
-        nextOffset:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nextoffset
-          description: Opaque offset identifier.
-          examples:
-          - qwer123454q2f
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
-      title: PageMetadata
-    BlockchainNetwork:
-      type: string
-      enum:
-      - ARBITRUM
-      - AVALANCHE_C_CHAIN
-      - BASE
-      - ETHEREUM
-      - OPTIMISM
-      - POLYGON
-      - SOLANA
-      - STELLAR
-      - SUI
-      - TEMPO
-      - TRON
-      title: BlockchainNetwork
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    IntermediaryBankSWIFT:
+      properties:
+        swift:
+          type: string
+          title: Swift
+        bank_name:
+          type: string
+          title: Bank Name
+        bank_address:
+          type: string
+          title: Bank Address
+      type: object
+      required:
+      - swift
+      - bank_name
+      - bank_address
+      title: IntermediaryBankSWIFT
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
   securitySchemes:
     apiKeyAuth:
       type: apiKey
