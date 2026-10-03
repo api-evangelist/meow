@@ -82,12 +82,6 @@ components:
           - qwer123454q2f
       type: object
       title: PageMetadata
-    ActionType:
-      type: string
-      enum:
-      - manage_users_and_policies
-      - send_money
-      title: ActionType
     CustomerApiSecurityPoliciesResponse:
       properties:
         security_policies:
@@ -103,6 +97,42 @@ components:
       required:
       - security_policies
       title: CustomerApiSecurityPoliciesResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ActionType:
+      type: string
+      enum:
+      - manage_users_and_policies
+      - send_money
+      title: ActionType
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     CustomerApiSecurityPolicyResponse:
       properties:
         id:
@@ -148,36 +178,6 @@ components:
       - created_time
       - updated_time
       title: CustomerApiSecurityPolicyResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   parameters:
     EntityIdHeader:
       name: x-entity-id

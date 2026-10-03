@@ -56,6 +56,89 @@ paths:
         - accounts:read
 components:
   schemas:
+    InitiatorIdentityType:
+      type: string
+      enum:
+      - web_user
+      - user_api_key
+      - entity_api_key
+      - mcp_oauth
+      - cli_key
+      - partner_api_key
+      title: InitiatorIdentityType
+      x-enum-varnames:
+      - web_user
+      - user_api_key
+      - entity_api_key
+      - mcp_oauth
+      - cli_key
+      - partner_api_key
+    Initiator:
+      properties:
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        public_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Public Id
+        api_key_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key Id
+        api_key_nickname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key Nickname
+        identity_type:
+          $ref: '#/components/schemas/InitiatorIdentityType'
+          default: web_user
+        user_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: User Id
+        display:
+          $ref: '#/components/schemas/DisplayInitiator'
+          readOnly: true
+      type: object
+      required:
+      - display
+      title: Initiator
+    ApprovalStatus:
+      type: string
+      enum:
+      - pending_approval
+      - approved
+      - executing
+      - completed
+      - rejected
+      - expired
+      - failed
+      title: ApprovalStatus
+    TransferStatus:
+      type: string
+      enum:
+      - pending
+      - pending_approval
+      - canceled
+      - processing
+      - error
+      - sent
+      - returned
+      - void
+      title: TransferStatus
     ApprovalResponse:
       properties:
         approval_id:
@@ -134,12 +217,36 @@ components:
       - approvals_received
       - created_time
       title: ApprovalResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ActionType:
       type: string
       enum:
       - manage_users_and_policies
       - send_money
       title: ActionType
+    ApprovalTransferHandle:
+      properties:
+        id:
+          type: string
+          title: Id
+        transfer_type:
+          $ref: '#/components/schemas/TransferMethod'
+        status:
+          $ref: '#/components/schemas/TransferStatus'
+      type: object
+      required:
+      - id
+      - transfer_type
+      - status
+      title: ApprovalTransferHandle
     DisplayInitiator:
       properties:
         primary:
@@ -149,63 +256,11 @@ components:
       required:
       - primary
       title: DisplayInitiator
-    ApprovalStatus:
-      type: string
-      enum:
-      - pending_approval
-      - approved
-      - executing
-      - completed
-      - rejected
-      - expired
-      - failed
-      title: ApprovalStatus
-    TransferMethod:
-      type: string
-      enum:
-      - book
-      - usdc
-      - usdt
-      - pyusd
-      - cash
-      - usdg
-      - ach
-      - wire
-      title: TransferMethod
     Timestamp:
       type: string
       format: date-time
       title: Timestamp
       description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    TransferStatus:
-      type: string
-      enum:
-      - pending
-      - pending_approval
-      - canceled
-      - processing
-      - error
-      - sent
-      - returned
-      - void
-      title: TransferStatus
-    InitiatorIdentityType:
-      type: string
-      enum:
-      - web_user
-      - user_api_key
-      - entity_api_key
-      - mcp_oauth
-      - cli_key
-      - partner_api_key
-      title: InitiatorIdentityType
-      x-enum-varnames:
-      - web_user
-      - user_api_key
-      - entity_api_key
-      - mcp_oauth
-      - cli_key
-      - partner_api_key
     ValidationError:
       properties:
         loc:
@@ -227,73 +282,18 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ApprovalTransferHandle:
-      properties:
-        id:
-          type: string
-          title: Id
-        transfer_type:
-          $ref: '#/components/schemas/TransferMethod'
-        status:
-          $ref: '#/components/schemas/TransferStatus'
-      type: object
-      required:
-      - id
-      - transfer_type
-      - status
-      title: ApprovalTransferHandle
-    Initiator:
-      properties:
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-        public_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Public Id
-        api_key_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Key Id
-        api_key_nickname:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Key Nickname
-        identity_type:
-          $ref: '#/components/schemas/InitiatorIdentityType'
-          default: web_user
-        user_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: User Id
-        display:
-          $ref: '#/components/schemas/DisplayInitiator'
-          readOnly: true
-      type: object
-      required:
-      - display
-      title: Initiator
+    TransferMethod:
+      type: string
+      enum:
+      - book
+      - usdc
+      - usdt
+      - pyusd
+      - cash
+      - usdg
+      - ach
+      - wire
+      title: TransferMethod
   parameters:
     EntityIdHeader:
       name: x-entity-id

@@ -114,25 +114,6 @@ paths:
         - accounts:tax-documents
 components:
   schemas:
-    TaxFormDescriptor:
-      properties:
-        tax_form_id:
-          type: string
-          title: Tax Form Id
-          description: Identifier for this tax form. Pass it to the retrieve endpoint to get a download URL.
-        tax_year:
-          type: integer
-          title: Tax Year
-          description: The tax year the form covers.
-        tax_form_type:
-          $ref: '#/components/schemas/TaxFormType'
-          description: Form type, such as `Tax1099Int`, `Tax1099Div`, `Tax1099B`, or `Tax1099`.
-      type: object
-      required:
-      - tax_form_id
-      - tax_year
-      - tax_form_type
-      title: TaxFormDescriptor
     TaxFormType:
       type: string
       enum:
@@ -141,48 +122,6 @@ components:
       - Tax1099B
       - Tax1099
       title: TaxFormType
-    TaxFormList:
-      properties:
-        tax_forms:
-          items:
-            $ref: '#/components/schemas/TaxFormDescriptor'
-          type: array
-          title: Tax Forms
-          description: Tax forms issued for this account. Empty if none have been issued, or none match your year and form-type filters.
-      type: object
-      required:
-      - tax_forms
-      title: TaxFormList
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     TaxFormDownload:
       properties:
         tax_form_id:
@@ -214,6 +153,67 @@ components:
       - download_url
       - expires_at
       title: TaxFormDownload
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TaxFormDescriptor:
+      properties:
+        tax_form_id:
+          type: string
+          title: Tax Form Id
+          description: Identifier for this tax form. Pass it to the retrieve endpoint to get a download URL.
+        tax_year:
+          type: integer
+          title: Tax Year
+          description: The tax year the form covers.
+        tax_form_type:
+          $ref: '#/components/schemas/TaxFormType'
+          description: Form type, such as `Tax1099Int`, `Tax1099Div`, `Tax1099B`, or `Tax1099`.
+      type: object
+      required:
+      - tax_form_id
+      - tax_year
+      - tax_form_type
+      title: TaxFormDescriptor
+    TaxFormList:
+      properties:
+        tax_forms:
+          items:
+            $ref: '#/components/schemas/TaxFormDescriptor'
+          type: array
+          title: Tax Forms
+          description: Tax forms issued for this account. Empty if none have been issued, or none match your year and form-type filters.
+      type: object
+      required:
+      - tax_forms
+      title: TaxFormList
   parameters:
     EntityIdHeader:
       name: x-entity-id

@@ -218,121 +218,6 @@ components:
       - product_id
       - quantity
       title: InvoiceLineRequest
-    CreateInvoiceRequest:
-      properties:
-        customer_id:
-          type: string
-          format: uuid
-          title: Customer Id
-        line_items:
-          items:
-            $ref: '#/components/schemas/InvoiceLineRequest'
-          type: array
-          title: Line Items
-        invoice_date:
-          $ref: '#/components/schemas/DateString'
-          description: Date the invoice is scheduled to be sent.
-        due_date:
-          $ref: '#/components/schemas/DateString'
-          description: Date the invoice is due.
-        payment_method_types:
-          items:
-            $ref: '#/components/schemas/PaymentMethodType'
-          type: array
-          title: Payment Method Types
-          description: Payment method types to enable on the invoice. `BANK_TRANSFER` is always enabled.
-        recurring_schedule:
-          anyOf:
-          - type: string
-            maxLength: 120
-            minLength: 1
-            description: 'RFC 5545 RRULE string. Required: DTSTART, RRULE. Allowed frequencies: WEEKLY, MONTHLY.'
-          - type: 'null'
-          title: Recurring Schedule
-          description: Recurring schedule for the invoice as an RFC 2445 RRULE string. A generator is available at https://icalendar.org/rrule-tool.html.
-        send_email_on_creation:
-          type: boolean
-          title: Send Email On Creation
-          description: If true, sends an email to the customer (and any additional recipients) on the `invoice_date`.
-        additional_recipient_emails:
-          anyOf:
-          - items:
-              type: string
-              format: email
-            type: array
-            maxItems: 20
-          - type: 'null'
-          title: Additional Recipient Emails
-          description: Additional recipient emails to send the invoice and any reminders to.
-        note:
-          anyOf:
-          - type: string
-            maxLength: 300
-          - type: 'null'
-          title: Note
-          description: Note to include on the invoice.
-        name:
-          anyOf:
-          - type: string
-            maxLength: 32
-          - type: 'null'
-          title: Name
-          description: Name of the invoice.
-        collection_account_id:
-          type: string
-          format: uuid
-          title: Collection Account Id
-          description: The collection account ID where payments on this invoice will be deposited.
-        show_contact_address:
-          type: boolean
-          title: Show Contact Address
-          description: Whether to show the customer's address on the invoice, if it exists.
-          default: false
-      type: object
-      required:
-      - customer_id
-      - line_items
-      - invoice_date
-      - due_date
-      - payment_method_types
-      - send_email_on_creation
-      - collection_account_id
-      title: CreateInvoiceRequest
-    PaymentMethodType:
-      type: string
-      enum:
-      - BANK_TRANSFER
-      - CARD
-      - ACH_DIRECT_DEBIT
-      - INTERNATIONAL_WIRE
-      - USDC_ETHEREUM
-      - USDC_SOLANA
-      - USDC_BASE
-      - USDT_ETHEREUM
-      - USDT_SOLANA
-      - CASH_SOLANA
-      title: PaymentMethodType
-      x-enum-varnames:
-      - BANK_TRANSFER
-      - CARD
-      - ACH_DIRECT_DEBIT
-      - INTERNATIONAL_WIRE
-      - USDC_ETHEREUM
-      - USDC_SOLANA
-      - USDC_BASE
-      - USDT_ETHEREUM
-      - USDT_SOLANA
-      - CASH_SOLANA
-    Timestamp:
-      type: string
-      format: date-time
-      title: Timestamp
-      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    DateString:
-      type: string
-      format: date
-      title: DateString
-      description: ISO 8601 full-date in the format `YYYY-MM-DD` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
     Invoice:
       properties:
         id:
@@ -462,27 +347,11 @@ components:
       - collection_account_id
       - created_at
       title: Invoice
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+    DateString:
+      type: string
+      format: date
+      title: DateString
+      description: ISO 8601 full-date in the format `YYYY-MM-DD` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
     HTTPValidationError:
       properties:
         detail:
@@ -492,6 +361,31 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    PaymentMethodType:
+      type: string
+      enum:
+      - BANK_TRANSFER
+      - CARD
+      - ACH_DIRECT_DEBIT
+      - INTERNATIONAL_WIRE
+      - USDC_ETHEREUM
+      - USDC_SOLANA
+      - USDC_BASE
+      - USDT_ETHEREUM
+      - USDT_SOLANA
+      - CASH_SOLANA
+      title: PaymentMethodType
+      x-enum-varnames:
+      - BANK_TRANSFER
+      - CARD
+      - ACH_DIRECT_DEBIT
+      - INTERNATIONAL_WIRE
+      - USDC_ETHEREUM
+      - USDC_SOLANA
+      - USDC_BASE
+      - USDT_ETHEREUM
+      - USDT_SOLANA
+      - CASH_SOLANA
     InvoiceStatus:
       type: string
       enum:
@@ -515,6 +409,112 @@ components:
       - CANCELED
       - EXPIRED
       - OVERDUE
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CreateInvoiceRequest:
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+          title: Customer Id
+        line_items:
+          items:
+            $ref: '#/components/schemas/InvoiceLineRequest'
+          type: array
+          title: Line Items
+        invoice_date:
+          $ref: '#/components/schemas/DateString'
+          description: Date the invoice is scheduled to be sent.
+        due_date:
+          $ref: '#/components/schemas/DateString'
+          description: Date the invoice is due.
+        payment_method_types:
+          items:
+            $ref: '#/components/schemas/PaymentMethodType'
+          type: array
+          title: Payment Method Types
+          description: Payment method types to enable on the invoice. `BANK_TRANSFER` is always enabled.
+        recurring_schedule:
+          anyOf:
+          - type: string
+            maxLength: 120
+            minLength: 1
+            description: 'RFC 5545 RRULE string. Required: DTSTART, RRULE. Allowed frequencies: WEEKLY, MONTHLY.'
+          - type: 'null'
+          title: Recurring Schedule
+          description: Recurring schedule for the invoice as an RFC 2445 RRULE string. A generator is available at https://icalendar.org/rrule-tool.html.
+        send_email_on_creation:
+          type: boolean
+          title: Send Email On Creation
+          description: If true, sends an email to the customer (and any additional recipients) on the `invoice_date`.
+        additional_recipient_emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+            maxItems: 20
+          - type: 'null'
+          title: Additional Recipient Emails
+          description: Additional recipient emails to send the invoice and any reminders to.
+        note:
+          anyOf:
+          - type: string
+            maxLength: 300
+          - type: 'null'
+          title: Note
+          description: Note to include on the invoice.
+        name:
+          anyOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+          title: Name
+          description: Name of the invoice.
+        collection_account_id:
+          type: string
+          format: uuid
+          title: Collection Account Id
+          description: The collection account ID where payments on this invoice will be deposited.
+        show_contact_address:
+          type: boolean
+          title: Show Contact Address
+          description: Whether to show the customer's address on the invoice, if it exists.
+          default: false
+      type: object
+      required:
+      - customer_id
+      - line_items
+      - invoice_date
+      - due_date
+      - payment_method_types
+      - send_email_on_creation
+      - collection_account_id
+      title: CreateInvoiceRequest
   parameters:
     EntityIdHeader:
       name: x-entity-id

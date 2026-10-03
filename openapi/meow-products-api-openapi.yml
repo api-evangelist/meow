@@ -109,42 +109,37 @@ paths:
       - apiKeyAuth:
         - billing:products:read
 components:
-  parameters:
-    EntityIdHeader:
-      name: x-entity-id
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uuid
-      description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
-    CreateProductRequest:
+    HTTPValidationError:
       properties:
-        name:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          maxLength: 100
-          title: Name
-        description:
-          anyOf:
-          - type: string
-            maxLength: 400
-          - type: 'null'
-          title: Description
-        default_price:
-          anyOf:
-          - type: number
-            maximum: 10000000.0
-            minimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
-          title: Default Price
-          description: Default price for the product (0.00 to 10,000,000.00).
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - name
-      - default_price
-      title: CreateProductRequest
+      - loc
+      - msg
+      - type
+      title: ValidationError
     InvoiceProductResponse:
       properties:
         id:
@@ -173,36 +168,41 @@ components:
       - name
       - default_price
       title: InvoiceProductResponse
-    ValidationError:
+    CreateProductRequest:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        name:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          maxLength: 100
+          title: Name
+        description:
+          anyOf:
+          - type: string
+            maxLength: 400
+          - type: 'null'
+          title: Description
+        default_price:
+          anyOf:
+          - type: number
+            maximum: 10000000.0
+            minimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Default Price
+          description: Default price for the product (0.00 to 10,000,000.00).
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - name
+      - default_price
+      title: CreateProductRequest
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

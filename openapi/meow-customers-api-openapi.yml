@@ -110,72 +110,54 @@ paths:
         - billing:customers:read
 components:
   schemas:
-    CreateInvoicingCustomerRequest:
-      properties:
-        nickname:
-          type: string
-          minLength: 1
-          title: Nickname
-        email:
-          type: string
-          format: email
-          title: Email
-        address:
-          anyOf:
-          - $ref: '#/components/schemas/AddressRequest'
-          - type: 'null'
-      type: object
-      required:
-      - nickname
-      - email
-      title: CreateInvoicingCustomerRequest
-    AddressRequest:
+    AddressResponse:
       properties:
         street_line_1:
-          type: string
-          maxLength: 300
-          minLength: 1
+          anyOf:
+          - type: string
+          - type: 'null'
           title: Street Line 1
           description: The primary address line.
         street_line_2:
           anyOf:
           - type: string
-            maxLength: 300
-            minLength: 0
           - type: 'null'
           title: Street Line 2
           description: The secondary address line.
         city:
-          type: string
-          maxLength: 50
-          minLength: 0
+          anyOf:
+          - type: string
+          - type: 'null'
           title: City
           description: The city.
         state:
           anyOf:
           - type: string
-            maxLength: 200
-            minLength: 0
           - type: 'null'
           title: State
           description: The state or province.
         country:
-          $ref: '#/components/schemas/CountryCodeAlpha2'
+          anyOf:
+          - $ref: '#/components/schemas/CountryCodeAlpha2'
+          - type: 'null'
           description: The ISO 3166-1 alpha-2 country code.
         postal_code:
           anyOf:
           - type: string
-            maxLength: 20
-            minLength: 1
           - type: 'null'
           title: Postal Code
           description: The postal or ZIP code.
       type: object
-      required:
-      - street_line_1
-      - city
-      - country
-      title: AddressRequest
+      title: AddressResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     CountryCodeAlpha2:
       type: string
       enum:
@@ -722,45 +704,25 @@ components:
       - nickname
       - created_time
       title: InvoicingCustomer
-    AddressResponse:
+    CreateInvoicingCustomerRequest:
       properties:
-        street_line_1:
+        nickname:
+          type: string
+          minLength: 1
+          title: Nickname
+        email:
+          type: string
+          format: email
+          title: Email
+        address:
           anyOf:
-          - type: string
+          - $ref: '#/components/schemas/AddressRequest'
           - type: 'null'
-          title: Street Line 1
-          description: The primary address line.
-        street_line_2:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Street Line 2
-          description: The secondary address line.
-        city:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: City
-          description: The city.
-        state:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: State
-          description: The state or province.
-        country:
-          anyOf:
-          - $ref: '#/components/schemas/CountryCodeAlpha2'
-          - type: 'null'
-          description: The ISO 3166-1 alpha-2 country code.
-        postal_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Postal Code
-          description: The postal or ZIP code.
       type: object
-      title: AddressResponse
+      required:
+      - nickname
+      - email
+      title: CreateInvoicingCustomerRequest
     ValidationError:
       properties:
         loc:
@@ -782,15 +744,53 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    AddressRequest:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        street_line_1:
+          type: string
+          maxLength: 300
+          minLength: 1
+          title: Street Line 1
+          description: The primary address line.
+        street_line_2:
+          anyOf:
+          - type: string
+            maxLength: 300
+            minLength: 0
+          - type: 'null'
+          title: Street Line 2
+          description: The secondary address line.
+        city:
+          type: string
+          maxLength: 50
+          minLength: 0
+          title: City
+          description: The city.
+        state:
+          anyOf:
+          - type: string
+            maxLength: 200
+            minLength: 0
+          - type: 'null'
+          title: State
+          description: The state or province.
+        country:
+          $ref: '#/components/schemas/CountryCodeAlpha2'
+          description: The ISO 3166-1 alpha-2 country code.
+        postal_code:
+          anyOf:
+          - type: string
+            maxLength: 20
+            minLength: 1
+          - type: 'null'
+          title: Postal Code
+          description: The postal or ZIP code.
       type: object
-      title: HTTPValidationError
+      required:
+      - street_line_1
+      - city
+      - country
+      title: AddressRequest
   parameters:
     EntityIdHeader:
       name: x-entity-id

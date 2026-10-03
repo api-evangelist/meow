@@ -64,140 +64,6 @@ paths:
         - accounts:read
 components:
   schemas:
-    ListAccessibleEntitiesResponse:
-      properties:
-        entities:
-          items:
-            $ref: '#/components/schemas/AccessibleEntity'
-          type: array
-          title: Entities
-          description: The entities your API key can access.
-      type: object
-      required:
-      - entities
-      title: ListAccessibleEntitiesResponse
-      description: The entities your API key can access.
-      example:
-        entities:
-        - access_type: global_api_key
-          entity_id: 94a60dc7-93ab-4fed-8b2f-4008cdf7289b
-          entity_name: AMITY
-          role: Admin
-        - access_type: global_api_key
-          entity_id: 123e4567-e89b-12d3-a456-426614174000
-          entity_name: Acme Corp
-          role: Viewer
-        - access_type: entity_api_key
-          entity_id: 123e4567-e89b-12d3-a456-426614174111
-          entity_name: Entity API Key Example
-    UserRoleEnum:
-      type: string
-      enum:
-      - Admin
-      - Viewer
-      - Bookkeeper
-      - Controller
-      - Card user
-      - Card manager
-      - Invoice user
-      - AP Clerk
-      - AP/AR Bookkeeper
-      - None
-      title: UserRoleEnum
-    ApiKeyType:
-      type: string
-      enum:
-      - entity
-      - user
-      title: ApiKeyType
-    ApiKeyEntityInfo:
-      properties:
-        entity_id:
-          type: string
-          title: Entity Id
-          description: The entity's public identifier.
-        entity_name:
-          type: string
-          title: Entity Name
-          description: The entity's display name.
-      type: object
-      required:
-      - entity_id
-      - entity_name
-      title: ApiKeyEntityInfo
-      description: Identifying information for the entity that owns an API key.
-    AccessibleEntity:
-      properties:
-        entity_id:
-          type: string
-          title: Entity Id
-          description: The entity's public identifier.
-        entity_name:
-          type: string
-          title: Entity Name
-          description: The entity's name.
-        access_type:
-          $ref: '#/components/schemas/AccessibleEntityAccessType'
-          description: How your API key gains access to the entity.
-        role:
-          anyOf:
-          - $ref: '#/components/schemas/UserRoleEnum'
-          - type: 'null'
-          description: Your role and permissions for this entity, when applicable (global API keys only).
-      type: object
-      required:
-      - entity_id
-      - entity_name
-      - access_type
-      title: AccessibleEntity
-      description: An entity your API key can access.
-    ApiKeyScope:
-      type: string
-      enum:
-      - accounts:read
-      - accounts:write
-      - accounts:payment-networks
-      - accounts:transactions
-      - accounts:balances
-      - accounts:statements
-      - accounts:tax-documents
-      - entity:create
-      - transfers:crypto:write
-      - transfers:usdc:write
-      - transfers:ach:write
-      - transfers:wire:write
-      - transfers:book:write
-      - contacts:read
-      - contacts:write
-      - billing:products:read
-      - billing:products:write
-      - billing:customers:read
-      - billing:customers:write
-      - billing:invoices:read
-      - billing:invoices:write
-      - billing:accounts:read
-      - billpay:read
-      - billpay:write
-      - onboarding:read
-      - onboarding:write
-      - cards:read
-      - cards:write
-      - webhooks:read
-      - webhooks:write
-      - partner:onboarding:read
-      - partner:onboarding:write
-      - partner:webhooks:read
-      - partner:webhooks:write
-      - simulations:write
-      - banking:limits:read
-      - banking:limits:write
-      title: ApiKeyScope
-    AccessibleEntityAccessType:
-      type: string
-      enum:
-      - global_api_key
-      - entity_api_key
-      title: AccessibleEntityAccessType
     CurrentApiKeyResponse:
       properties:
         id:
@@ -241,6 +107,140 @@ components:
         - accounts:read
         - accounts:transactions
         - transfers:book:write
+    ApiKeyScope:
+      type: string
+      enum:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+      title: ApiKeyScope
+    UserRoleEnum:
+      type: string
+      enum:
+      - Admin
+      - Viewer
+      - Bookkeeper
+      - Controller
+      - Card user
+      - Card manager
+      - Invoice user
+      - AP Clerk
+      - AP/AR Bookkeeper
+      - None
+      title: UserRoleEnum
+    ListAccessibleEntitiesResponse:
+      properties:
+        entities:
+          items:
+            $ref: '#/components/schemas/AccessibleEntity'
+          type: array
+          title: Entities
+          description: The entities your API key can access.
+      type: object
+      required:
+      - entities
+      title: ListAccessibleEntitiesResponse
+      description: The entities your API key can access.
+      example:
+        entities:
+        - access_type: global_api_key
+          entity_id: 94a60dc7-93ab-4fed-8b2f-4008cdf7289b
+          entity_name: AMITY
+          role: Admin
+        - access_type: global_api_key
+          entity_id: 123e4567-e89b-12d3-a456-426614174000
+          entity_name: Acme Corp
+          role: Viewer
+        - access_type: entity_api_key
+          entity_id: 123e4567-e89b-12d3-a456-426614174111
+          entity_name: Entity API Key Example
+    AccessibleEntity:
+      properties:
+        entity_id:
+          type: string
+          title: Entity Id
+          description: The entity's public identifier.
+        entity_name:
+          type: string
+          title: Entity Name
+          description: The entity's name.
+        access_type:
+          $ref: '#/components/schemas/AccessibleEntityAccessType'
+          description: How your API key gains access to the entity.
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/UserRoleEnum'
+          - type: 'null'
+          description: Your role and permissions for this entity, when applicable (global API keys only).
+      type: object
+      required:
+      - entity_id
+      - entity_name
+      - access_type
+      title: AccessibleEntity
+      description: An entity your API key can access.
+    AccessibleEntityAccessType:
+      type: string
+      enum:
+      - global_api_key
+      - entity_api_key
+      title: AccessibleEntityAccessType
+    ApiKeyType:
+      type: string
+      enum:
+      - entity
+      - user
+      title: ApiKeyType
+    ApiKeyEntityInfo:
+      properties:
+        entity_id:
+          type: string
+          title: Entity Id
+          description: The entity's public identifier.
+        entity_name:
+          type: string
+          title: Entity Name
+          description: The entity's display name.
+      type: object
+      required:
+      - entity_id
+      - entity_name
+      title: ApiKeyEntityInfo
+      description: Identifying information for the entity that owns an API key.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

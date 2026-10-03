@@ -75,21 +75,6 @@ paths:
         - accounts:payment-networks
 components:
   schemas:
-    BlockchainNetwork:
-      type: string
-      enum:
-      - ARBITRUM
-      - AVALANCHE_C_CHAIN
-      - BASE
-      - ETHEREUM
-      - OPTIMISM
-      - POLYGON
-      - SOLANA
-      - STELLAR
-      - SUI
-      - TEMPO
-      - TRON
-      title: BlockchainNetwork
     PageMetadata:
       properties:
         nextOffset:
@@ -102,6 +87,56 @@ components:
           - qwer123454q2f
       type: object
       title: PageMetadata
+    AccountPaymentNetworkList:
+      properties:
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+          description: Metadata for pagination.
+        paymentNetworks:
+          items:
+            $ref: '#/components/schemas/AccountPaymentNetwork'
+          type: array
+          minItems: 0
+          title: Paymentnetworks
+          description: Array of payment networks, or an empty array if none are available. Not all accounts support every network; for example, a prepaid debit card account does not support ACH.
+          examples:
+          - - bankId: 010088889
+              identifier: '1111222233335820'
+              transferIn: true
+              transferOut: true
+              type: US_ACH
+          - - bankId: 010088889
+              identifier: '1111222233335820'
+              transferIn: true
+              transferOut: true
+              type: US_ACH
+            - identifier: '0x1234567890abcdef1234567890abcdef12345678'
+              network: ETHEREUM
+              transferIn: true
+              transferOut: true
+              type: USDC
+          - - identifier: 8xDc123456789abcdef123456789abcdef123456789abcdef
+              network: SOLANA
+              transferIn: true
+              transferOut: true
+              type: USDC
+      type: object
+      required:
+      - paymentNetworks
+      title: AccountPaymentNetworkList
+    PaymentNetworkType:
+      type: string
+      enum:
+      - US_ACH
+      - US_FEDWIRE
+      - US_CHIPS
+      - CA_ACSS
+      - CA_LVTS
+      - USDC
+      - USDT
+      title: PaymentNetworkType
     AccountType:
       type: string
       enum:
@@ -111,6 +146,15 @@ components:
       - SAVINGS
       - TAXABLE
       title: AccountType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     AccountPaymentNetwork:
       properties:
         bankId:
@@ -193,65 +237,21 @@ components:
       - transferIn
       - transferOut
       title: AccountPaymentNetwork
-    PaymentNetworkType:
+    BlockchainNetwork:
       type: string
       enum:
-      - US_ACH
-      - US_FEDWIRE
-      - US_CHIPS
-      - CA_ACSS
-      - CA_LVTS
-      - USDC
-      - USDT
-      title: PaymentNetworkType
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    AccountPaymentNetworkList:
-      properties:
-        page:
-          anyOf:
-          - $ref: '#/components/schemas/PageMetadata'
-          - type: 'null'
-          description: Metadata for pagination.
-        paymentNetworks:
-          items:
-            $ref: '#/components/schemas/AccountPaymentNetwork'
-          type: array
-          minItems: 0
-          title: Paymentnetworks
-          description: Array of payment networks, or an empty array if none are available. Not all accounts support every network; for example, a prepaid debit card account does not support ACH.
-          examples:
-          - - bankId: 010088889
-              identifier: '1111222233335820'
-              transferIn: true
-              transferOut: true
-              type: US_ACH
-          - - bankId: 010088889
-              identifier: '1111222233335820'
-              transferIn: true
-              transferOut: true
-              type: US_ACH
-            - identifier: '0x1234567890abcdef1234567890abcdef12345678'
-              network: ETHEREUM
-              transferIn: true
-              transferOut: true
-              type: USDC
-          - - identifier: 8xDc123456789abcdef123456789abcdef123456789abcdef
-              network: SOLANA
-              transferIn: true
-              transferOut: true
-              type: USDC
-      type: object
-      required:
-      - paymentNetworks
-      title: AccountPaymentNetworkList
+      - ARBITRUM
+      - AVALANCHE_C_CHAIN
+      - BASE
+      - ETHEREUM
+      - OPTIMISM
+      - POLYGON
+      - SOLANA
+      - STELLAR
+      - SUI
+      - TEMPO
+      - TRON
+      title: BlockchainNetwork
     ValidationError:
       properties:
         loc:

@@ -290,6 +290,29 @@ paths:
         - partner:webhooks:read
 components:
   schemas:
+    WebhookRedriveResponse:
+      properties:
+        delivery_id:
+          type: string
+          format: uuid
+          title: Delivery Id
+        queued:
+          type: boolean
+          title: Queued
+      type: object
+      required:
+      - delivery_id
+      - queued
+      title: WebhookRedriveResponse
+    WebhookPayloadMode:
+      type: string
+      enum:
+      - snapshot
+      - thin
+      title: WebhookPayloadMode
+      x-enum-varnames:
+      - snapshot
+      - thin
     WebhookDeliveryListResponse:
       properties:
         items:
@@ -309,6 +332,61 @@ components:
       - total_count
       - has_more
       title: WebhookDeliveryListResponse
+    DeliveryStatus:
+      type: string
+      enum:
+      - pending
+      - retrying
+      - in_progress
+      - succeeded
+      - failed_permanent
+      title: DeliveryStatus
+      x-enum-varnames:
+      - pending
+      - retrying
+      - in_progress
+      - succeeded
+      - failed_permanent
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    WebhookDeliveryAttemptsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/WebhookDeliveryAttemptResponse'
+          type: array
+          title: Items
+        total_count:
+          type: integer
+          title: Total Count
+        has_more:
+          type: boolean
+          title: Has More
+      type: object
+      required:
+      - items
+      - total_count
+      - has_more
+      title: WebhookDeliveryAttemptsResponse
     CreateWebhookSubscriptionRequest:
       properties:
         name:
@@ -336,137 +414,6 @@ components:
       - name
       - url
       title: CreateWebhookSubscriptionRequest
-    WebhookSubscriptionWithSecretResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        name:
-          type: string
-          title: Name
-        url:
-          type: string
-          title: Url
-        is_enabled:
-          type: boolean
-          title: Is Enabled
-        event_types:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/WebhookEventType'
-            type: array
-          - type: 'null'
-          title: Event Types
-        payload_mode:
-          $ref: '#/components/schemas/WebhookPayloadMode'
-        created_time:
-          type: string
-          format: date-time
-          title: Created Time
-        updated_time:
-          type: string
-          format: date-time
-          title: Updated Time
-        secret:
-          type: string
-          format: password
-          title: Secret
-          writeOnly: false
-      type: object
-      required:
-      - id
-      - name
-      - url
-      - is_enabled
-      - event_types
-      - payload_mode
-      - created_time
-      - updated_time
-      - secret
-      title: WebhookSubscriptionWithSecretResponse
-    UpdateWebhookSubscriptionRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-            maxLength: 255
-          - type: 'null'
-          title: Name
-        url:
-          anyOf:
-          - type: string
-            maxLength: 2048
-            minLength: 1
-            format: uri
-          - type: 'null'
-          title: Url
-        event_types:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/WebhookEventType'
-            type: array
-          - type: 'null'
-          title: Event Types
-        rotate_secret:
-          type: boolean
-          title: Rotate Secret
-          default: false
-        is_enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Enabled
-        payload_mode:
-          anyOf:
-          - $ref: '#/components/schemas/WebhookPayloadMode'
-          - type: 'null'
-      type: object
-      title: UpdateWebhookSubscriptionRequest
-    WebhookTestEventResponse:
-      properties:
-        event_id:
-          type: string
-          format: uuid
-          title: Event Id
-        delivery_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Delivery Id
-        queued:
-          type: boolean
-          title: Queued
-      type: object
-      required:
-      - event_id
-      - delivery_id
-      - queued
-      title: WebhookTestEventResponse
-    WebhookPayloadMode:
-      type: string
-      enum:
-      - snapshot
-      - thin
-      title: WebhookPayloadMode
-      x-enum-varnames:
-      - snapshot
-      - thin
-    WebhookRedriveResponse:
-      properties:
-        delivery_id:
-          type: string
-          format: uuid
-          title: Delivery Id
-        queued:
-          type: boolean
-          title: Queued
-      type: object
-      required:
-      - delivery_id
-      - queued
-      title: WebhookRedriveResponse
     WebhookEventType:
       type: string
       enum:
@@ -520,117 +467,6 @@ components:
       - balance_updated
       - message_attempt_exhausted
       - webhook_test
-    WebhookDeliveryAttemptResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        delivery_id:
-          type: string
-          format: uuid
-          title: Delivery Id
-        attempt_number:
-          type: integer
-          title: Attempt Number
-        webhook_msg_id:
-          type: string
-          title: Webhook Msg Id
-        request_url:
-          type: string
-          title: Request Url
-        response_status:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Response Status
-        response_body_excerpt:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Response Body Excerpt
-        duration_ms:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Duration Ms
-        error_message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error Message
-        attempted_at:
-          type: string
-          format: date-time
-          title: Attempted At
-      type: object
-      required:
-      - id
-      - delivery_id
-      - attempt_number
-      - webhook_msg_id
-      - request_url
-      - response_status
-      - response_body_excerpt
-      - duration_ms
-      - error_message
-      - attempted_at
-      title: WebhookDeliveryAttemptResponse
-    WebhookDeliveryAttemptsResponse:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/WebhookDeliveryAttemptResponse'
-          type: array
-          title: Items
-        total_count:
-          type: integer
-          title: Total Count
-        has_more:
-          type: boolean
-          title: Has More
-      type: object
-      required:
-      - items
-      - total_count
-      - has_more
-      title: WebhookDeliveryAttemptsResponse
-    DeliveryStatus:
-      type: string
-      enum:
-      - pending
-      - retrying
-      - in_progress
-      - succeeded
-      - failed_permanent
-      title: DeliveryStatus
-      x-enum-varnames:
-      - pending
-      - retrying
-      - in_progress
-      - succeeded
-      - failed_permanent
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -640,6 +476,55 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    WebhookSubscriptionWithSecretResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+        url:
+          type: string
+          title: Url
+        is_enabled:
+          type: boolean
+          title: Is Enabled
+        event_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/WebhookEventType'
+            type: array
+          - type: 'null'
+          title: Event Types
+        payload_mode:
+          $ref: '#/components/schemas/WebhookPayloadMode'
+        created_time:
+          type: string
+          format: date-time
+          title: Created Time
+        updated_time:
+          type: string
+          format: date-time
+          title: Updated Time
+        secret:
+          type: string
+          format: password
+          title: Secret
+          writeOnly: false
+      type: object
+      required:
+      - id
+      - name
+      - url
+      - is_enabled
+      - event_types
+      - payload_mode
+      - created_time
+      - updated_time
+      - secret
+      title: WebhookSubscriptionWithSecretResponse
     WebhookDeliveryResponse:
       properties:
         id:
@@ -763,6 +648,121 @@ components:
       - created_time
       - updated_time
       title: WebhookSubscriptionResponse
+    UpdateWebhookSubscriptionRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 255
+          - type: 'null'
+          title: Name
+        url:
+          anyOf:
+          - type: string
+            maxLength: 2048
+            minLength: 1
+            format: uri
+          - type: 'null'
+          title: Url
+        event_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/WebhookEventType'
+            type: array
+          - type: 'null'
+          title: Event Types
+        rotate_secret:
+          type: boolean
+          title: Rotate Secret
+          default: false
+        is_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Enabled
+        payload_mode:
+          anyOf:
+          - $ref: '#/components/schemas/WebhookPayloadMode'
+          - type: 'null'
+      type: object
+      title: UpdateWebhookSubscriptionRequest
+    WebhookDeliveryAttemptResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        delivery_id:
+          type: string
+          format: uuid
+          title: Delivery Id
+        attempt_number:
+          type: integer
+          title: Attempt Number
+        webhook_msg_id:
+          type: string
+          title: Webhook Msg Id
+        request_url:
+          type: string
+          title: Request Url
+        response_status:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Response Status
+        response_body_excerpt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Response Body Excerpt
+        duration_ms:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Ms
+        error_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Message
+        attempted_at:
+          type: string
+          format: date-time
+          title: Attempted At
+      type: object
+      required:
+      - id
+      - delivery_id
+      - attempt_number
+      - webhook_msg_id
+      - request_url
+      - response_status
+      - response_body_excerpt
+      - duration_ms
+      - error_message
+      - attempted_at
+      title: WebhookDeliveryAttemptResponse
+    WebhookTestEventResponse:
+      properties:
+        event_id:
+          type: string
+          format: uuid
+          title: Event Id
+        delivery_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Delivery Id
+        queued:
+          type: boolean
+          title: Queued
+      type: object
+      required:
+      - event_id
+      - delivery_id
+      - queued
+      title: WebhookTestEventResponse
   securitySchemes:
     apiKeyAuth:
       type: apiKey
