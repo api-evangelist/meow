@@ -387,134 +387,17 @@ paths:
         - billpay:write
 components:
   schemas:
-    BillPresignedUrlEntry:
+    BillPresignedUrlResponse:
       properties:
-        url:
-          type: string
-          title: Url
-        fields:
-          additionalProperties:
-            type: string
-          type: object
-          title: Fields
-        object_key:
-          type: string
-          title: Object Key
-        filename:
-          type: string
-          title: Filename
-        max_bytes:
-          type: integer
-          title: Max Bytes
+        uploads:
+          items:
+            $ref: '#/components/schemas/BillPresignedUrlEntry'
+          type: array
+          title: Uploads
       type: object
       required:
-      - url
-      - fields
-      - object_key
-      - filename
-      - max_bytes
-      title: BillPresignedUrlEntry
-    DateString:
-      type: string
-      format: date
-      title: DateString
-      description: ISO 8601 full-date in the format `YYYY-MM-DD` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    IntegrationBillSyncStatus:
-      type: string
-      enum:
-      - synced
-      - requires_sync
-      - sync_complete
-      - sync_failed
-      title: IntegrationBillSyncStatus
-      description: Tracks the sync status of an bill with external accounting systems.
-      x-enum-varnames:
-      - synced
-      - requires_sync
-      - sync_complete
-      - sync_failed
-    BillStatusEnum:
-      type: string
-      enum:
-      - CANCELED
-      - DRAFT_PROCESSING
-      - DRAFT
-      - PAYMENT_INFO_NEEDED
-      - PENDING
-      - APPROVED
-      - REJECTED
-      - SCHEDULED
-      - PAYMENT_INITIATED
-      - PAYMENT_DELIVERED
-      - PAYMENT_FAILED
-      - PAYMENT_CANCELED
-      title: BillStatusEnum
-      x-enum-varnames:
-      - CANCELED
-      - DRAFT_PROCESSING
-      - DRAFT
-      - PAYMENT_INFO_NEEDED
-      - PENDING
-      - APPROVED
-      - REJECTED
-      - SCHEDULED
-      - PAYMENT_INITIATED
-      - PAYMENT_DELIVERED
-      - PAYMENT_FAILED
-      - PAYMENT_CANCELED
-    BillFileMetadata:
-      properties:
-        filename:
-          type: string
-          title: Filename
-        content_type:
-          type: string
-          title: Content Type
-        size:
-          type: integer
-          title: Size
-      type: object
-      required:
-      - filename
-      - content_type
-      - size
-      title: BillFileMetadata
-    BillPaymentDetailsResponse:
-      properties:
-        account_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Account Id
-          description: The account this bill will be paid from, in the same id format returned by `GET /accounts`.
-        payment_type:
-          anyOf:
-          - $ref: '#/components/schemas/BillPaymentTypeEnum'
-          - type: 'null'
-          description: 'How this bill will be paid: `ACH`, `WIRE`, `CHECK`, `CRYPTO`, or `INTERNATIONAL_PAYMENT_FX`.'
-        currency:
-          anyOf:
-          - $ref: '#/components/schemas/Iso4217Code'
-          - type: 'null'
-          description: The currency this bill will be paid in.
-        scheduled_payment_date:
-          anyOf:
-          - $ref: '#/components/schemas/DateString'
-          - type: 'null'
-          description: The date the payment is scheduled for, if one is set.
-      type: object
-      title: BillPaymentDetailsResponse
-    BillCreationSourceEnum:
-      type: string
-      enum:
-      - USER
-      - EMAIL
-      - SCHEDULE
-      title: BillCreationSourceEnum
-      x-enum-varnames:
-      - USER
-      - EMAIL
-      - SCHEDULE
+      - uploads
+      title: BillPresignedUrlResponse
     Iso4217Code:
       type: string
       enum:
@@ -701,6 +584,224 @@ components:
       - ZWG
       - ZWL
       title: Iso4217Code
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    BillPresignedUrlRequest:
+      properties:
+        files:
+          items:
+            $ref: '#/components/schemas/BillFileMetadata'
+          type: array
+          maxItems: 5
+          minItems: 1
+          title: Files
+      type: object
+      required:
+      - files
+      title: BillPresignedUrlRequest
+    BillSortEnum:
+      type: string
+      enum:
+      - VENDOR_NAME
+      - STATUS
+      - AMOUNT
+      - PAYMENT_DATE
+      - BILL_DATE
+      - BILL_DUE_DATE
+      - INVOICE_NUMBER
+      - DESCRIPTION
+      - PAYMENT_TYPE
+      - CATEGORY
+      title: BillSortEnum
+      x-enum-varnames:
+      - VENDOR_NAME
+      - STATUS
+      - AMOUNT
+      - PAYMENT_DATE
+      - BILL_DATE
+      - BILL_DUE_DATE
+      - INVOICE_NUMBER
+      - DESCRIPTION
+      - PAYMENT_TYPE
+      - CATEGORY
+    BillSummaryResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Identifier for this bill.
+        status:
+          $ref: '#/components/schemas/BillStatusEnum'
+          description: The current status of the bill.
+        vendor_name:
+          type: string
+          title: Vendor Name
+          description: The name of the vendor.
+        invoice_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Number
+          description: The invoice number.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Description of the bill.
+        memo:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Memo
+          description: Memo for the bill.
+        bill_date:
+          anyOf:
+          - $ref: '#/components/schemas/DateString'
+          - type: 'null'
+          description: The bill date.
+        bill_due_date:
+          anyOf:
+          - $ref: '#/components/schemas/DateString'
+          - type: 'null'
+          description: The due date.
+        bill_total:
+          anyOf:
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Bill Total
+          description: The total amount of the bill.
+        currency:
+          anyOf:
+          - $ref: '#/components/schemas/Iso4217Code'
+          - type: 'null'
+          description: The bill's currency.
+        payment_type:
+          anyOf:
+          - $ref: '#/components/schemas/BillPaymentTypeEnum'
+          - type: 'null'
+          description: 'How this bill is paid: `ACH`, `WIRE`, `CHECK`, `CRYPTO`, or `INTERNATIONAL_PAYMENT_FX`.'
+        contact_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Contact Id
+          description: The ID of the associated contact.
+        category_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Category Id
+          description: The spend category this bill is coded to, if any.
+        category_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category Name
+          description: The name of the spend category, if any.
+        creation_source:
+          $ref: '#/components/schemas/BillCreationSourceEnum'
+          description: How the bill was created.
+        created_by:
+          type: string
+          title: Created By
+          description: Who created the bill.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: The creation timestamp.
+        updated_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The last-updated timestamp.
+        submitted_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: When the bill was submitted for approval.
+        submitted_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Submitted By
+          description: Who submitted the bill.
+        paid_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The paid timestamp.
+        paid_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Paid By
+          description: Who paid the bill.
+        scheduled_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: The scheduled payment timestamp.
+        resolved_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: When the bill was resolved.
+        canceled_at:
+          anyOf:
+          - $ref: '#/components/schemas/Timestamp'
+          - type: 'null'
+          description: When the bill was canceled.
+        canceled_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Canceled By
+          description: Who canceled the bill.
+        bill_schedule_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Bill Schedule Id
+          description: The recurring schedule this bill belongs to, if any.
+        ordinal:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Ordinal
+          description: The bill's position in its recurring schedule (template is 0).
+      type: object
+      required:
+      - id
+      - status
+      - vendor_name
+      - creation_source
+      - created_by
+      - created_at
+      title: BillSummaryResponse
     BillConfirmUploadEntry:
       properties:
         object_key:
@@ -714,45 +815,229 @@ components:
       - object_key
       - filename
       title: BillConfirmUploadEntry
-    BillLineItemResponse:
+    CreateBillLineItem:
       properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Identifier for this line item.
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: The unit amount for the line, in the bill's currency.
-        quantity:
-          anyOf:
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          - type: 'null'
-          title: Quantity
-          description: Quantity for an itemized line; omitted for an expense line.
-        description:
-          type: string
-          title: Description
-          description: What this line is for.
         type:
           $ref: '#/components/schemas/BillLineItemTypeEnum'
           description: Whether this line is an expense or an itemized quantity.
-        amount_total:
+        amount:
+          anyOf:
+          - type: number
+            exclusiveMinimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+          description: The unit amount for the line, in the bill's currency.
+        description:
           type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount Total
-          description: 'The line total: the unit amount times the quantity for an itemized line, or the unit amount for an expense line.'
+          minLength: 1
+          title: Description
+          description: What this line is for.
+        quantity:
+          anyOf:
+          - type: number
+            exclusiveMinimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,3}0*$
+          - type: 'null'
+          title: Quantity
+          description: Quantity, required when the line is itemized.
       type: object
       required:
-      - id
+      - type
       - amount
       - description
-      - type
-      - amount_total
-      title: BillLineItemResponse
+      title: CreateBillLineItem
+    BillsResponse:
+      properties:
+        bills:
+          items:
+            $ref: '#/components/schemas/BillSummaryResponse'
+          type: array
+          title: Bills
+          description: List of bills.
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+          description: Pagination metadata.
+      type: object
+      required:
+      - bills
+      title: BillsResponse
+    BillCreationSourceEnum:
+      type: string
+      enum:
+      - USER
+      - EMAIL
+      - SCHEDULE
+      title: BillCreationSourceEnum
+      x-enum-varnames:
+      - USER
+      - EMAIL
+      - SCHEDULE
+    UpdateBillRequest:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: A short description of the bill.
+        memo:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Memo
+          description: An internal memo (up to 140 characters).
+        invoice_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Number
+          description: The vendor's invoice number.
+        contact_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Contact Id
+          description: The vendor this bill is payable to. The vendor must exist.
+        bill_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Bill Date
+          description: The date on the bill (`YYYY-MM-DD`).
+        bill_due_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Bill Due Date
+          description: The date the bill is due (`YYYY-MM-DD`).
+        payment_type:
+          anyOf:
+          - type: string
+            enum:
+            - ACH
+            - WIRE
+            - CHECK
+          - type: 'null'
+          title: Payment Type
+          description: How the bill will be paid once approved.
+        currency:
+          anyOf:
+          - $ref: '#/components/schemas/Iso4217Code'
+          - type: 'null'
+          description: The bill's currency.
+        line_items:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateBillLineItem'
+            type: array
+          - type: 'null'
+          title: Line Items
+          description: Replaces the bill's line items when provided. Omit to leave them unchanged; send an empty list to clear them.
+      type: object
+      title: UpdateBillRequest
+    CreateBillRequest:
+      properties:
+        idempotency_key:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Idempotency Key
+          description: A unique key you generate so retrying this request never creates a duplicate bill. Reusing a key is rejected.
+        contact_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Contact Id
+          description: The vendor this bill is payable to. The vendor must already exist as a contact.
+        invoice_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Number
+          description: The vendor's invoice number.
+        bill_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Bill Date
+          description: The date on the bill (`YYYY-MM-DD`).
+        bill_due_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Bill Due Date
+          description: The date the bill is due (`YYYY-MM-DD`).
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: A short description of the bill.
+        memo:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Memo
+          description: An internal memo (up to 140 characters).
+        payment_type:
+          anyOf:
+          - type: string
+            enum:
+            - ACH
+            - WIRE
+            - CHECK
+          - type: 'null'
+          title: Payment Type
+          description: 'How the bill will be paid once approved: `ACH`, `WIRE`, or `CHECK`. Defaults to `ACH`.'
+        account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Id
+          description: The account to pay from, in the same id format returned by `GET /accounts`. Defaults to your configured bill pay account when omitted.
+        currency:
+          anyOf:
+          - $ref: '#/components/schemas/Iso4217Code'
+          - type: 'null'
+          description: The bill's currency. Defaults to USD.
+        rrule:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Rrule
+          description: An iCalendar RRULE (with DTSTART) to make this a recurring bill. Each occurrence is generated as its own draft for human approval.
+        line_items:
+          items:
+            $ref: '#/components/schemas/CreateBillLineItem'
+          type: array
+          title: Line Items
+          description: The line items that make up the bill.
+      type: object
+      required:
+      - idempotency_key
+      title: CreateBillRequest
+    PageMetadata:
+      properties:
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
+      type: object
+      title: PageMetadata
     BillResponse:
       properties:
         id:
@@ -965,270 +1250,15 @@ components:
       - created_by
       - created_at
       title: BillResponse
-    BillSummaryResponse:
+    HTTPValidationError:
       properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Identifier for this bill.
-        status:
-          $ref: '#/components/schemas/BillStatusEnum'
-          description: The current status of the bill.
-        vendor_name:
-          type: string
-          title: Vendor Name
-          description: The name of the vendor.
-        invoice_number:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Invoice Number
-          description: The invoice number.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Description of the bill.
-        memo:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Memo
-          description: Memo for the bill.
-        bill_date:
-          anyOf:
-          - $ref: '#/components/schemas/DateString'
-          - type: 'null'
-          description: The bill date.
-        bill_due_date:
-          anyOf:
-          - $ref: '#/components/schemas/DateString'
-          - type: 'null'
-          description: The due date.
-        bill_total:
-          anyOf:
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          - type: 'null'
-          title: Bill Total
-          description: The total amount of the bill.
-        currency:
-          anyOf:
-          - $ref: '#/components/schemas/Iso4217Code'
-          - type: 'null'
-          description: The bill's currency.
-        payment_type:
-          anyOf:
-          - $ref: '#/components/schemas/BillPaymentTypeEnum'
-          - type: 'null'
-          description: 'How this bill is paid: `ACH`, `WIRE`, `CHECK`, `CRYPTO`, or `INTERNATIONAL_PAYMENT_FX`.'
-        contact_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Contact Id
-          description: The ID of the associated contact.
-        category_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Category Id
-          description: The spend category this bill is coded to, if any.
-        category_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Category Name
-          description: The name of the spend category, if any.
-        creation_source:
-          $ref: '#/components/schemas/BillCreationSourceEnum'
-          description: How the bill was created.
-        created_by:
-          type: string
-          title: Created By
-          description: Who created the bill.
-        created_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: The creation timestamp.
-        updated_at:
-          anyOf:
-          - $ref: '#/components/schemas/Timestamp'
-          - type: 'null'
-          description: The last-updated timestamp.
-        submitted_at:
-          anyOf:
-          - $ref: '#/components/schemas/Timestamp'
-          - type: 'null'
-          description: When the bill was submitted for approval.
-        submitted_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Submitted By
-          description: Who submitted the bill.
-        paid_at:
-          anyOf:
-          - $ref: '#/components/schemas/Timestamp'
-          - type: 'null'
-          description: The paid timestamp.
-        paid_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Paid By
-          description: Who paid the bill.
-        scheduled_at:
-          anyOf:
-          - $ref: '#/components/schemas/Timestamp'
-          - type: 'null'
-          description: The scheduled payment timestamp.
-        resolved_at:
-          anyOf:
-          - $ref: '#/components/schemas/Timestamp'
-          - type: 'null'
-          description: When the bill was resolved.
-        canceled_at:
-          anyOf:
-          - $ref: '#/components/schemas/Timestamp'
-          - type: 'null'
-          description: When the bill was canceled.
-        canceled_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Canceled By
-          description: Who canceled the bill.
-        bill_schedule_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Bill Schedule Id
-          description: The recurring schedule this bill belongs to, if any.
-        ordinal:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Ordinal
-          description: The bill's position in its recurring schedule (template is 0).
-      type: object
-      required:
-      - id
-      - status
-      - vendor_name
-      - creation_source
-      - created_by
-      - created_at
-      title: BillSummaryResponse
-    ValidationError:
-      properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          title: Detail
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    BillPaymentTypeEnum:
-      type: string
-      enum:
-      - ACH
-      - CRYPTO
-      - INTERNATIONAL_PAYMENT_FX
-      - WIRE
-      - CHECK
-      title: BillPaymentTypeEnum
-      x-enum-varnames:
-      - ACH
-      - CRYPTO
-      - INTERNATIONAL_PAYMENT_FX
-      - WIRE
-      - CHECK
-    PageMetadata:
-      properties:
-        nextOffset:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nextoffset
-          description: Opaque offset identifier.
-          examples:
-          - qwer123454q2f
-      type: object
-      title: PageMetadata
-    CreateBillLineItem:
-      properties:
-        type:
-          $ref: '#/components/schemas/BillLineItemTypeEnum'
-          description: Whether this line is an expense or an itemized quantity.
-        amount:
-          anyOf:
-          - type: number
-            exclusiveMinimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
-          title: Amount
-          description: The unit amount for the line, in the bill's currency.
-        description:
-          type: string
-          minLength: 1
-          title: Description
-          description: What this line is for.
-        quantity:
-          anyOf:
-          - type: number
-            exclusiveMinimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,3}0*$
-          - type: 'null'
-          title: Quantity
-          description: Quantity, required when the line is itemized.
-      type: object
-      required:
-      - type
-      - amount
-      - description
-      title: CreateBillLineItem
-    BillPresignedUrlResponse:
-      properties:
-        uploads:
-          items:
-            $ref: '#/components/schemas/BillPresignedUrlEntry'
-          type: array
-          title: Uploads
-      type: object
-      required:
-      - uploads
-      title: BillPresignedUrlResponse
-    BillPresignedUrlRequest:
-      properties:
-        files:
-          items:
-            $ref: '#/components/schemas/BillFileMetadata'
-          type: array
-          maxItems: 5
-          minItems: 1
-          title: Files
-      type: object
-      required:
-      - files
-      title: BillPresignedUrlRequest
+      title: HTTPValidationError
     BillDocumentResponse:
       properties:
         id:
@@ -1254,225 +1284,78 @@ components:
       - url
       - created_at
       title: BillDocumentResponse
-    CreateBillRequest:
-      properties:
-        idempotency_key:
-          type: string
-          maxLength: 50
-          minLength: 1
-          title: Idempotency Key
-          description: A unique key you generate so retrying this request never creates a duplicate bill. Reusing a key is rejected.
-        contact_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Contact Id
-          description: The vendor this bill is payable to. The vendor must already exist as a contact.
-        invoice_number:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Invoice Number
-          description: The vendor's invoice number.
-        bill_date:
-          anyOf:
-          - type: string
-            format: date
-          - type: 'null'
-          title: Bill Date
-          description: The date on the bill (`YYYY-MM-DD`).
-        bill_due_date:
-          anyOf:
-          - type: string
-            format: date
-          - type: 'null'
-          title: Bill Due Date
-          description: The date the bill is due (`YYYY-MM-DD`).
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: A short description of the bill.
-        memo:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Memo
-          description: An internal memo (up to 140 characters).
-        payment_type:
-          anyOf:
-          - type: string
-            enum:
-            - ACH
-            - WIRE
-            - CHECK
-          - type: 'null'
-          title: Payment Type
-          description: 'How the bill will be paid once approved: `ACH`, `WIRE`, or `CHECK`. Defaults to `ACH`.'
-        account_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Account Id
-          description: The account to pay from, in the same id format returned by `GET /accounts`. Defaults to your configured bill pay account when omitted.
-        currency:
-          anyOf:
-          - $ref: '#/components/schemas/Iso4217Code'
-          - type: 'null'
-          description: The bill's currency. Defaults to USD.
-        rrule:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Rrule
-          description: An iCalendar RRULE (with DTSTART) to make this a recurring bill. Each occurrence is generated as its own draft for human approval.
-        line_items:
-          items:
-            $ref: '#/components/schemas/CreateBillLineItem'
-          type: array
-          title: Line Items
-          description: The line items that make up the bill.
-      type: object
-      required:
-      - idempotency_key
-      title: CreateBillRequest
-    UpdateBillRequest:
-      properties:
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: A short description of the bill.
-        memo:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Memo
-          description: An internal memo (up to 140 characters).
-        invoice_number:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Invoice Number
-          description: The vendor's invoice number.
-        contact_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Contact Id
-          description: The vendor this bill is payable to. The vendor must exist.
-        bill_date:
-          anyOf:
-          - type: string
-            format: date
-          - type: 'null'
-          title: Bill Date
-          description: The date on the bill (`YYYY-MM-DD`).
-        bill_due_date:
-          anyOf:
-          - type: string
-            format: date
-          - type: 'null'
-          title: Bill Due Date
-          description: The date the bill is due (`YYYY-MM-DD`).
-        payment_type:
-          anyOf:
-          - type: string
-            enum:
-            - ACH
-            - WIRE
-            - CHECK
-          - type: 'null'
-          title: Payment Type
-          description: How the bill will be paid once approved.
-        currency:
-          anyOf:
-          - $ref: '#/components/schemas/Iso4217Code'
-          - type: 'null'
-          description: The bill's currency.
-        line_items:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/CreateBillLineItem'
-            type: array
-          - type: 'null'
-          title: Line Items
-          description: Replaces the bill's line items when provided. Omit to leave them unchanged; send an empty list to clear them.
-      type: object
-      title: UpdateBillRequest
-    BillsResponse:
-      properties:
-        bills:
-          items:
-            $ref: '#/components/schemas/BillSummaryResponse'
-          type: array
-          title: Bills
-          description: List of bills.
-        page:
-          anyOf:
-          - $ref: '#/components/schemas/PageMetadata'
-          - type: 'null'
-          description: Pagination metadata.
-      type: object
-      required:
-      - bills
-      title: BillsResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+    BillPaymentTypeEnum:
+      type: string
+      enum:
+      - ACH
+      - CRYPTO
+      - INTERNATIONAL_PAYMENT_FX
+      - WIRE
+      - CHECK
+      title: BillPaymentTypeEnum
+      x-enum-varnames:
+      - ACH
+      - CRYPTO
+      - INTERNATIONAL_PAYMENT_FX
+      - WIRE
+      - CHECK
     Timestamp:
       type: string
       format: date-time
       title: Timestamp
       description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    BillConfirmUploadRequest:
+    BillPresignedUrlEntry:
       properties:
-        documents:
-          items:
-            $ref: '#/components/schemas/BillConfirmUploadEntry'
-          type: array
-          maxItems: 5
-          minItems: 1
-          title: Documents
+        url:
+          type: string
+          title: Url
+        fields:
+          additionalProperties:
+            type: string
+          type: object
+          title: Fields
+        object_key:
+          type: string
+          title: Object Key
+        filename:
+          type: string
+          title: Filename
+        max_bytes:
+          type: integer
+          title: Max Bytes
       type: object
       required:
-      - documents
-      title: BillConfirmUploadRequest
-    BillSortEnum:
-      type: string
-      enum:
-      - VENDOR_NAME
-      - STATUS
-      - AMOUNT
-      - PAYMENT_DATE
-      - BILL_DATE
-      - BILL_DUE_DATE
-      - INVOICE_NUMBER
-      - DESCRIPTION
-      - PAYMENT_TYPE
-      - CATEGORY
-      title: BillSortEnum
-      x-enum-varnames:
-      - VENDOR_NAME
-      - STATUS
-      - AMOUNT
-      - PAYMENT_DATE
-      - BILL_DATE
-      - BILL_DUE_DATE
-      - INVOICE_NUMBER
-      - DESCRIPTION
-      - PAYMENT_TYPE
-      - CATEGORY
+      - url
+      - fields
+      - object_key
+      - filename
+      - max_bytes
+      title: BillPresignedUrlEntry
+    BillPaymentDetailsResponse:
+      properties:
+        account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Account Id
+          description: The account this bill will be paid from, in the same id format returned by `GET /accounts`.
+        payment_type:
+          anyOf:
+          - $ref: '#/components/schemas/BillPaymentTypeEnum'
+          - type: 'null'
+          description: 'How this bill will be paid: `ACH`, `WIRE`, `CHECK`, `CRYPTO`, or `INTERNATIONAL_PAYMENT_FX`.'
+        currency:
+          anyOf:
+          - $ref: '#/components/schemas/Iso4217Code'
+          - type: 'null'
+          description: The currency this bill will be paid in.
+        scheduled_payment_date:
+          anyOf:
+          - $ref: '#/components/schemas/DateString'
+          - type: 'null'
+          description: The date the payment is scheduled for, if one is set.
+      type: object
+      title: BillPaymentDetailsResponse
     IntegrationVendor:
       type: string
       enum:
@@ -1486,6 +1369,36 @@ components:
       - Relay
       - Mastercard
       title: IntegrationVendor
+    BillConfirmUploadRequest:
+      properties:
+        documents:
+          items:
+            $ref: '#/components/schemas/BillConfirmUploadEntry'
+          type: array
+          maxItems: 5
+          minItems: 1
+          title: Documents
+      type: object
+      required:
+      - documents
+      title: BillConfirmUploadRequest
+    BillFileMetadata:
+      properties:
+        filename:
+          type: string
+          title: Filename
+        content_type:
+          type: string
+          title: Content Type
+        size:
+          type: integer
+          title: Size
+      type: object
+      required:
+      - filename
+      - content_type
+      - size
+      title: BillFileMetadata
     IntegrationBillPaymentSyncStatus:
       type: string
       enum:
@@ -1500,6 +1413,88 @@ components:
       - requires_sync
       - sync_complete
       - sync_failed
+    BillLineItemResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Identifier for this line item.
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The unit amount for the line, in the bill's currency.
+        quantity:
+          anyOf:
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Quantity
+          description: Quantity for an itemized line; omitted for an expense line.
+        description:
+          type: string
+          title: Description
+          description: What this line is for.
+        type:
+          $ref: '#/components/schemas/BillLineItemTypeEnum'
+          description: Whether this line is an expense or an itemized quantity.
+        amount_total:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount Total
+          description: 'The line total: the unit amount times the quantity for an itemized line, or the unit amount for an expense line.'
+      type: object
+      required:
+      - id
+      - amount
+      - description
+      - type
+      - amount_total
+      title: BillLineItemResponse
+    IntegrationBillSyncStatus:
+      type: string
+      enum:
+      - synced
+      - requires_sync
+      - sync_complete
+      - sync_failed
+      title: IntegrationBillSyncStatus
+      description: Tracks the sync status of an bill with external accounting systems.
+      x-enum-varnames:
+      - synced
+      - requires_sync
+      - sync_complete
+      - sync_failed
+    BillStatusEnum:
+      type: string
+      enum:
+      - CANCELED
+      - DRAFT_PROCESSING
+      - DRAFT
+      - PAYMENT_INFO_NEEDED
+      - PENDING
+      - APPROVED
+      - REJECTED
+      - SCHEDULED
+      - PAYMENT_INITIATED
+      - PAYMENT_DELIVERED
+      - PAYMENT_FAILED
+      - PAYMENT_CANCELED
+      title: BillStatusEnum
+      x-enum-varnames:
+      - CANCELED
+      - DRAFT_PROCESSING
+      - DRAFT
+      - PAYMENT_INFO_NEEDED
+      - PENDING
+      - APPROVED
+      - REJECTED
+      - SCHEDULED
+      - PAYMENT_INITIATED
+      - PAYMENT_DELIVERED
+      - PAYMENT_FAILED
+      - PAYMENT_CANCELED
     BillLineItemTypeEnum:
       type: string
       enum:
@@ -1509,6 +1504,11 @@ components:
       x-enum-varnames:
       - EXPENSE
       - ITEM
+    DateString:
+      type: string
+      format: date
+      title: DateString
+      description: ISO 8601 full-date in the format `YYYY-MM-DD` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
   parameters:
     EntityIdHeader:
       name: x-entity-id

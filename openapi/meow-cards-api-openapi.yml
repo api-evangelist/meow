@@ -625,209 +625,98 @@ paths:
         - cards:read
 components:
   schemas:
-    AwxCardInsightsResponse:
+    PaymentTokenResponse:
       properties:
-        total_spend:
+        payment_type:
           type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Total Spend
-        total_cashback:
+          const: spt
+          title: Payment Type
+          default: spt
+        token:
           type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Total Cashback
-        top_expenses:
-          items:
-            $ref: '#/components/schemas/TopExpense'
-          type: array
-          title: Top Expenses
-        top_merchants:
-          items:
-            $ref: '#/components/schemas/MerchantSpendInsight'
-          type: array
-          title: Top Merchants
-        weekly_cardholder_spend:
-          items:
-            $ref: '#/components/schemas/WeeklyTimeSeries'
-          type: array
-          title: Weekly Cardholder Spend
-        weekly_merchant_spend:
-          items:
-            $ref: '#/components/schemas/WeeklyTimeSeries'
-          type: array
-          title: Weekly Merchant Spend
+          title: Token
+          description: Shared Payment Token ID.
+        provider:
+          type: string
+          title: Provider
+          default: stripe
+        usage_limits:
+          $ref: '#/components/schemas/TokenUsageLimits'
+        metadata:
+          $ref: '#/components/schemas/CardMetadata'
       type: object
       required:
-      - total_spend
-      - total_cashback
-      - top_expenses
-      - top_merchants
-      - weekly_cardholder_spend
-      - weekly_merchant_spend
-      title: AwxCardInsightsResponse
-    CardDetailsResponse:
+      - token
+      - usage_limits
+      - metadata
+      title: PaymentTokenResponse
+    CreateCardRequest:
       properties:
-        id:
+        amount:
+          type: integer
+          maximum: 25000.0
+          exclusiveMinimum: 0.0
+          title: Amount
+          description: Maximum spend limit in whole dollars.
+        currency:
+          $ref: '#/components/schemas/Iso4217Code'
+          description: Three-letter ISO 4217 currency code.
+          default: USD
+        merchant_name:
           type: string
-          format: uuid
-          title: Id
-          description: Unique card identifier.
-        billing_address:
-          $ref: '#/components/schemas/JAddress'
-          description: Card billing address.
-        delivery_address:
+          maxLength: 100
+          minLength: 1
+          pattern: ^[ -~]+$
+          title: Merchant Name
+          description: Name of the merchant.
+        nickname:
           anyOf:
           - type: string
+            maxLength: 30
+            minLength: 1
+            pattern: ^[ -~]+$
           - type: 'null'
-          title: Delivery Address
-          description: Masked delivery address for the physical card.
-        debit_account:
-          $ref: '#/components/schemas/CardDebitAccount'
-          description: Linked banking account.
-        tracking_url:
+          title: Nickname
+          description: Display name for the card (max 30 characters). Defaults to the merchant name when omitted.
+        allowed_categories:
           anyOf:
-          - type: string
+          - items:
+              $ref: '#/components/schemas/CardTransactionCategory'
+            type: array
           - type: 'null'
-          title: Tracking Url
-          description: Shipping tracking URL for the physical card.
+          title: Allowed Categories
+          description: Restrict the card to these merchant categories.
+        task_description:
+          type: string
+          title: Task Description
+          description: Brief description of what you are purchasing and why.
+        expires_in_minutes:
+          type: integer
+          maximum: 1440.0
+          exclusiveMinimum: 0.0
+          title: Expires In Minutes
+          description: Card expires after this many minutes (default 60).
+          default: 60
+        single_use:
+          type: boolean
+          title: Single Use
+          description: If `true`, the card is revoked automatically after the first authorization. If `false`, the card stays usable until expiry or explicit revoke.
+          default: true
       type: object
       required:
-      - id
-      - billing_address
-      - debit_account
-      title: CardDetailsResponse
-    JAddress:
-      properties:
-        street_line_1:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Street Line 1
-        street_line_2:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Street Line 2
-        city:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: City
-        state:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: State
-        postal_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Postal Code
-        country:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Country
-      type: object
-      title: JAddress
-    AwxTransactionSortEnum:
+      - amount
+      - merchant_name
+      - task_description
+      title: CreateCardRequest
+    CardStatusUpdate:
       type: string
       enum:
-      - AMOUNT
-      - CARDHOLDER_NAME
-      - IS_MISSING_REQUIREMENTS
-      - MERCHANT_NAME
-      - ORIGINAL_CREATED_TIME
-      title: AwxTransactionSortEnum
+      - active
+      - inactive
+      title: CardStatusUpdate
       x-enum-varnames:
-      - AMOUNT
-      - CARDHOLDER_NAME
-      - IS_MISSING_REQUIREMENTS
-      - MERCHANT_NAME
-      - ORIGINAL_CREATED_TIME
-    MerchantRestrictionType:
-      type: string
-      enum:
-      - allow
-      - block
-      title: MerchantRestrictionType
-      x-enum-varnames:
-      - allow
-      - block
-    CardTransactionCategory:
-      type: string
-      enum:
-      - Advertising
-      - Airlines
-      - Books and Newspapers
-      - Car Rental
-      - Charity
-      - Clothing
-      - Electronics
-      - Entertainment
-      - Facilities Expenses
-      - Financial Institutions and Fees
-      - Fuel
-      - Furniture
-      - Government Services
-      - Grocery
-      - Ground Transportation
-      - Insurance
-      - Legal
-      - Lodging
-      - Meals
-      - Medical
-      - Office Supplies
-      - Parking
-      - Political
-      - Professional Services
-      - Recruiting
-      - Rent
-      - Restaurants
-      - Shipping
-      - Software
-      - Taxes
-      - Taxis and Rideshare
-      - Technology Infrastructure
-      - Training and Education
-      - Utilities
-      - Vehicle Expenses
-      title: CardTransactionCategory
-      x-enum-varnames:
-      - advertising
-      - airlines
-      - books_and_newspapers
-      - car_rental
-      - charity
-      - clothing
-      - electronics
-      - entertainment
-      - facilities_expenses
-      - financial_institutions_and_fees
-      - fuel
-      - furniture
-      - government_services
-      - grocery
-      - ground_transportation
-      - insurance
-      - legal
-      - lodging
-      - meals
-      - medical
-      - office_supplies
-      - parking
-      - political
-      - professional_services
-      - recruiting
-      - rent
-      - restaurants
-      - shipping
-      - software
-      - taxes
-      - taxis_and_rideshare
-      - technology_infrastructure
-      - training_and_education
-      - utilities
-      - vehicle_expenses
+      - active
+      - inactive
     IssuingPlatform:
       type: string
       enum:
@@ -837,208 +726,6 @@ components:
       x-enum-varnames:
       - stripe
       - awx
-    ExtAwxCardTransactionStatus:
-      type: string
-      enum:
-      - APPROVED
-      - PENDING
-      - FAILED
-      - CLEARED
-      - REVERSED
-      - EXPIRED
-      title: ExtAwxCardTransactionStatus
-      x-enum-varnames:
-      - APPROVED
-      - PENDING
-      - FAILED
-      - CLEARED
-      - REVERSED
-      - EXPIRED
-    AwxCardTransactionBusinessResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        trace_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Trace Id
-        status:
-          $ref: '#/components/schemas/ExtAwxCardTransactionStatus'
-        tx_type:
-          $ref: '#/components/schemas/ExtAwxCardTransactionType'
-        detail:
-          type: string
-          title: Detail
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-        created_time:
-          type: string
-          format: date-time
-          title: Created Time
-        updated_time:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Updated Time
-        note:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Note
-        attachments:
-          items:
-            $ref: '#/components/schemas/AwxCardTransactionAttachment'
-          type: array
-          title: Attachments
-        merchant:
-          anyOf:
-          - $ref: '#/components/schemas/MerchantMetadataResponse'
-          - type: 'null'
-        is_missing_memo:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Missing Memo
-        is_missing_receipt:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Missing Receipt
-        original_created_time:
-          type: string
-          format: date-time
-          title: Original Created Time
-        cashback:
-          anyOf:
-          - $ref: '#/components/schemas/TransactionEarnedCashback'
-          - type: 'null'
-        card_id:
-          type: string
-          format: uuid
-          title: Card Id
-        cardholder_name:
-          type: string
-          title: Cardholder Name
-        card_nickname:
-          type: string
-          title: Card Nickname
-        is_physical:
-          type: boolean
-          title: Is Physical
-        card_last_4:
-          type: string
-          title: Card Last 4
-        network_transaction_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Network Transaction Id
-        original_amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Original Amount
-        original_currency:
-          $ref: '#/components/schemas/Iso4217Code'
-        industry:
-          anyOf:
-          - $ref: '#/components/schemas/DbIndustry'
-          - type: 'null'
-        category:
-          anyOf:
-          - $ref: '#/components/schemas/CardTransactionCategory'
-          - type: 'null'
-        failure_reason_user_friendly:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Reason User Friendly
-        hold_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Hold Id
-        credit_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Credit Id
-        release_transaction_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Release Transaction Id
-        hold_book_transfer_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hold Book Transfer Id
-      type: object
-      required:
-      - id
-      - status
-      - tx_type
-      - detail
-      - amount
-      - created_time
-      - attachments
-      - merchant
-      - is_missing_memo
-      - is_missing_receipt
-      - original_created_time
-      - card_id
-      - cardholder_name
-      - card_nickname
-      - is_physical
-      - card_last_4
-      - original_amount
-      - original_currency
-      title: AwxCardTransactionBusinessResponse
-    CardCardholder:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Cardholder's full name.
-        public_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Public Id
-          description: Cardholder's public user ID.
-      type: object
-      required:
-      - name
-      title: CardCardholder
-    TokenUsageLimits:
-      properties:
-        max_amount:
-          type: integer
-          title: Max Amount
-          description: Maximum amount in whole dollars.
-        currency:
-          $ref: '#/components/schemas/Iso4217Code'
-          description: Three-letter ISO 4217 currency code.
-        expires_at:
-          type: string
-          format: date-time
-          title: Expires At
-          description: Token expiration timestamp.
-      type: object
-      required:
-      - max_amount
-      - currency
-      - expires_at
-      title: TokenUsageLimits
     Iso4217Code:
       type: string
       enum:
@@ -1225,43 +912,294 @@ components:
       - ZWG
       - ZWL
       title: Iso4217Code
-    AwxCardTransactionAttachment:
+    CreateCardResponse:
+      properties:
+        payment_type:
+          type: string
+          const: card
+          title: Payment Type
+          default: card
+        controls:
+          $ref: '#/components/schemas/CardControls'
+        metadata:
+          $ref: '#/components/schemas/CardMetadata'
+      type: object
+      required:
+      - controls
+      - metadata
+      title: CreateCardResponse
+    CardControls:
+      properties:
+        spending_limit:
+          type: integer
+          title: Spending Limit
+          description: Maximum spend limit in whole dollars.
+        single_use:
+          type: boolean
+          title: Single Use
+          description: Whether the card is single-use.
+        expires_at:
+          type: string
+          format: date-time
+          title: Expires At
+          description: When the card is set to expire. The card is not revoked automatically; revoke it explicitly when you are done with it.
+      type: object
+      required:
+      - spending_limit
+      - single_use
+      - expires_at
+      title: CardControls
+    DbIndustry:
+      properties:
+        mcc:
+          type: string
+          pattern: '[0-9]{4}$'
+          title: Mcc
+        description:
+          type: string
+          title: Description
+        irs_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Irs Description
+      type: object
+      required:
+      - mcc
+      - description
+      - irs_description
+      title: DbIndustry
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CreatePaymentTokenRequest:
+      properties:
+        amount:
+          type: integer
+          maximum: 25000.0
+          exclusiveMinimum: 0.0
+          title: Amount
+          description: Maximum amount for this token in whole dollars.
+        currency:
+          $ref: '#/components/schemas/Iso4217Code'
+          description: Three-letter ISO 4217 currency code.
+          default: USD
+        merchant_name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[ -~]+$
+          title: Merchant Name
+          description: Name of the merchant.
+        task_description:
+          type: string
+          title: Task Description
+          description: Brief description of the purchase.
+        expires_in_minutes:
+          type: integer
+          maximum: 1440.0
+          exclusiveMinimum: 0.0
+          title: Expires In Minutes
+          description: Token expires after this many minutes (default 60).
+          default: 60
+      type: object
+      required:
+      - amount
+      - merchant_name
+      - task_description
+      title: CreatePaymentTokenRequest
+    MeowPaginatedList_AwxCardTransactionBusinessResponse_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/AwxCardTransactionBusinessResponse'
+          type: array
+          title: Items
+        total:
+          type: integer
+          title: Total
+        page:
+          $ref: '#/components/schemas/MeowPage'
+      type: object
+      required:
+      - items
+      - total
+      - page
+      title: MeowPaginatedList[AwxCardTransactionBusinessResponse]
+    ExtAwxCardTransactionStatus:
+      type: string
+      enum:
+      - APPROVED
+      - PENDING
+      - FAILED
+      - CLEARED
+      - REVERSED
+      - EXPIRED
+      title: ExtAwxCardTransactionStatus
+      x-enum-varnames:
+      - APPROVED
+      - PENDING
+      - FAILED
+      - CLEARED
+      - REVERSED
+      - EXPIRED
+    CardMetadata:
+      properties:
+        card_id:
+          type: string
+          format: uuid
+          title: Card Id
+          description: Identifier for the issued card.
+        task_description:
+          type: string
+          title: Task Description
+          description: What you are purchasing.
+      type: object
+      required:
+      - card_id
+      - task_description
+      title: CardMetadata
+    CardDetailsResponse:
       properties:
         id:
           type: string
           format: uuid
           title: Id
-        transaction_id:
-          type: string
-          format: uuid
-          title: Transaction Id
-        file_name:
-          type: string
-          title: File Name
-        url:
-          type: string
-          title: Url
+          description: Unique card identifier.
+        billing_address:
+          $ref: '#/components/schemas/JAddress'
+          description: Card billing address.
+        delivery_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Delivery Address
+          description: Masked delivery address for the physical card.
+        debit_account:
+          $ref: '#/components/schemas/CardDebitAccount'
+          description: Linked banking account.
+        tracking_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tracking Url
+          description: Shipping tracking URL for the physical card.
       type: object
       required:
       - id
-      - transaction_id
-      - file_name
-      - url
-      title: AwxCardTransactionAttachment
-    SpendInsight:
+      - billing_address
+      - debit_account
+      title: CardDetailsResponse
+    CardStatus:
+      type: string
+      enum:
+      - pending
+      - active
+      - suspended
+      - closed
+      - failed
+      title: CardStatus
+      x-enum-varnames:
+      - pending
+      - active
+      - suspended
+      - closed
+      - failed
+    TransactionEarnedCashback:
       properties:
-        total:
+        dollars:
           type: string
           pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Total
-        value:
+          title: Dollars
+        percentage:
           type: string
-          title: Value
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,4}0*$
+          title: Percentage
+          description: Percentage represented as 4 digit decimal. 0.0001 = 0.01%. Max is 0.05 = 5%
       type: object
       required:
-      - total
-      - value
-      title: SpendInsight
+      - dollars
+      - percentage
+      title: TransactionEarnedCashback
+    CardResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Unique card identifier.
+        display_name:
+          type: string
+          title: Display Name
+          description: Card name or nickname.
+        last_four:
+          type: string
+          title: Last Four
+          description: Last 4 digits of the card number.
+        status:
+          $ref: '#/components/schemas/CardStatus'
+          description: Card status.
+        platform:
+          $ref: '#/components/schemas/IssuingPlatform'
+          description: The platform that issued this card.
+        is_physical:
+          type: boolean
+          title: Is Physical
+          description: Whether this is a physical card.
+        is_single_use:
+          type: boolean
+          title: Is Single Use
+          description: Whether this is a single-use card.
+          default: false
+        cardholder:
+          $ref: '#/components/schemas/CardCardholder'
+          description: Cardholder info.
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Card creation timestamp.
+        expiration:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expiration
+          description: Card expiration date.
+        spending_restriction:
+          anyOf:
+          - $ref: '#/components/schemas/CardSpendingRestriction'
+          - type: 'null'
+          description: Merchant spending restrictions.
+      type: object
+      required:
+      - id
+      - display_name
+      - last_four
+      - status
+      - platform
+      - is_physical
+      - cardholder
+      - created_at
+      title: CardResponse
     SpendingControls:
       properties:
         per_transaction_limit:
@@ -1314,6 +1252,153 @@ components:
       required:
       - per_transaction_limit
       title: SpendingControls
+    WeeklyTimeSeries:
+      properties:
+        week:
+          type: string
+          format: date
+          title: Week
+        data:
+          items:
+            $ref: '#/components/schemas/SpendInsight'
+          type: array
+          title: Data
+      type: object
+      required:
+      - week
+      - data
+      title: WeeklyTimeSeries
+    CardTransactionCategory:
+      type: string
+      enum:
+      - Advertising
+      - Airlines
+      - Books and Newspapers
+      - Car Rental
+      - Charity
+      - Clothing
+      - Electronics
+      - Entertainment
+      - Facilities Expenses
+      - Financial Institutions and Fees
+      - Fuel
+      - Furniture
+      - Government Services
+      - Grocery
+      - Ground Transportation
+      - Insurance
+      - Legal
+      - Lodging
+      - Meals
+      - Medical
+      - Office Supplies
+      - Parking
+      - Political
+      - Professional Services
+      - Recruiting
+      - Rent
+      - Restaurants
+      - Shipping
+      - Software
+      - Taxes
+      - Taxis and Rideshare
+      - Technology Infrastructure
+      - Training and Education
+      - Utilities
+      - Vehicle Expenses
+      title: CardTransactionCategory
+      x-enum-varnames:
+      - advertising
+      - airlines
+      - books_and_newspapers
+      - car_rental
+      - charity
+      - clothing
+      - electronics
+      - entertainment
+      - facilities_expenses
+      - financial_institutions_and_fees
+      - fuel
+      - furniture
+      - government_services
+      - grocery
+      - ground_transportation
+      - insurance
+      - legal
+      - lodging
+      - meals
+      - medical
+      - office_supplies
+      - parking
+      - political
+      - professional_services
+      - recruiting
+      - rent
+      - restaurants
+      - shipping
+      - software
+      - taxes
+      - taxis_and_rideshare
+      - technology_infrastructure
+      - training_and_education
+      - utilities
+      - vehicle_expenses
+    TokenUsageLimits:
+      properties:
+        max_amount:
+          type: integer
+          title: Max Amount
+          description: Maximum amount in whole dollars.
+        currency:
+          $ref: '#/components/schemas/Iso4217Code'
+          description: Three-letter ISO 4217 currency code.
+        expires_at:
+          type: string
+          format: date-time
+          title: Expires At
+          description: Token expiration timestamp.
+      type: object
+      required:
+      - max_amount
+      - currency
+      - expires_at
+      title: TokenUsageLimits
+    MerchantRestrictionType:
+      type: string
+      enum:
+      - allow
+      - block
+      title: MerchantRestrictionType
+      x-enum-varnames:
+      - allow
+      - block
+    MeowPaginatedList_CardResponse_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/CardResponse'
+          type: array
+          title: Items
+        total:
+          type: integer
+          title: Total
+        page:
+          $ref: '#/components/schemas/MeowPage'
+      type: object
+      required:
+      - items
+      - total
+      - page
+      title: MeowPaginatedList[CardResponse]
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     CardPanResponse:
       properties:
         card_number:
@@ -1343,15 +1428,122 @@ components:
       required:
       - card_number
       title: CardPanResponse
-    CardStatusUpdate:
-      type: string
-      enum:
-      - active
-      - inactive
-      title: CardStatusUpdate
-      x-enum-varnames:
-      - active
-      - inactive
+    CardSpendingRestriction:
+      properties:
+        type:
+          $ref: '#/components/schemas/MerchantRestrictionType'
+          description: Whether the merchant list is an allowlist or blocklist.
+        merchants:
+          items:
+            type: string
+          type: array
+          title: Merchants
+          description: Merchant names in the restriction list.
+      type: object
+      required:
+      - type
+      - merchants
+      title: CardSpendingRestriction
+    TopExpense:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        detail:
+          type: string
+          title: Detail
+        logo_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logo Url
+        website:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Website
+        cardholder:
+          type: string
+          title: Cardholder
+        posted_time:
+          type: string
+          format: date-time
+          title: Posted Time
+        card_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Card Id
+        network_transaction_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Network Transaction Id
+      type: object
+      required:
+      - id
+      - amount
+      - detail
+      - cardholder
+      - posted_time
+      title: TopExpense
+    CardCardholder:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Cardholder's full name.
+        public_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Public Id
+          description: Cardholder's public user ID.
+      type: object
+      required:
+      - name
+      title: CardCardholder
+    JAddress:
+      properties:
+        street_line_1:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Street Line 1
+        street_line_2:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Street Line 2
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+        postal_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postal Code
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+      type: object
+      title: JAddress
     MeowPage:
       properties:
         limit:
@@ -1368,163 +1560,50 @@ components:
           default: 0
       type: object
       title: MeowPage
-    CreateCardRequest:
+    ExtAwxCardTransactionType:
+      type: string
+      enum:
+      - AUTHORIZATION
+      - CLEARING
+      - REFUND
+      - REVERSAL
+      - ORIGINAL_CREDIT
+      title: ExtAwxCardTransactionType
+      x-enum-varnames:
+      - AUTHORIZATION
+      - CLEARING
+      - REFUND
+      - REVERSAL
+      - ORIGINAL_CREDIT
+    CardFormFactor:
+      type: string
+      enum:
+      - physical
+      - virtual
+      title: CardFormFactor
+      x-enum-varnames:
+      - physical
+      - virtual
+    CardDebitAccount:
       properties:
-        amount:
-          type: integer
-          maximum: 25000.0
-          exclusiveMinimum: 0.0
-          title: Amount
-          description: Maximum spend limit in whole dollars.
-        currency:
-          $ref: '#/components/schemas/Iso4217Code'
-          description: Three-letter ISO 4217 currency code.
-          default: USD
-        merchant_name:
+        id:
           type: string
-          maxLength: 100
-          minLength: 1
-          pattern: ^[ -~]+$
-          title: Merchant Name
-          description: Name of the merchant.
-        nickname:
-          anyOf:
-          - type: string
-            maxLength: 30
-            minLength: 1
-            pattern: ^[ -~]+$
-          - type: 'null'
-          title: Nickname
-          description: Display name for the card (max 30 characters). Defaults to the merchant name when omitted.
-        allowed_categories:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/CardTransactionCategory'
-            type: array
-          - type: 'null'
-          title: Allowed Categories
-          description: Restrict the card to these merchant categories.
-        task_description:
+          format: uuid
+          title: Id
+          description: Banking account ID.
+        name:
           type: string
-          title: Task Description
-          description: Brief description of what you are purchasing and why.
-        expires_in_minutes:
-          type: integer
-          maximum: 1440.0
-          exclusiveMinimum: 0.0
-          title: Expires In Minutes
-          description: Card expires after this many minutes (default 60).
-          default: 60
-        single_use:
-          type: boolean
-          title: Single Use
-          description: If `true`, the card is revoked automatically after the first authorization. If `false`, the card stays usable until expiry or explicit revoke.
-          default: true
+          title: Name
+          description: Banking account display name.
+        bank:
+          $ref: '#/components/schemas/BankingAccountProductType'
+          description: Banking account product type.
       type: object
       required:
-      - amount
-      - merchant_name
-      - task_description
-      title: CreateCardRequest
-    CardControls:
-      properties:
-        spending_limit:
-          type: integer
-          title: Spending Limit
-          description: Maximum spend limit in whole dollars.
-        single_use:
-          type: boolean
-          title: Single Use
-          description: Whether the card is single-use.
-        expires_at:
-          type: string
-          format: date-time
-          title: Expires At
-          description: When the card is set to expire. The card is not revoked automatically; revoke it explicitly when you are done with it.
-      type: object
-      required:
-      - spending_limit
-      - single_use
-      - expires_at
-      title: CardControls
-    WeeklyTimeSeries:
-      properties:
-        week:
-          type: string
-          format: date
-          title: Week
-        data:
-          items:
-            $ref: '#/components/schemas/SpendInsight'
-          type: array
-          title: Data
-      type: object
-      required:
-      - week
-      - data
-      title: WeeklyTimeSeries
-    CreateCardResponse:
-      properties:
-        payment_type:
-          type: string
-          const: card
-          title: Payment Type
-          default: card
-        controls:
-          $ref: '#/components/schemas/CardControls'
-        metadata:
-          $ref: '#/components/schemas/CardMetadata'
-      type: object
-      required:
-      - controls
-      - metadata
-      title: CreateCardResponse
-    PaymentTokenResponse:
-      properties:
-        payment_type:
-          type: string
-          const: spt
-          title: Payment Type
-          default: spt
-        token:
-          type: string
-          title: Token
-          description: Shared Payment Token ID.
-        provider:
-          type: string
-          title: Provider
-          default: stripe
-        usage_limits:
-          $ref: '#/components/schemas/TokenUsageLimits'
-        metadata:
-          $ref: '#/components/schemas/CardMetadata'
-      type: object
-      required:
-      - token
-      - usage_limits
-      - metadata
-      title: PaymentTokenResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - id
+      - name
+      - bank
+      title: CardDebitAccount
     MerchantMetadataResponse:
       properties:
         id:
@@ -1589,125 +1668,190 @@ components:
       - count
       - merchant
       title: MerchantSpendInsight
-    CardDebitAccount:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Banking account ID.
-        name:
-          type: string
-          title: Name
-          description: Banking account display name.
-        bank:
-          $ref: '#/components/schemas/BankingAccountProductType'
-          description: Banking account product type.
-      type: object
-      required:
-      - id
-      - name
-      - bank
-      title: CardDebitAccount
-    TransactionEarnedCashback:
-      properties:
-        dollars:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Dollars
-        percentage:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,4}0*$
-          title: Percentage
-          description: Percentage represented as 4 digit decimal. 0.0001 = 0.01%. Max is 0.05 = 5%
-      type: object
-      required:
-      - dollars
-      - percentage
-      title: TransactionEarnedCashback
-    MeowPaginatedList_AwxCardTransactionBusinessResponse_:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/AwxCardTransactionBusinessResponse'
-          type: array
-          title: Items
-        total:
-          type: integer
-          title: Total
-        page:
-          $ref: '#/components/schemas/MeowPage'
-      type: object
-      required:
-      - items
-      - total
-      - page
-      title: MeowPaginatedList[AwxCardTransactionBusinessResponse]
-    CardSpendingRestriction:
-      properties:
-        type:
-          $ref: '#/components/schemas/MerchantRestrictionType'
-          description: Whether the merchant list is an allowlist or blocklist.
-        merchants:
-          items:
-            type: string
-          type: array
-          title: Merchants
-          description: Merchant names in the restriction list.
-      type: object
-      required:
-      - type
-      - merchants
-      title: CardSpendingRestriction
-    CardMetadata:
+    RevokeCardResponse:
       properties:
         card_id:
           type: string
           format: uuid
           title: Card Id
-          description: Identifier for the issued card.
-        task_description:
-          type: string
-          title: Task Description
-          description: What you are purchasing.
+        status:
+          $ref: '#/components/schemas/CardStatus'
       type: object
       required:
       - card_id
-      - task_description
-      title: CardMetadata
-    ExtAwxCardTransactionType:
-      type: string
-      enum:
-      - AUTHORIZATION
-      - CLEARING
-      - REFUND
-      - REVERSAL
-      - ORIGINAL_CREDIT
-      title: ExtAwxCardTransactionType
-      x-enum-varnames:
-      - AUTHORIZATION
-      - CLEARING
-      - REFUND
-      - REVERSAL
-      - ORIGINAL_CREDIT
-    MeowPaginatedList_CardResponse_:
+      - status
+      title: RevokeCardResponse
+    AwxCardTransactionAttachment:
       properties:
-        items:
-          items:
-            $ref: '#/components/schemas/CardResponse'
-          type: array
-          title: Items
-        total:
-          type: integer
-          title: Total
-        page:
-          $ref: '#/components/schemas/MeowPage'
+        id:
+          type: string
+          format: uuid
+          title: Id
+        transaction_id:
+          type: string
+          format: uuid
+          title: Transaction Id
+        file_name:
+          type: string
+          title: File Name
+        url:
+          type: string
+          title: Url
       type: object
       required:
-      - items
-      - total
-      - page
-      title: MeowPaginatedList[CardResponse]
+      - id
+      - transaction_id
+      - file_name
+      - url
+      title: AwxCardTransactionAttachment
+    AwxCardTransactionBusinessResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        trace_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Trace Id
+        status:
+          $ref: '#/components/schemas/ExtAwxCardTransactionStatus'
+        tx_type:
+          $ref: '#/components/schemas/ExtAwxCardTransactionType'
+        detail:
+          type: string
+          title: Detail
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+        created_time:
+          type: string
+          format: date-time
+          title: Created Time
+        updated_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated Time
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        attachments:
+          items:
+            $ref: '#/components/schemas/AwxCardTransactionAttachment'
+          type: array
+          title: Attachments
+        merchant:
+          anyOf:
+          - $ref: '#/components/schemas/MerchantMetadataResponse'
+          - type: 'null'
+        is_missing_memo:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Missing Memo
+        is_missing_receipt:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Missing Receipt
+        original_created_time:
+          type: string
+          format: date-time
+          title: Original Created Time
+        cashback:
+          anyOf:
+          - $ref: '#/components/schemas/TransactionEarnedCashback'
+          - type: 'null'
+        card_id:
+          type: string
+          format: uuid
+          title: Card Id
+        cardholder_name:
+          type: string
+          title: Cardholder Name
+        card_nickname:
+          type: string
+          title: Card Nickname
+        is_physical:
+          type: boolean
+          title: Is Physical
+        card_last_4:
+          type: string
+          title: Card Last 4
+        network_transaction_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Network Transaction Id
+        original_amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Original Amount
+        original_currency:
+          $ref: '#/components/schemas/Iso4217Code'
+        industry:
+          anyOf:
+          - $ref: '#/components/schemas/DbIndustry'
+          - type: 'null'
+        category:
+          anyOf:
+          - $ref: '#/components/schemas/CardTransactionCategory'
+          - type: 'null'
+        failure_reason_user_friendly:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Reason User Friendly
+        hold_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Hold Id
+        credit_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Credit Id
+        release_transaction_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Release Transaction Id
+        hold_book_transfer_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hold Book Transfer Id
+      type: object
+      required:
+      - id
+      - status
+      - tx_type
+      - detail
+      - amount
+      - created_time
+      - attachments
+      - merchant
+      - is_missing_memo
+      - is_missing_receipt
+      - original_created_time
+      - card_id
+      - cardholder_name
+      - card_nickname
+      - is_physical
+      - card_last_4
+      - original_amount
+      - original_currency
+      title: AwxCardTransactionBusinessResponse
     UpdateCardRequest:
       properties:
         status:
@@ -1739,112 +1883,60 @@ components:
           description: Restrict the card to these merchant categories. Pass `null` to clear all category restrictions.
       type: object
       title: UpdateCardRequest
-    DbIndustry:
-      properties:
-        mcc:
-          type: string
-          pattern: '[0-9]{4}$'
-          title: Mcc
-        description:
-          type: string
-          title: Description
-        irs_description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Irs Description
-      type: object
-      required:
-      - mcc
-      - description
-      - irs_description
-      title: DbIndustry
-    CardStatus:
+    AwxTransactionSortEnum:
       type: string
       enum:
-      - pending
-      - active
-      - suspended
-      - closed
-      - failed
-      title: CardStatus
+      - AMOUNT
+      - CARDHOLDER_NAME
+      - IS_MISSING_REQUIREMENTS
+      - MERCHANT_NAME
+      - ORIGINAL_CREATED_TIME
+      title: AwxTransactionSortEnum
       x-enum-varnames:
-      - pending
-      - active
-      - suspended
-      - closed
-      - failed
-    HTTPValidationError:
+      - AMOUNT
+      - CARDHOLDER_NAME
+      - IS_MISSING_REQUIREMENTS
+      - MERCHANT_NAME
+      - ORIGINAL_CREATED_TIME
+    AwxCardInsightsResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    RevokeCardResponse:
-      properties:
-        card_id:
-          type: string
-          format: uuid
-          title: Card Id
-        status:
-          $ref: '#/components/schemas/CardStatus'
-      type: object
-      required:
-      - card_id
-      - status
-      title: RevokeCardResponse
-    TopExpense:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        amount:
+        total_spend:
           type: string
           pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-        detail:
+          title: Total Spend
+        total_cashback:
           type: string
-          title: Detail
-        logo_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Logo Url
-        website:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Website
-        cardholder:
-          type: string
-          title: Cardholder
-        posted_time:
-          type: string
-          format: date-time
-          title: Posted Time
-        card_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Card Id
-        network_transaction_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Network Transaction Id
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Total Cashback
+        top_expenses:
+          items:
+            $ref: '#/components/schemas/TopExpense'
+          type: array
+          title: Top Expenses
+        top_merchants:
+          items:
+            $ref: '#/components/schemas/MerchantSpendInsight'
+          type: array
+          title: Top Merchants
+        weekly_cardholder_spend:
+          items:
+            $ref: '#/components/schemas/WeeklyTimeSeries'
+          type: array
+          title: Weekly Cardholder Spend
+        weekly_merchant_spend:
+          items:
+            $ref: '#/components/schemas/WeeklyTimeSeries'
+          type: array
+          title: Weekly Merchant Spend
       type: object
       required:
-      - id
-      - amount
-      - detail
-      - cardholder
-      - posted_time
-      title: TopExpense
+      - total_spend
+      - total_cashback
+      - top_expenses
+      - top_merchants
+      - weekly_cardholder_spend
+      - weekly_merchant_spend
+      title: AwxCardInsightsResponse
     BankingAccountProductType:
       type: string
       enum:
@@ -1856,112 +1948,20 @@ components:
       - bridge
       - stripe
       title: BankingAccountProductType
-    CreatePaymentTokenRequest:
+    SpendInsight:
       properties:
-        amount:
-          type: integer
-          maximum: 25000.0
-          exclusiveMinimum: 0.0
-          title: Amount
-          description: Maximum amount for this token in whole dollars.
-        currency:
-          $ref: '#/components/schemas/Iso4217Code'
-          description: Three-letter ISO 4217 currency code.
-          default: USD
-        merchant_name:
+        total:
           type: string
-          maxLength: 100
-          minLength: 1
-          pattern: ^[ -~]+$
-          title: Merchant Name
-          description: Name of the merchant.
-        task_description:
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Total
+        value:
           type: string
-          title: Task Description
-          description: Brief description of the purchase.
-        expires_in_minutes:
-          type: integer
-          maximum: 1440.0
-          exclusiveMinimum: 0.0
-          title: Expires In Minutes
-          description: Token expires after this many minutes (default 60).
-          default: 60
+          title: Value
       type: object
       required:
-      - amount
-      - merchant_name
-      - task_description
-      title: CreatePaymentTokenRequest
-    CardResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Unique card identifier.
-        display_name:
-          type: string
-          title: Display Name
-          description: Card name or nickname.
-        last_four:
-          type: string
-          title: Last Four
-          description: Last 4 digits of the card number.
-        status:
-          $ref: '#/components/schemas/CardStatus'
-          description: Card status.
-        platform:
-          $ref: '#/components/schemas/IssuingPlatform'
-          description: The platform that issued this card.
-        is_physical:
-          type: boolean
-          title: Is Physical
-          description: Whether this is a physical card.
-        is_single_use:
-          type: boolean
-          title: Is Single Use
-          description: Whether this is a single-use card.
-          default: false
-        cardholder:
-          $ref: '#/components/schemas/CardCardholder'
-          description: Cardholder info.
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Card creation timestamp.
-        expiration:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Expiration
-          description: Card expiration date.
-        spending_restriction:
-          anyOf:
-          - $ref: '#/components/schemas/CardSpendingRestriction'
-          - type: 'null'
-          description: Merchant spending restrictions.
-      type: object
-      required:
-      - id
-      - display_name
-      - last_four
-      - status
-      - platform
-      - is_physical
-      - cardholder
-      - created_at
-      title: CardResponse
-    CardFormFactor:
-      type: string
-      enum:
-      - physical
-      - virtual
-      title: CardFormFactor
-      x-enum-varnames:
-      - physical
-      - virtual
+      - total
+      - value
+      title: SpendInsight
   parameters:
     EntityIdHeader:
       name: x-entity-id

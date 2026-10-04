@@ -119,41 +119,6 @@ components:
         format: uuid
       description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
-    CreateProductRequest:
-      properties:
-        name:
-          type: string
-          maxLength: 100
-          title: Name
-        description:
-          anyOf:
-          - type: string
-            maxLength: 400
-          - type: 'null'
-          title: Description
-        default_price:
-          anyOf:
-          - type: number
-            maximum: 10000000.0
-            minimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
-          title: Default Price
-          description: Default price for the product (0.00 to 10,000,000.00).
-      type: object
-      required:
-      - name
-      - default_price
-      title: CreateProductRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     InvoiceProductResponse:
       properties:
         id:
@@ -203,6 +168,41 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CreateProductRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          title: Name
+        description:
+          anyOf:
+          - type: string
+            maxLength: 400
+          - type: 'null'
+          title: Description
+        default_price:
+          anyOf:
+          - type: number
+            maximum: 10000000.0
+            minimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Default Price
+          description: Default price for the product (0.00 to 10,000,000.00).
+      type: object
+      required:
+      - name
+      - default_price
+      title: CreateProductRequest
   securitySchemes:
     apiKeyAuth:
       type: apiKey

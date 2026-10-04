@@ -113,6 +113,15 @@ paths:
       - apiKeyAuth:
         - accounts:tax-documents
 components:
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
     TaxFormType:
       type: string
@@ -122,6 +131,18 @@ components:
       - Tax1099B
       - Tax1099
       title: TaxFormType
+    TaxFormList:
+      properties:
+        tax_forms:
+          items:
+            $ref: '#/components/schemas/TaxFormDescriptor'
+          type: array
+          title: Tax Forms
+          description: Tax forms issued for this account. Empty if none have been issued, or none match your year and form-type filters.
+      type: object
+      required:
+      - tax_forms
+      title: TaxFormList
     TaxFormDescriptor:
       properties:
         tax_form_id:
@@ -202,27 +223,6 @@ components:
       - download_url
       - expires_at
       title: TaxFormDownload
-    TaxFormList:
-      properties:
-        tax_forms:
-          items:
-            $ref: '#/components/schemas/TaxFormDescriptor'
-          type: array
-          title: Tax Forms
-          description: Tax forms issued for this account. Empty if none have been issued, or none match your year and form-type filters.
-      type: object
-      required:
-      - tax_forms
-      title: TaxFormList
-  parameters:
-    EntityIdHeader:
-      name: x-entity-id
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uuid
-      description: Optional `entity_id` to scope requests to a specific entity.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

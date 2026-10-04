@@ -44,15 +44,6 @@ paths:
       parameters:
       - $ref: '#/components/parameters/EntityIdHeader'
 components:
-  parameters:
-    EntityIdHeader:
-      name: x-entity-id
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uuid
-      description: Optional `entity_id` to scope requests to a specific entity.
   schemas:
     PaymentMethodTypes:
       properties:
@@ -91,6 +82,15 @@ components:
       - USDT_ETHEREUM
       - USDT_SOLANA
       - CASH_SOLANA
+  parameters:
+    EntityIdHeader:
+      name: x-entity-id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Optional `entity_id` to scope requests to a specific entity.
   securitySchemes:
     apiKeyAuth:
       type: apiKey
