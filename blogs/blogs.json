@@ -2,14 +2,20 @@
   "repo": "meow",
   "feeds": [
     {
+      "source": "https://www.meow.com/blog",
+      "feed_url": "https://www.meow.com/blog",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
       "source": "https://support.meow.com/",
       "feed_url": "https://support.meow.com/",
       "title": "",
       "saved": 0,
-      "method": "none",
-      "error": "parse_failed"
+      "method": "none"
     }
   ],
   "post_count": 0,
-  "fetched": "2026-09-19T19:51:11Z"
+  "fetched": "2026-10-10T13:15:00Z"
 }

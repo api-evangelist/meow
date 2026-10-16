@@ -83,6 +83,15 @@ paths:
         - accounts:balances
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     Balance:
       properties:
         balance:
@@ -100,18 +109,6 @@ components:
       - balance
       - date
       title: Balance
-    Balances:
-      properties:
-        balances:
-          items:
-            $ref: '#/components/schemas/Balance'
-          type: array
-          title: Balances
-          description: An array of balances.
-      type: object
-      required:
-      - balances
-      title: Balances
     ValidationError:
       properties:
         loc:
@@ -133,15 +130,18 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    Balances:
       properties:
-        detail:
+        balances:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/Balance'
           type: array
-          title: Detail
+          title: Balances
+          description: An array of balances.
       type: object
-      title: HTTPValidationError
+      required:
+      - balances
+      title: Balances
   parameters:
     EntityIdHeader:
       name: x-entity-id

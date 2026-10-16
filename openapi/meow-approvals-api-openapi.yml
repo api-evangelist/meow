@@ -56,6 +56,23 @@ paths:
         - accounts:read
 components:
   schemas:
+    InitiatorIdentityType:
+      type: string
+      enum:
+      - web_user
+      - user_api_key
+      - entity_api_key
+      - mcp_oauth
+      - cli_key
+      - partner_api_key
+      title: InitiatorIdentityType
+      x-enum-varnames:
+      - web_user
+      - user_api_key
+      - entity_api_key
+      - mcp_oauth
+      - cli_key
+      - partner_api_key
     Initiator:
       properties:
         email:
@@ -99,6 +116,29 @@ components:
       required:
       - display
       title: Initiator
+    ApprovalStatus:
+      type: string
+      enum:
+      - pending_approval
+      - approved
+      - executing
+      - completed
+      - rejected
+      - expired
+      - failed
+      title: ApprovalStatus
+    TransferStatus:
+      type: string
+      enum:
+      - pending
+      - pending_approval
+      - canceled
+      - processing
+      - error
+      - sent
+      - returned
+      - void
+      title: TransferStatus
     ApprovalResponse:
       properties:
         approval_id:
@@ -177,78 +217,21 @@ components:
       - approvals_received
       - created_time
       title: ApprovalResponse
-    TransferStatus:
-      type: string
-      enum:
-      - pending
-      - pending_approval
-      - canceled
-      - processing
-      - error
-      - sent
-      - returned
-      - void
-      title: TransferStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ActionType:
       type: string
       enum:
       - manage_users_and_policies
       - send_money
       title: ActionType
-    Timestamp:
-      type: string
-      format: date-time
-      title: Timestamp
-      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    DisplayInitiator:
-      properties:
-        primary:
-          type: string
-          title: Primary
-      type: object
-      required:
-      - primary
-      title: DisplayInitiator
-    ApprovalStatus:
-      type: string
-      enum:
-      - pending_approval
-      - approved
-      - executing
-      - completed
-      - rejected
-      - expired
-      - failed
-      title: ApprovalStatus
-    InitiatorIdentityType:
-      type: string
-      enum:
-      - web_user
-      - user_api_key
-      - entity_api_key
-      - mcp_oauth
-      - cli_key
-      - partner_api_key
-      title: InitiatorIdentityType
-      x-enum-varnames:
-      - web_user
-      - user_api_key
-      - entity_api_key
-      - mcp_oauth
-      - cli_key
-      - partner_api_key
-    TransferMethod:
-      type: string
-      enum:
-      - book
-      - usdc
-      - usdt
-      - pyusd
-      - cash
-      - usdg
-      - ach
-      - wire
-      title: TransferMethod
     ApprovalTransferHandle:
       properties:
         id:
@@ -264,6 +247,20 @@ components:
       - transfer_type
       - status
       title: ApprovalTransferHandle
+    DisplayInitiator:
+      properties:
+        primary:
+          type: string
+          title: Primary
+      type: object
+      required:
+      - primary
+      title: DisplayInitiator
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
     ValidationError:
       properties:
         loc:
@@ -285,15 +282,18 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+    TransferMethod:
+      type: string
+      enum:
+      - book
+      - usdc
+      - usdt
+      - pyusd
+      - cash
+      - usdg
+      - ach
+      - wire
+      title: TransferMethod
   parameters:
     EntityIdHeader:
       name: x-entity-id

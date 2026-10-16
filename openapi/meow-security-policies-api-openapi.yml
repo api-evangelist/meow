@@ -70,6 +70,69 @@ paths:
         - accounts:read
 components:
   schemas:
+    PageMetadata:
+      properties:
+        nextOffset:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextoffset
+          description: Opaque offset identifier.
+          examples:
+          - qwer123454q2f
+      type: object
+      title: PageMetadata
+    CustomerApiSecurityPoliciesResponse:
+      properties:
+        security_policies:
+          items:
+            $ref: '#/components/schemas/CustomerApiSecurityPolicyResponse'
+          type: array
+          title: Security Policies
+        page:
+          anyOf:
+          - $ref: '#/components/schemas/PageMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - security_policies
+      title: CustomerApiSecurityPoliciesResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ActionType:
+      type: string
+      enum:
+      - manage_users_and_policies
+      - send_money
+      title: ActionType
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     CustomerApiSecurityPolicyResponse:
       properties:
         id:
@@ -115,69 +178,6 @@ components:
       - created_time
       - updated_time
       title: CustomerApiSecurityPolicyResponse
-    ActionType:
-      type: string
-      enum:
-      - manage_users_and_policies
-      - send_money
-      title: ActionType
-    PageMetadata:
-      properties:
-        nextOffset:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nextoffset
-          description: Opaque offset identifier.
-          examples:
-          - qwer123454q2f
-      type: object
-      title: PageMetadata
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    CustomerApiSecurityPoliciesResponse:
-      properties:
-        security_policies:
-          items:
-            $ref: '#/components/schemas/CustomerApiSecurityPolicyResponse'
-          type: array
-          title: Security Policies
-        page:
-          anyOf:
-          - $ref: '#/components/schemas/PageMetadata'
-          - type: 'null'
-      type: object
-      required:
-      - security_policies
-      title: CustomerApiSecurityPoliciesResponse
   parameters:
     EntityIdHeader:
       name: x-entity-id
