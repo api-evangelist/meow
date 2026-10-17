@@ -237,21 +237,38 @@ paths:
         - partner:onboarding:write
 components:
   schemas:
-    OnboardingKycStatus:
-      type: string
-      enum:
-      - not_started
-      - pending
-      - action_required
-      - approved
-      - rejected
-      title: OnboardingKycStatus
-      x-enum-varnames:
-      - not_started
-      - pending
-      - action_required
-      - approved
-      - rejected
+    OnboardingDocumentStatus:
+      properties:
+        proof_type:
+          $ref: '#/components/schemas/PublicKybProofType'
+          description: Type of KYB document on file.
+        file_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Name
+          description: Uploaded file name, or null if not yet uploaded.
+        representative_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Representative Id
+          description: The representative this document belongs to, or null for business-level documents.
+      type: object
+      required:
+      - proof_type
+      - file_name
+      title: OnboardingDocumentStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     PartnerDocumentUploadRequest:
       properties:
         proof_type:
@@ -271,227 +288,6 @@ components:
       - proof_type
       - file_name
       title: PartnerDocumentUploadRequest
-    PartnerDocumentUploadResponse:
-      properties:
-        upload_url:
-          type: string
-          title: Upload Url
-          description: Pre-signed URL to upload the file via HTTP PUT.
-        object_key:
-          type: string
-          title: Object Key
-          description: Object key, required when confirming the upload.
-        max_bytes:
-          type: integer
-          title: Max Bytes
-          description: Maximum allowed file size in bytes.
-        expires_in_seconds:
-          type: integer
-          title: Expires In Seconds
-          description: Number of seconds until the upload URL expires.
-      type: object
-      required:
-      - upload_url
-      - object_key
-      - max_bytes
-      - expires_in_seconds
-      title: PartnerDocumentUploadResponse
-    OnboardingAddress:
-      properties:
-        address:
-          type: string
-          maxLength: 900
-          minLength: 1
-          title: Address
-          description: Street address line 1.
-          examples:
-          - 9 Whisker Way
-        address_2:
-          anyOf:
-          - type: string
-            maxLength: 900
-          - type: 'null'
-          title: Address 2
-          description: Street address line 2.
-          examples:
-          - Suite 9
-        city:
-          type: string
-          maxLength: 300
-          minLength: 1
-          title: City
-          description: City name.
-          examples:
-          - San Francisco
-        state:
-          anyOf:
-          - type: string
-            maxLength: 300
-          - type: 'null'
-          title: State
-          description: State or province code.
-          examples:
-          - CA
-        zip:
-          type: string
-          maxLength: 100
-          minLength: 1
-          title: Zip
-          description: Postal or ZIP code.
-          examples:
-          - '94105'
-        country:
-          $ref: '#/components/schemas/CountryCodeAlpha2'
-          description: ISO 3166-1 alpha-2 country code.
-      type: object
-      required:
-      - address
-      - city
-      - zip
-      - country
-      title: OnboardingAddress
-    PartnerKycSubmissionRequest:
-      properties:
-        first_name:
-          type: string
-          minLength: 1
-          title: First Name
-          description: Legal first name.
-          examples:
-          - Felix
-        last_name:
-          type: string
-          minLength: 1
-          title: Last Name
-          description: Legal last name.
-          examples:
-          - Whiskers
-        date_of_birth:
-          $ref: '#/components/schemas/DateString'
-          description: Date of birth (`YYYY-MM-DD`).
-        id_number:
-          type: string
-          format: password
-          title: Id Number
-          description: Government ID number matching `id_type`. For `us_ssn` use nine digits, with or without dashes (123-45-6789 or 123456789); for `us_ssn_last_4` use the last four digits; for non-US ID types provide the number as issued. Formatting characters are stripped before verification.
-          writeOnly: true
-          examples:
-          - 123-45-6789
-        id_type:
-          $ref: '#/components/schemas/ExtPlaidIDNumberType'
-          description: Type of government ID. Defaults to `us_ssn`; non-US representatives pass their country-specific type (e.g. `sg_nric`, `au_passport`, `ca_sin`).
-          default: us_ssn
-        address:
-          $ref: '#/components/schemas/OnboardingAddress'
-          description: Residential address.
-        phone_number:
-          anyOf:
-          - type: string
-            pattern: ^\+[1-9]\d{1,14}$
-          - type: 'null'
-          title: Phone Number
-          description: Phone number in E.164 format (e.g. +14155550123).
-          examples:
-          - '+14155550123'
-        ip:
-          type: string
-          format: ipvanyaddress
-          title: Ip
-          description: IPv4 or IPv6 address of the end user submitting this verification. Forwarded to the identity-verification provider as a fraud signal.
-          examples:
-          - 203.0.113.42
-        user_email:
-          type: string
-          format: email
-          title: User Email
-          description: Email address of the applicant this KYC data belongs to. Must match the `user_email` the application was created with.
-      type: object
-      required:
-      - first_name
-      - last_name
-      - date_of_birth
-      - id_number
-      - address
-      - ip
-      - user_email
-      title: PartnerKycSubmissionRequest
-    PartnerApplicationListResponse:
-      properties:
-        applications:
-          items:
-            $ref: '#/components/schemas/PartnerApplicationResponse'
-          type: array
-          title: Applications
-          description: List of partner applications.
-      type: object
-      required:
-      - applications
-      title: PartnerApplicationListResponse
-    LegalStructure:
-      type: string
-      enum:
-      - ccorp
-      - corp
-      - estate
-      - foreign_entity
-      - llc
-      - llp
-      - lp
-      - nonprofit
-      - partnership
-      - scheme
-      - scorp
-      - soleprop
-      - trust
-      title: LegalStructure
-    PartnerApplicationResponse:
-      properties:
-        entity_id:
-          type: string
-          format: uuid
-          title: Entity Id
-          description: Public ID of the onboarded business entity, stable across the onboarding lifecycle and matching the `entity_id` used in the Customer API, MCP, and webhook payloads.
-        status:
-          $ref: '#/components/schemas/OnboardingApplicationStatus'
-          description: Current onboarding status.
-        business_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Business Name
-          description: Legal business name.
-        created_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: ISO 8601 timestamp of when the entity was created.
-        updated_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: ISO 8601 timestamp of when onboarding was last updated.
-        application_id:
-          type: string
-          format: uuid
-          title: Application Id
-          description: Unique application identifier.
-        partner_reference_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Partner Reference Id
-          description: Your reference ID.
-        onboarding_url:
-          type: string
-          title: Onboarding Url
-          description: URL the applicant opens to complete onboarding.
-      type: object
-      required:
-      - entity_id
-      - status
-      - business_name
-      - created_at
-      - updated_at
-      - application_id
-      - partner_reference_id
-      - onboarding_url
-      title: PartnerApplicationResponse
     ExtPlaidIDNumberType:
       type: string
       enum:
@@ -569,78 +365,6 @@ components:
       - us_ssn
       - us_ssn_last_4
       - za_smart_id
-    PartnerDocumentConfirmResponse:
-      properties:
-        confirmed:
-          type: boolean
-          title: Confirmed
-          description: Whether the document was successfully confirmed.
-        file_name:
-          type: string
-          title: File Name
-          description: Confirmed file name.
-      type: object
-      required:
-      - confirmed
-      - file_name
-      title: PartnerDocumentConfirmResponse
-    OnboardingDocumentStatus:
-      properties:
-        proof_type:
-          $ref: '#/components/schemas/PublicKybProofType'
-          description: Type of KYB document on file.
-        file_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: File Name
-          description: Uploaded file name, or null if not yet uploaded.
-        representative_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Representative Id
-          description: The representative this document belongs to, or null for business-level documents.
-      type: object
-      required:
-      - proof_type
-      - file_name
-      title: OnboardingDocumentStatus
-    PartnerKycSubmissionResponse:
-      properties:
-        application_id:
-          type: string
-          format: uuid
-          title: Application Id
-          description: Unique application identifier.
-        user_email:
-          type: string
-          title: User Email
-          description: Email address of the verified applicant.
-        kyc_status:
-          $ref: '#/components/schemas/OnboardingKycStatus'
-          description: 'Identity verification status after this submission. Verification usually completes asynchronously; poll the application status endpoint for the final result. This polled status has no `action_required` value: attempts the `identity_verification.*` webhook stream reports as `identity_verification.action_required` appear here as `pending` until a new attempt resolves.'
-      type: object
-      required:
-      - application_id
-      - user_email
-      - kyc_status
-      title: PartnerKycSubmissionResponse
-    DateString:
-      type: string
-      format: date
-      title: DateString
-      description: ISO 8601 full-date in the format `YYYY-MM-DD` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     CountryCodeAlpha2:
       type: string
       enum:
@@ -1146,164 +870,60 @@ components:
       - ZA
       - ZM
       - ZW
-    Timestamp:
-      type: string
-      format: date-time
-      title: Timestamp
-      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    ValidationError:
+    OnboardingAddress:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        address:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    OnboardingApplicationStatus:
-      type: string
-      enum:
-      - pending_document_upload
-      - pending_user_action
-      - submitted
-      - under_review
-      - approved
-      - rejected
-      title: OnboardingApplicationStatus
-    PartnerApplicationStatusResponse:
-      properties:
-        entity_id:
-          type: string
-          format: uuid
-          title: Entity Id
-          description: Public ID of the onboarded business entity, stable across the onboarding lifecycle and matching the `entity_id` used in the Customer API, MCP, and webhook payloads.
-        status:
-          $ref: '#/components/schemas/OnboardingApplicationStatus'
-          description: Current onboarding status.
-        business_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Business Name
-          description: Legal business name.
-        created_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: ISO 8601 timestamp of when the entity was created.
-        updated_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: ISO 8601 timestamp of when onboarding was last updated.
-        documents:
-          items:
-            $ref: '#/components/schemas/OnboardingDocumentStatus'
-          type: array
-          title: Documents
-          description: Documents uploaded during onboarding.
-        kyc_status:
-          $ref: '#/components/schemas/OnboardingKycStatus'
-          description: Identity verification status of the primary representative. After you submit KYC data or they complete verification, this moves to `pending` and resolves on its own; poll it to track progress.
-        application_id:
-          type: string
-          format: uuid
-          title: Application Id
-          description: Unique application identifier.
-        partner_reference_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Partner Reference Id
-          description: Your reference ID.
-        onboarding_url:
-          type: string
-          title: Onboarding Url
-          description: URL the applicant opens to complete onboarding.
-      type: object
-      required:
-      - entity_id
-      - status
-      - business_name
-      - created_at
-      - updated_at
-      - documents
-      - kyc_status
-      - application_id
-      - partner_reference_id
-      - onboarding_url
-      title: PartnerApplicationStatusResponse
-    PartnerDocumentConfirmRequest:
-      properties:
-        object_key:
-          type: string
-          title: Object Key
-          description: Object key returned from the upload-url endpoint.
-        proof_type:
-          $ref: '#/components/schemas/PublicKybProofType'
-          description: Type of KYB document being confirmed. Use the same `proof_type` you passed when requesting the upload URL.
-      type: object
-      required:
-      - object_key
-      - proof_type
-      title: PartnerDocumentConfirmRequest
-    PartnerCreateApplicationRequest:
-      properties:
-        business_name:
-          type: string
-          maxLength: 400
-          title: Business Name
-          description: Legal business name.
+          maxLength: 900
+          minLength: 1
+          title: Address
+          description: Street address line 1.
           examples:
-          - Catnip Coffee Co
-        business_date_of_incorporation:
-          $ref: '#/components/schemas/DateString'
-          description: Date the business was incorporated.
-        incorporation_state:
-          anyOf:
-          - $ref: '#/components/schemas/StateCode'
-          - type: 'null'
-          description: US state of incorporation. Required for businesses incorporated in the US; omit for businesses incorporated elsewhere.
-          examples:
-          - DE
-        legal_structure:
-          $ref: '#/components/schemas/LegalStructure'
-          description: Legal structure of the business (e.g. `llc`, `corp`). Businesses incorporated outside the US use `foreign_entity`.
-        business_address:
-          $ref: '#/components/schemas/OnboardingAddress'
-          description: Registered legal business address. Must be in a country where Meow supports business onboarding; unsupported countries are rejected with the full supported list.
-        physical_address:
-          anyOf:
-          - $ref: '#/components/schemas/OnboardingAddress'
-          - type: 'null'
-          description: Primary operating address. Omit it when the business operates at its registered legal address; that address is then used as the physical address too.
-        user_email:
-          type: string
-          format: email
-          title: User Email
-          description: Email address of the primary representative who will own the account.
-        partner_reference_id:
+          - 9 Whisker Way
+        address_2:
           anyOf:
           - type: string
+            maxLength: 900
           - type: 'null'
-          title: Partner Reference Id
-          description: Your own reference ID for this application, used to make creation idempotent.
+          title: Address 2
+          description: Street address line 2.
+          examples:
+          - Suite 9
+        city:
+          type: string
+          maxLength: 300
+          minLength: 1
+          title: City
+          description: City name.
+          examples:
+          - San Francisco
+        state:
+          anyOf:
+          - type: string
+            maxLength: 300
+          - type: 'null'
+          title: State
+          description: State or province code.
+          examples:
+          - CA
+        zip:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Zip
+          description: Postal or ZIP code.
+          examples:
+          - '94105'
+        country:
+          $ref: '#/components/schemas/CountryCodeAlpha2'
+          description: ISO 3166-1 alpha-2 country code.
       type: object
       required:
-      - business_name
-      - business_date_of_incorporation
-      - legal_structure
-      - business_address
-      - user_email
-      title: PartnerCreateApplicationRequest
+      - address
+      - city
+      - zip
+      - country
+      title: OnboardingAddress
     PublicKybProofType:
       type: string
       enum:
@@ -1461,6 +1081,199 @@ components:
       - corporate_structure_chart
       - sanctions_vendor_service_agreement
       - contractual_fund_flow_agreements
+    OnboardingKycStatus:
+      type: string
+      enum:
+      - not_started
+      - pending
+      - action_required
+      - approved
+      - rejected
+      title: OnboardingKycStatus
+      x-enum-varnames:
+      - not_started
+      - pending
+      - action_required
+      - approved
+      - rejected
+    PartnerApplicationListResponse:
+      properties:
+        applications:
+          items:
+            $ref: '#/components/schemas/PartnerApplicationResponse'
+          type: array
+          title: Applications
+          description: List of partner applications.
+      type: object
+      required:
+      - applications
+      title: PartnerApplicationListResponse
+    DateString:
+      type: string
+      format: date
+      title: DateString
+      description: ISO 8601 full-date in the format `YYYY-MM-DD` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    PartnerKycSubmissionResponse:
+      properties:
+        application_id:
+          type: string
+          format: uuid
+          title: Application Id
+          description: Unique application identifier.
+        user_email:
+          type: string
+          title: User Email
+          description: Email address of the verified applicant.
+        kyc_status:
+          $ref: '#/components/schemas/OnboardingKycStatus'
+          description: 'Identity verification status after this submission. Verification usually completes asynchronously; poll the application status endpoint for the final result. This polled status has no `action_required` value: attempts the `identity_verification.*` webhook stream reports as `identity_verification.action_required` appear here as `pending` until a new attempt resolves.'
+      type: object
+      required:
+      - application_id
+      - user_email
+      - kyc_status
+      title: PartnerKycSubmissionResponse
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    PartnerDocumentConfirmRequest:
+      properties:
+        object_key:
+          type: string
+          title: Object Key
+          description: Object key returned from the upload-url endpoint.
+        proof_type:
+          $ref: '#/components/schemas/PublicKybProofType'
+          description: Type of KYB document being confirmed. Use the same `proof_type` you passed when requesting the upload URL.
+      type: object
+      required:
+      - object_key
+      - proof_type
+      title: PartnerDocumentConfirmRequest
+    PartnerKycSubmissionRequest:
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          title: First Name
+          description: Legal first name.
+          examples:
+          - Felix
+        last_name:
+          type: string
+          minLength: 1
+          title: Last Name
+          description: Legal last name.
+          examples:
+          - Whiskers
+        date_of_birth:
+          $ref: '#/components/schemas/DateString'
+          description: Date of birth (`YYYY-MM-DD`).
+        id_number:
+          type: string
+          format: password
+          title: Id Number
+          description: Government ID number matching `id_type`. For `us_ssn` use nine digits, with or without dashes (123-45-6789 or 123456789); for `us_ssn_last_4` use the last four digits; for non-US ID types provide the number as issued. Formatting characters are stripped before verification.
+          writeOnly: true
+          examples:
+          - 123-45-6789
+        id_type:
+          $ref: '#/components/schemas/ExtPlaidIDNumberType'
+          description: Type of government ID. Defaults to `us_ssn`; non-US representatives pass their country-specific type (e.g. `sg_nric`, `au_passport`, `ca_sin`).
+          default: us_ssn
+        address:
+          $ref: '#/components/schemas/OnboardingAddress'
+          description: Residential address.
+        phone_number:
+          anyOf:
+          - type: string
+            pattern: ^\+[1-9]\d{1,14}$
+          - type: 'null'
+          title: Phone Number
+          description: Phone number in E.164 format (e.g. +14155550123).
+          examples:
+          - '+14155550123'
+        ip:
+          type: string
+          format: ipvanyaddress
+          title: Ip
+          description: IPv4 or IPv6 address of the end user submitting this verification. Forwarded to the identity-verification provider as a fraud signal.
+          examples:
+          - 203.0.113.42
+        user_email:
+          type: string
+          format: email
+          title: User Email
+          description: Email address of the applicant this KYC data belongs to. Must match the `user_email` the application was created with.
+      type: object
+      required:
+      - first_name
+      - last_name
+      - date_of_birth
+      - id_number
+      - address
+      - ip
+      - user_email
+      title: PartnerKycSubmissionRequest
+    PartnerDocumentUploadResponse:
+      properties:
+        upload_url:
+          type: string
+          title: Upload Url
+          description: Pre-signed URL to upload the file via HTTP PUT.
+        object_key:
+          type: string
+          title: Object Key
+          description: Object key, required when confirming the upload.
+        max_bytes:
+          type: integer
+          title: Max Bytes
+          description: Maximum allowed file size in bytes.
+        expires_in_seconds:
+          type: integer
+          title: Expires In Seconds
+          description: Number of seconds until the upload URL expires.
+      type: object
+      required:
+      - upload_url
+      - object_key
+      - max_bytes
+      - expires_in_seconds
+      title: PartnerDocumentUploadResponse
+    LegalStructure:
+      type: string
+      enum:
+      - ccorp
+      - corp
+      - estate
+      - foreign_entity
+      - llc
+      - llp
+      - lp
+      - nonprofit
+      - partnership
+      - scheme
+      - scorp
+      - soleprop
+      - trust
+      title: LegalStructure
+    PartnerDocumentConfirmResponse:
+      properties:
+        confirmed:
+          type: boolean
+          title: Confirmed
+          description: Whether the document was successfully confirmed.
+        file_name:
+          type: string
+          title: File Name
+          description: Confirmed file name.
+      type: object
+      required:
+      - confirmed
+      - file_name
+      title: PartnerDocumentConfirmResponse
     StateCode:
       type: string
       enum:
@@ -1570,6 +1383,193 @@ components:
       - WI
       - WY
       - PR
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PartnerCreateApplicationRequest:
+      properties:
+        business_name:
+          type: string
+          maxLength: 400
+          title: Business Name
+          description: Legal business name.
+          examples:
+          - Catnip Coffee Co
+        business_date_of_incorporation:
+          $ref: '#/components/schemas/DateString'
+          description: Date the business was incorporated.
+        incorporation_state:
+          anyOf:
+          - $ref: '#/components/schemas/StateCode'
+          - type: 'null'
+          description: US state of incorporation. Required for businesses incorporated in the US; omit for businesses incorporated elsewhere.
+          examples:
+          - DE
+        legal_structure:
+          $ref: '#/components/schemas/LegalStructure'
+          description: Legal structure of the business (e.g. `llc`, `corp`). Businesses incorporated outside the US use `foreign_entity`.
+        business_address:
+          $ref: '#/components/schemas/OnboardingAddress'
+          description: Registered legal business address. Must be in a country where Meow supports business onboarding; unsupported countries are rejected with the full supported list.
+        physical_address:
+          anyOf:
+          - $ref: '#/components/schemas/OnboardingAddress'
+          - type: 'null'
+          description: Primary operating address. Omit it when the business operates at its registered legal address; that address is then used as the physical address too.
+        user_email:
+          type: string
+          format: email
+          title: User Email
+          description: Email address of the primary representative who will own the account.
+        partner_reference_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Partner Reference Id
+          description: Your own reference ID for this application, used to make creation idempotent.
+      type: object
+      required:
+      - business_name
+      - business_date_of_incorporation
+      - legal_structure
+      - business_address
+      - user_email
+      title: PartnerCreateApplicationRequest
+    PartnerApplicationStatusResponse:
+      properties:
+        entity_id:
+          type: string
+          format: uuid
+          title: Entity Id
+          description: Public ID of the onboarded business entity, stable across the onboarding lifecycle and matching the `entity_id` used in the Customer API, MCP, and webhook payloads.
+        status:
+          $ref: '#/components/schemas/OnboardingApplicationStatus'
+          description: Current onboarding status.
+        business_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Business Name
+          description: Legal business name.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when the entity was created.
+        updated_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when onboarding was last updated.
+        documents:
+          items:
+            $ref: '#/components/schemas/OnboardingDocumentStatus'
+          type: array
+          title: Documents
+          description: Documents uploaded during onboarding.
+        kyc_status:
+          $ref: '#/components/schemas/OnboardingKycStatus'
+          description: Identity verification status of the primary representative. After you submit KYC data or they complete verification, this moves to `pending` and resolves on its own; poll it to track progress.
+        application_id:
+          type: string
+          format: uuid
+          title: Application Id
+          description: Unique application identifier.
+        partner_reference_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Partner Reference Id
+          description: Your reference ID.
+        onboarding_url:
+          type: string
+          title: Onboarding Url
+          description: URL the applicant opens to complete onboarding.
+      type: object
+      required:
+      - entity_id
+      - status
+      - business_name
+      - created_at
+      - updated_at
+      - documents
+      - kyc_status
+      - application_id
+      - partner_reference_id
+      - onboarding_url
+      title: PartnerApplicationStatusResponse
+    OnboardingApplicationStatus:
+      type: string
+      enum:
+      - pending_document_upload
+      - pending_user_action
+      - submitted
+      - under_review
+      - approved
+      - rejected
+      title: OnboardingApplicationStatus
+    PartnerApplicationResponse:
+      properties:
+        entity_id:
+          type: string
+          format: uuid
+          title: Entity Id
+          description: Public ID of the onboarded business entity, stable across the onboarding lifecycle and matching the `entity_id` used in the Customer API, MCP, and webhook payloads.
+        status:
+          $ref: '#/components/schemas/OnboardingApplicationStatus'
+          description: Current onboarding status.
+        business_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Business Name
+          description: Legal business name.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when the entity was created.
+        updated_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when onboarding was last updated.
+        application_id:
+          type: string
+          format: uuid
+          title: Application Id
+          description: Unique application identifier.
+        partner_reference_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Partner Reference Id
+          description: Your reference ID.
+        onboarding_url:
+          type: string
+          title: Onboarding Url
+          description: URL the applicant opens to complete onboarding.
+      type: object
+      required:
+      - entity_id
+      - status
+      - business_name
+      - created_at
+      - updated_at
+      - application_id
+      - partner_reference_id
+      - onboarding_url
+      title: PartnerApplicationResponse
   securitySchemes:
     apiKeyAuth:
       type: apiKey

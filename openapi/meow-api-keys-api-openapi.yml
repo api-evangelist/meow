@@ -64,90 +64,6 @@ paths:
         - accounts:read
 components:
   schemas:
-    CurrentApiKeyResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: The API key's opaque identifier.
-        key_type:
-          $ref: '#/components/schemas/ApiKeyType'
-          description: The type of API key.
-        scopes:
-          items:
-            $ref: '#/components/schemas/ApiKeyScope'
-          type: array
-          title: Scopes
-          description: The scopes granted to this key, in order.
-        owner_entity:
-          anyOf:
-          - $ref: '#/components/schemas/ApiKeyEntityInfo'
-          - type: 'null'
-          description: The entity associated with this key, when applicable.
-        owner_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Owner Email
-          description: Email address of the user who owns this key, when applicable.
-      type: object
-      required:
-      - id
-      - key_type
-      - scopes
-      title: CurrentApiKeyResponse
-      description: Metadata describing the API key used for the current request.
-      example:
-        id: a_AEVN-4eFgihjZr8-BH3g
-        key_type: entity
-        owner_entity:
-          entity_id: 94a60dc7-93ab-4fed-8b2f-4008cdf7289b
-          entity_name: AMITY
-        scopes:
-        - accounts:read
-        - accounts:transactions
-        - transfers:book:write
-    ApiKeyScope:
-      type: string
-      enum:
-      - accounts:read
-      - accounts:write
-      - accounts:payment-networks
-      - accounts:transactions
-      - accounts:balances
-      - accounts:statements
-      - accounts:tax-documents
-      - entity:create
-      - transfers:crypto:write
-      - transfers:usdc:write
-      - transfers:ach:write
-      - transfers:wire:write
-      - transfers:book:write
-      - contacts:read
-      - contacts:write
-      - billing:products:read
-      - billing:products:write
-      - billing:customers:read
-      - billing:customers:write
-      - billing:invoices:read
-      - billing:invoices:write
-      - billing:accounts:read
-      - billpay:read
-      - billpay:write
-      - onboarding:read
-      - onboarding:write
-      - cards:read
-      - cards:write
-      - webhooks:read
-      - webhooks:write
-      - partner:onboarding:read
-      - partner:onboarding:write
-      - partner:webhooks:read
-      - partner:webhooks:write
-      - simulations:write
-      - banking:limits:read
-      - banking:limits:write
-      title: ApiKeyScope
     UserRoleEnum:
       type: string
       enum:
@@ -162,6 +78,28 @@ components:
       - AP/AR Bookkeeper
       - None
       title: UserRoleEnum
+    ApiKeyEntityInfo:
+      properties:
+        entity_id:
+          type: string
+          title: Entity Id
+          description: The entity's public identifier.
+        entity_name:
+          type: string
+          title: Entity Name
+          description: The entity's display name.
+      type: object
+      required:
+      - entity_id
+      - entity_name
+      title: ApiKeyEntityInfo
+      description: Identifying information for the entity that owns an API key.
+    ApiKeyType:
+      type: string
+      enum:
+      - entity
+      - user
+      title: ApiKeyType
     ListAccessibleEntitiesResponse:
       properties:
         entities:
@@ -213,34 +151,96 @@ components:
       - access_type
       title: AccessibleEntity
       description: An entity your API key can access.
+    ApiKeyScope:
+      type: string
+      enum:
+      - accounts:read
+      - accounts:write
+      - accounts:payment-networks
+      - accounts:transactions
+      - accounts:balances
+      - accounts:statements
+      - accounts:tax-documents
+      - entity:create
+      - transfers:crypto:write
+      - transfers:usdc:write
+      - transfers:ach:write
+      - transfers:wire:write
+      - transfers:book:write
+      - contacts:read
+      - contacts:write
+      - billing:products:read
+      - billing:products:write
+      - billing:customers:read
+      - billing:customers:write
+      - billing:invoices:read
+      - billing:invoices:write
+      - billing:accounts:read
+      - billpay:read
+      - billpay:write
+      - onboarding:read
+      - onboarding:write
+      - cards:read
+      - cards:write
+      - webhooks:read
+      - webhooks:write
+      - partner:onboarding:read
+      - partner:onboarding:write
+      - partner:webhooks:read
+      - partner:webhooks:write
+      - simulations:write
+      - banking:limits:read
+      - banking:limits:write
+      title: ApiKeyScope
     AccessibleEntityAccessType:
       type: string
       enum:
       - global_api_key
       - entity_api_key
       title: AccessibleEntityAccessType
-    ApiKeyType:
-      type: string
-      enum:
-      - entity
-      - user
-      title: ApiKeyType
-    ApiKeyEntityInfo:
+    CurrentApiKeyResponse:
       properties:
-        entity_id:
+        id:
           type: string
-          title: Entity Id
-          description: The entity's public identifier.
-        entity_name:
-          type: string
-          title: Entity Name
-          description: The entity's display name.
+          title: Id
+          description: The API key's opaque identifier.
+        key_type:
+          $ref: '#/components/schemas/ApiKeyType'
+          description: The type of API key.
+        scopes:
+          items:
+            $ref: '#/components/schemas/ApiKeyScope'
+          type: array
+          title: Scopes
+          description: The scopes granted to this key, in order.
+        owner_entity:
+          anyOf:
+          - $ref: '#/components/schemas/ApiKeyEntityInfo'
+          - type: 'null'
+          description: The entity associated with this key, when applicable.
+        owner_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Owner Email
+          description: Email address of the user who owns this key, when applicable.
       type: object
       required:
-      - entity_id
-      - entity_name
-      title: ApiKeyEntityInfo
-      description: Identifying information for the entity that owns an API key.
+      - id
+      - key_type
+      - scopes
+      title: CurrentApiKeyResponse
+      description: Metadata describing the API key used for the current request.
+      example:
+        id: a_AEVN-4eFgihjZr8-BH3g
+        key_type: entity
+        owner_entity:
+          entity_id: 94a60dc7-93ab-4fed-8b2f-4008cdf7289b
+          entity_name: AMITY
+        scopes:
+        - accounts:read
+        - accounts:transactions
+        - transfers:book:write
   securitySchemes:
     apiKeyAuth:
       type: apiKey

@@ -336,127 +336,52 @@ paths:
       - $ref: '#/components/parameters/EntityIdHeader'
 components:
   schemas:
-    SimulateCardIncrementRequest:
+    OnboardingDocumentStatus:
       properties:
-        increment_amount:
+        proof_type:
+          $ref: '#/components/schemas/PublicKybProofType'
+          description: Type of KYB document on file.
+        file_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Name
+          description: Uploaded file name, or null if not yet uploaded.
+        representative_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Representative Id
+          description: The representative this document belongs to, or null for business-level documents.
+      type: object
+      required:
+      - proof_type
+      - file_name
+      title: OnboardingDocumentStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SimulateCardReverseRequest:
+      properties:
+        reverse_amount:
           anyOf:
           - type: number
             maximum: 20000000.0
             exclusiveMinimum: 0.0
           - type: string
             pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
-          title: Increment Amount
-          description: Amount to increase the authorization by, in dollars.
-        is_amount_controllable:
-          anyOf:
-          - type: boolean
           - type: 'null'
-          title: Is Amount Controllable
-          description: Whether the final captured amount may differ from the incremented amount.
+          title: Reverse Amount
+          description: Amount to reverse, in dollars. Defaults to the full authorized amount.
       type: object
-      required:
-      - increment_amount
-      title: SimulateCardIncrementRequest
-    OnboardingRepresentativeKyc:
-      properties:
-        representative_id:
-          type: string
-          format: uuid
-          title: Representative Id
-          description: ID of the representative.
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-          description: Legal first name.
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: Legal last name.
-        email:
-          type: string
-          title: Email
-          description: Representative's email address.
-        is_primary:
-          type: boolean
-          title: Is Primary
-          description: Whether they are the primary representative (signer).
-        is_beneficial_owner:
-          type: boolean
-          title: Is Beneficial Owner
-          description: Whether they are a beneficial owner.
-        percent_ownership:
-          anyOf:
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          - type: 'null'
-          title: Percent Ownership
-          description: Ownership percentage, if any.
-        kyc_status:
-          $ref: '#/components/schemas/OnboardingKycStatus'
-          description: 'This representative''s identity verification status, kept consistent with the `identity_verification.*` webhook events. `action_required` means their verification needs another step from them (for example, a document or selfie): create a link with `POST /entities/{entity_id}/representatives/{representative_id}/verification-link` and share it so they can finish.'
-      type: object
-      required:
-      - representative_id
-      - first_name
-      - last_name
-      - email
-      - is_primary
-      - is_beneficial_owner
-      - percent_ownership
-      - kyc_status
-      title: OnboardingRepresentativeKyc
-    SimulateFundFinancialAccountResponse:
-      properties:
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: The simulated funding amount, in dollars.
-        status:
-          $ref: '#/components/schemas/SimulatedTransferStatus'
-          description: The status of the simulated funding.
-        created_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: When the simulation was submitted.
-      type: object
-      required:
-      - amount
-      - status
-      - created_at
-      title: SimulateFundFinancialAccountResponse
-    SimulateCardAuthorizationResponse:
-      properties:
-        authorization_id:
-          type: string
-          title: Authorization Id
-          description: The authorization identifier. Pass this to capture, increment, or reverse the authorization.
-        status:
-          $ref: '#/components/schemas/SimulatedCardAuthorizationStatus'
-          description: The authorization status.
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: The authorization amount, in dollars.
-        approved:
-          type: boolean
-          title: Approved
-          description: Whether the authorization was approved.
-        created_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: When the authorization was created.
-      type: object
-      required:
-      - authorization_id
-      - status
-      - amount
-      - approved
-      - created_at
-      title: SimulateCardAuthorizationResponse
+      title: SimulateCardReverseRequest
     EntityCheckingAccountProduct:
       type: string
       enum:
@@ -466,111 +391,6 @@ components:
       x-enum-varnames:
       - grasshopper
       - crb
-    OnboardingKycStatus:
-      type: string
-      enum:
-      - not_started
-      - pending
-      - action_required
-      - approved
-      - rejected
-      title: OnboardingKycStatus
-      x-enum-varnames:
-      - not_started
-      - pending
-      - action_required
-      - approved
-      - rejected
-    SimulatedInboundRail:
-      type: string
-      enum:
-      - ach
-      - wire
-      - rtp
-      - fednow
-      title: SimulatedInboundRail
-      x-enum-varnames:
-      - ach
-      - wire
-      - rtp
-      - fednow
-    SimulatedTransferStatus:
-      type: string
-      enum:
-      - submitted
-      title: SimulatedTransferStatus
-      x-enum-varnames:
-      - submitted
-    SimulatedCardAuthorizationMethod:
-      type: string
-      enum:
-      - chip
-      - contactless
-      - keyed_in
-      - online
-      - swipe
-      title: SimulatedCardAuthorizationMethod
-      x-enum-varnames:
-      - chip
-      - contactless
-      - keyed_in
-      - online
-      - swipe
-    OnboardingStep:
-      type: string
-      enum:
-      - gather_business_context
-      - collect_user_info
-      - collect_business_addresses
-      - collect_business_details
-      - collect_additional_details
-      - complete_due_diligence
-      - upload_documents
-      - manage_representatives
-      - complete_identity_verification
-      - accept_terms
-      - submit_application
-      - monitor_review
-      - resolve_info_requests
-      title: OnboardingStep
-    SimulatedCardWallet:
-      type: string
-      enum:
-      - apple_pay
-      - google_pay
-      - samsung_pay
-      title: SimulatedCardWallet
-      x-enum-varnames:
-      - apple_pay
-      - google_pay
-      - samsung_pay
-    SimulatedCardAuthorizationStatus:
-      type: string
-      enum:
-      - pending
-      - closed
-      - expired
-      - reversed
-      title: SimulatedCardAuthorizationStatus
-      x-enum-varnames:
-      - pending
-      - closed
-      - expired
-      - reversed
-    SimulateCardRefundRequest:
-      properties:
-        refund_amount:
-          anyOf:
-          - type: number
-            maximum: 20000000.0
-            exclusiveMinimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
-          - type: 'null'
-          title: Refund Amount
-          description: Amount to refund, in dollars. Defaults to the full transaction amount.
-      type: object
-      title: SimulateCardRefundRequest
     SimulatedCardMerchant:
       properties:
         name:
@@ -635,316 +455,111 @@ components:
           description: Whether to close the authorization after capturing.
       type: object
       title: SimulateCardCaptureRequest
-    SimulateFundFinancialAccountRequest:
-      properties:
-        amount:
-          anyOf:
-          - type: number
-            maximum: 20000000.0
-            exclusiveMinimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
-          title: Amount
-          description: Amount to fund the account with, in dollars.
-      type: object
-      required:
-      - amount
-      title: SimulateFundFinancialAccountRequest
-    SimulateCardTransactionResponse:
-      properties:
-        transaction_id:
-          type: string
-          format: uuid
-          title: Transaction Id
-          description: The identifier of the transaction that was refunded, as returned by the list card transactions endpoint.
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: The refunded amount, in dollars.
-        currency:
-          $ref: '#/components/schemas/Iso4217Code'
-          description: The ISO 4217 currency of the transaction.
-        created_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: When the transaction was created.
-      type: object
-      required:
-      - transaction_id
-      - amount
-      - currency
-      - created_at
-      title: SimulateCardTransactionResponse
-    SimulateInboundTransferResponse:
-      properties:
-        account_id:
-          type: string
-          title: Account Id
-          description: The cash account the simulated funds were credited to.
-        amount:
-          type: string
-          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
-          title: Amount
-          description: The simulated transfer amount, in dollars.
-        rail:
-          $ref: '#/components/schemas/SimulatedInboundRail'
-          description: The payment rail the transfer was simulated over.
-        status:
-          $ref: '#/components/schemas/SimulatedTransferStatus'
-          description: The status of the simulated transfer.
-        created_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: When the simulation was submitted.
-      type: object
-      required:
-      - account_id
-      - amount
-      - rail
-      - status
-      - created_at
-      title: SimulateInboundTransferResponse
-    OnboardingDocumentStatus:
-      properties:
-        proof_type:
-          $ref: '#/components/schemas/PublicKybProofType'
-          description: Type of KYB document on file.
-        file_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: File Name
-          description: Uploaded file name, or null if not yet uploaded.
-        representative_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Representative Id
-          description: The representative this document belongs to, or null for business-level documents.
-      type: object
-      required:
-      - proof_type
-      - file_name
-      title: OnboardingDocumentStatus
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    SimulateInboundTransferRequest:
-      properties:
-        account_id:
-          type: string
-          title: Account Id
-          description: The cash account ID, exactly as returned by the list accounts endpoint (for example, `cash_account_<uuid>`).
-        rail:
-          $ref: '#/components/schemas/SimulatedInboundRail'
-          description: The payment rail to simulate the inbound transfer over.
-        amount:
-          anyOf:
-          - type: number
-            maximum: 20000000.0
-            exclusiveMinimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
-          title: Amount
-          description: The transfer amount, in dollars.
-      type: object
-      required:
-      - account_id
-      - rail
-      - amount
-      title: SimulateInboundTransferRequest
-    Iso4217Code:
+    SimulatedCardWallet:
       type: string
       enum:
-      - AED
-      - AFN
-      - ALL
-      - AMD
-      - ANG
-      - AOA
-      - ARS
-      - AUD
-      - AWG
-      - AZN
-      - BAM
-      - BBD
-      - BDT
-      - BGN
-      - BHD
-      - BIF
-      - BMD
-      - BND
-      - BOB
-      - BOV
-      - BRL
-      - BSD
-      - BTN
-      - BWP
-      - BYN
-      - BZD
-      - CAD
-      - CDF
-      - CHE
-      - CHF
-      - CHW
-      - CLF
-      - CLP
-      - CNY
-      - COP
-      - COU
-      - CRC
-      - CUC
-      - CUP
-      - CVE
-      - CZK
-      - DJF
-      - DKK
-      - DOP
-      - DZD
-      - EGP
-      - ERN
-      - ETB
-      - EUR
-      - FJD
-      - FKP
-      - GBP
-      - GEL
-      - GHS
-      - GIP
-      - GMD
-      - GNF
-      - GTQ
-      - GYD
-      - HKD
-      - HNL
-      - HRK
-      - HTG
-      - HUF
-      - IDR
-      - ILS
-      - INR
-      - IQD
-      - IRR
-      - ISK
-      - JMD
-      - JOD
-      - JPY
-      - KES
-      - KGS
-      - KHR
-      - KMF
-      - KPW
-      - KRW
-      - KWD
-      - KYD
-      - KZT
-      - LAK
-      - LBP
-      - LKR
-      - LRD
-      - LSL
-      - LYD
-      - MAD
-      - MDL
-      - MGA
-      - MKD
-      - MMK
-      - MNT
-      - MOP
-      - MRU
-      - MUR
-      - MVR
-      - MWK
-      - MXN
-      - MXV
-      - MYR
-      - MZN
-      - NAD
-      - NGN
-      - NIO
-      - NOK
-      - NPR
-      - NZD
-      - OMR
-      - PAB
-      - PEN
-      - PGK
-      - PHP
-      - PKR
-      - PLN
-      - PYG
-      - QAR
-      - RON
-      - RSD
-      - RUB
-      - RWF
-      - SAR
-      - SBD
-      - SCR
-      - SDG
-      - SLE
-      - SEK
-      - SGD
-      - SHP
-      - SLL
-      - SOS
-      - SRD
-      - SSP
-      - STN
-      - SVC
-      - SYP
-      - SZL
-      - THB
-      - TJS
-      - TMT
-      - TND
-      - TOP
-      - TRY
-      - TTD
-      - TWD
-      - TZS
-      - UAH
-      - UGX
-      - USD
-      - USN
-      - UYI
-      - UYU
-      - UYW
-      - UZS
-      - VED
-      - VES
-      - VND
-      - VUV
-      - WST
-      - XAF
-      - XAG
-      - XAU
-      - XBA
-      - XBB
-      - XBC
-      - XBD
-      - XCD
-      - XDR
-      - XOF
-      - XPD
-      - XPF
-      - XPT
-      - XSU
-      - XTS
-      - XUA
-      - XXX
-      - YER
-      - ZAR
-      - ZMW
-      - ZWG
-      - ZWL
-      title: Iso4217Code
+      - apple_pay
+      - google_pay
+      - samsung_pay
+      title: SimulatedCardWallet
+      x-enum-varnames:
+      - apple_pay
+      - google_pay
+      - samsung_pay
+    SimulateCardAuthorizationResponse:
+      properties:
+        authorization_id:
+          type: string
+          title: Authorization Id
+          description: The authorization identifier. Pass this to capture, increment, or reverse the authorization.
+        status:
+          $ref: '#/components/schemas/SimulatedCardAuthorizationStatus'
+          description: The authorization status.
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The authorization amount, in dollars.
+        approved:
+          type: boolean
+          title: Approved
+          description: Whether the authorization was approved.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: When the authorization was created.
+      type: object
+      required:
+      - authorization_id
+      - status
+      - amount
+      - approved
+      - created_at
+      title: SimulateCardAuthorizationResponse
+    SimulatedCardAuthorizationStatus:
+      type: string
+      enum:
+      - pending
+      - closed
+      - expired
+      - reversed
+      title: SimulatedCardAuthorizationStatus
+      x-enum-varnames:
+      - pending
+      - closed
+      - expired
+      - reversed
+    SimulateCardIncrementRequest:
+      properties:
+        increment_amount:
+          anyOf:
+          - type: number
+            maximum: 20000000.0
+            exclusiveMinimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Increment Amount
+          description: Amount to increase the authorization by, in dollars.
+        is_amount_controllable:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Amount Controllable
+          description: Whether the final captured amount may differ from the incremented amount.
+      type: object
+      required:
+      - increment_amount
+      title: SimulateCardIncrementRequest
+    OnboardingNextStep:
+      properties:
+        step:
+          $ref: '#/components/schemas/OnboardingStep'
+          description: The onboarding step the application is currently on.
+        phase:
+          $ref: '#/components/schemas/OnboardingPhase'
+          description: Coarse onboarding phase (collecting info, ready to submit, or submitted).
+        missing:
+          items:
+            type: string
+          type: array
+          title: Missing
+          description: Items you still need to provide to advance past the current step. Empty once the step is satisfied.
+        required_proof_types:
+          items:
+            $ref: '#/components/schemas/PublicKybProofType'
+          type: array
+          title: Required Proof Types
+          description: KYB documents you still owe, as `proof_type` values to pass to the document upload endpoint. For a non-US business this usually includes `incorporation`, `shareholder_registry` (your shareholder registry or register of members), and `officer_registry` (your register of directors). Empty once every required document is on file.
+        can_submit:
+          type: boolean
+          title: Can Submit
+          description: Whether all requirements are met and the application is ready to be submitted for review.
+      type: object
+      required:
+      - step
+      - phase
+      - missing
+      - can_submit
+      title: OnboardingNextStep
     CountryCodeAlpha2:
       type: string
       enum:
@@ -1450,215 +1065,21 @@ components:
       - ZA
       - ZM
       - ZW
-    SimulateCardReverseRequest:
-      properties:
-        reverse_amount:
-          anyOf:
-          - type: number
-            maximum: 20000000.0
-            exclusiveMinimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
-          - type: 'null'
-          title: Reverse Amount
-          description: Amount to reverse, in dollars. Defaults to the full authorized amount.
-      type: object
-      title: SimulateCardReverseRequest
-    Timestamp:
-      type: string
-      format: date-time
-      title: Timestamp
-      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
-    EntityOnboardingStatusResponse:
-      properties:
-        entity_id:
-          type: string
-          format: uuid
-          title: Entity Id
-          description: Public ID of the onboarded business entity, stable across the onboarding lifecycle and matching the `entity_id` used in the Customer API, MCP, and webhook payloads.
-        status:
-          $ref: '#/components/schemas/OnboardingApplicationStatus'
-          description: Current onboarding status.
-        business_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Business Name
-          description: Legal business name.
-        created_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: ISO 8601 timestamp of when the entity was created.
-        updated_at:
-          $ref: '#/components/schemas/Timestamp'
-          description: ISO 8601 timestamp of when onboarding was last updated.
-        documents:
-          items:
-            $ref: '#/components/schemas/OnboardingDocumentStatus'
-          type: array
-          title: Documents
-          description: Documents uploaded during onboarding.
-        kyc_status:
-          $ref: '#/components/schemas/OnboardingKycStatus'
-          description: 'Identity verification status of the primary representative. After you submit KYC data or they complete verification, this moves to `pending` and resolves on its own; poll it to track progress. `action_required` means their verification needs another step from them (for example, a document): create a link with `POST /entities/{entity_id}/representatives/{representative_id}/verification-link` and share it so they can finish. See `representatives` for every representative''s status.'
-        onboarding_type:
-          $ref: '#/components/schemas/PublicOnboardingType'
-          description: How this entity was onboarded (e.g. `api`, `smb`, `partner`).
-        next_step:
-          $ref: '#/components/schemas/OnboardingNextStep'
-          description: 'What you must do next: the current onboarding step, the items still missing for it, and whether the application is ready to be submitted for review.'
-        representatives:
-          items:
-            $ref: '#/components/schemas/OnboardingRepresentativeKyc'
-          type: array
-          title: Representatives
-          description: Every representative on the application with their identity verification (KYC) status. The top-level `kyc_status` reflects the primary representative; the application can only be approved once every representative is approved.
-        consent_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Consent Url
-          description: Link where the primary representative reviews and accepts the required agreements and disclosures in their browser. Populated once the application has been submitted; share it with the primary representative. The link needs no login and anyone holding it can accept on the business's behalf, so treat it as a secret.
-      type: object
-      required:
-      - entity_id
-      - status
-      - business_name
-      - created_at
-      - updated_at
-      - documents
-      - kyc_status
-      - onboarding_type
-      - next_step
-      - representatives
-      - consent_url
-      title: EntityOnboardingStatusResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    SimulateApplicationApprovalRequest:
-      properties:
-        banking_account_product_type:
-          $ref: '#/components/schemas/EntityCheckingAccountProduct'
-          description: The checking account product to open once the application is approved. Defaults to `grasshopper`.
-          default: grasshopper
-      type: object
-      title: SimulateApplicationApprovalRequest
-    OnboardingApplicationStatus:
+    SimulatedCardAuthorizationMethod:
       type: string
       enum:
-      - pending_document_upload
-      - pending_user_action
-      - submitted
-      - under_review
-      - approved
-      - rejected
-      title: OnboardingApplicationStatus
-    OnboardingNextStep:
-      properties:
-        step:
-          $ref: '#/components/schemas/OnboardingStep'
-          description: The onboarding step the application is currently on.
-        phase:
-          $ref: '#/components/schemas/OnboardingPhase'
-          description: Coarse onboarding phase (collecting info, ready to submit, or submitted).
-        missing:
-          items:
-            type: string
-          type: array
-          title: Missing
-          description: Items you still need to provide to advance past the current step. Empty once the step is satisfied.
-        required_proof_types:
-          items:
-            $ref: '#/components/schemas/PublicKybProofType'
-          type: array
-          title: Required Proof Types
-          description: KYB documents you still owe, as `proof_type` values to pass to the document upload endpoint. For a non-US business this usually includes `incorporation`, `shareholder_registry` (your shareholder registry or register of members), and `officer_registry` (your register of directors). Empty once every required document is on file.
-        can_submit:
-          type: boolean
-          title: Can Submit
-          description: Whether all requirements are met and the application is ready to be submitted for review.
-      type: object
-      required:
-      - step
-      - phase
-      - missing
-      - can_submit
-      title: OnboardingNextStep
-    PublicOnboardingType:
-      type: string
-      enum:
-      - api
-      - smb
-      - mcp
-      - partner
-      title: PublicOnboardingType
+      - chip
+      - contactless
+      - keyed_in
+      - online
+      - swipe
+      title: SimulatedCardAuthorizationMethod
       x-enum-varnames:
-      - api
-      - smb
-      - mcp
-      - partner
-    SimulateCardAuthorizationRequest:
-      properties:
-        card_id:
-          type: string
-          format: uuid
-          title: Card Id
-          description: The card to authorize against, as returned by Create Card.
-        amount:
-          anyOf:
-          - type: number
-            maximum: 20000000.0
-            exclusiveMinimum: 0.0
-          - type: string
-            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
-          title: Amount
-          description: The authorization amount, in dollars.
-        currency:
-          $ref: '#/components/schemas/Iso4217Code'
-          description: The ISO 4217 currency of the authorization.
-          default: USD
-        merchant:
-          $ref: '#/components/schemas/SimulatedCardMerchant'
-          description: The merchant presenting the authorization.
-        is_amount_controllable:
-          type: boolean
-          title: Is Amount Controllable
-          description: Whether the final captured amount may differ from the requested amount (for example, partial captures or added tips).
-          default: true
-        authorization_method:
-          anyOf:
-          - $ref: '#/components/schemas/SimulatedCardAuthorizationMethod'
-          - type: 'null'
-          description: How the card was presented for the authorization.
-        wallet:
-          anyOf:
-          - $ref: '#/components/schemas/SimulatedCardWallet'
-          - type: 'null'
-          description: The digital wallet used, if any.
-      type: object
-      required:
-      - card_id
-      - amount
-      - merchant
-      title: SimulateCardAuthorizationRequest
+      - chip
+      - contactless
+      - keyed_in
+      - online
+      - swipe
     PublicKybProofType:
       type: string
       enum:
@@ -1816,6 +1237,423 @@ components:
       - corporate_structure_chart
       - sanctions_vendor_service_agreement
       - contractual_fund_flow_agreements
+    Iso4217Code:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BOV
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHE
+      - CHF
+      - CHW
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - COU
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SLE
+      - SEK
+      - SGD
+      - SHP
+      - SLL
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UYW
+      - UZS
+      - VED
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWG
+      - ZWL
+      title: Iso4217Code
+    OnboardingKycStatus:
+      type: string
+      enum:
+      - not_started
+      - pending
+      - action_required
+      - approved
+      - rejected
+      title: OnboardingKycStatus
+      x-enum-varnames:
+      - not_started
+      - pending
+      - action_required
+      - approved
+      - rejected
+    SimulateFundFinancialAccountResponse:
+      properties:
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The simulated funding amount, in dollars.
+        status:
+          $ref: '#/components/schemas/SimulatedTransferStatus'
+          description: The status of the simulated funding.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: When the simulation was submitted.
+      type: object
+      required:
+      - amount
+      - status
+      - created_at
+      title: SimulateFundFinancialAccountResponse
+    SimulateInboundTransferResponse:
+      properties:
+        account_id:
+          type: string
+          title: Account Id
+          description: The cash account the simulated funds were credited to.
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The simulated transfer amount, in dollars.
+        rail:
+          $ref: '#/components/schemas/SimulatedInboundRail'
+          description: The payment rail the transfer was simulated over.
+        status:
+          $ref: '#/components/schemas/SimulatedTransferStatus'
+          description: The status of the simulated transfer.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: When the simulation was submitted.
+      type: object
+      required:
+      - account_id
+      - amount
+      - rail
+      - status
+      - created_at
+      title: SimulateInboundTransferResponse
+    SimulateCardTransactionResponse:
+      properties:
+        transaction_id:
+          type: string
+          format: uuid
+          title: Transaction Id
+          description: The identifier of the transaction that was refunded, as returned by the list card transactions endpoint.
+        amount:
+          type: string
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Amount
+          description: The refunded amount, in dollars.
+        currency:
+          $ref: '#/components/schemas/Iso4217Code'
+          description: The ISO 4217 currency of the transaction.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: When the transaction was created.
+      type: object
+      required:
+      - transaction_id
+      - amount
+      - currency
+      - created_at
+      title: SimulateCardTransactionResponse
+    OnboardingRepresentativeKyc:
+      properties:
+        representative_id:
+          type: string
+          format: uuid
+          title: Representative Id
+          description: ID of the representative.
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: Legal first name.
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: Legal last name.
+        email:
+          type: string
+          title: Email
+          description: Representative's email address.
+        is_primary:
+          type: boolean
+          title: Is Primary
+          description: Whether they are the primary representative (signer).
+        is_beneficial_owner:
+          type: boolean
+          title: Is Beneficial Owner
+          description: Whether they are a beneficial owner.
+        percent_ownership:
+          anyOf:
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          - type: 'null'
+          title: Percent Ownership
+          description: Ownership percentage, if any.
+        kyc_status:
+          $ref: '#/components/schemas/OnboardingKycStatus'
+          description: 'This representative''s identity verification status, kept consistent with the `identity_verification.*` webhook events. `action_required` means their verification needs another step from them (for example, a document or selfie): create a link with `POST /entities/{entity_id}/representatives/{representative_id}/verification-link` and share it so they can finish.'
+      type: object
+      required:
+      - representative_id
+      - first_name
+      - last_name
+      - email
+      - is_primary
+      - is_beneficial_owner
+      - percent_ownership
+      - kyc_status
+      title: OnboardingRepresentativeKyc
+    SimulatedTransferStatus:
+      type: string
+      enum:
+      - submitted
+      title: SimulatedTransferStatus
+      x-enum-varnames:
+      - submitted
+    Timestamp:
+      type: string
+      format: date-time
+      title: Timestamp
+      description: ISO 8601 date-time in the format `YYYY-MM-DDThh:mm:ss.nnn[Z|[+|-]hh:mm]` (per [IETF RFC 3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14)).
+    OnboardingStep:
+      type: string
+      enum:
+      - gather_business_context
+      - collect_user_info
+      - collect_business_addresses
+      - collect_business_details
+      - collect_additional_details
+      - complete_due_diligence
+      - upload_documents
+      - manage_representatives
+      - complete_identity_verification
+      - accept_terms
+      - submit_application
+      - monitor_review
+      - resolve_info_requests
+      title: OnboardingStep
+    EntityOnboardingStatusResponse:
+      properties:
+        entity_id:
+          type: string
+          format: uuid
+          title: Entity Id
+          description: Public ID of the onboarded business entity, stable across the onboarding lifecycle and matching the `entity_id` used in the Customer API, MCP, and webhook payloads.
+        status:
+          $ref: '#/components/schemas/OnboardingApplicationStatus'
+          description: Current onboarding status.
+        business_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Business Name
+          description: Legal business name.
+        created_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when the entity was created.
+        updated_at:
+          $ref: '#/components/schemas/Timestamp'
+          description: ISO 8601 timestamp of when onboarding was last updated.
+        documents:
+          items:
+            $ref: '#/components/schemas/OnboardingDocumentStatus'
+          type: array
+          title: Documents
+          description: Documents uploaded during onboarding.
+        kyc_status:
+          $ref: '#/components/schemas/OnboardingKycStatus'
+          description: 'Identity verification status of the primary representative. After you submit KYC data or they complete verification, this moves to `pending` and resolves on its own; poll it to track progress. `action_required` means their verification needs another step from them (for example, a document): create a link with `POST /entities/{entity_id}/representatives/{representative_id}/verification-link` and share it so they can finish. See `representatives` for every representative''s status.'
+        onboarding_type:
+          $ref: '#/components/schemas/PublicOnboardingType'
+          description: How this entity was onboarded (e.g. `api`, `smb`, `partner`).
+        next_step:
+          $ref: '#/components/schemas/OnboardingNextStep'
+          description: 'What you must do next: the current onboarding step, the items still missing for it, and whether the application is ready to be submitted for review.'
+        representatives:
+          items:
+            $ref: '#/components/schemas/OnboardingRepresentativeKyc'
+          type: array
+          title: Representatives
+          description: Every representative on the application with their identity verification (KYC) status. The top-level `kyc_status` reflects the primary representative; the application can only be approved once every representative is approved.
+        consent_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Consent Url
+          description: Link where the primary representative reviews and accepts the required agreements and disclosures in their browser. Populated once the application has been submitted; share it with the primary representative. The link needs no login and anyone holding it can accept on the business's behalf, so treat it as a secret.
+      type: object
+      required:
+      - entity_id
+      - status
+      - business_name
+      - created_at
+      - updated_at
+      - documents
+      - kyc_status
+      - onboarding_type
+      - next_step
+      - representatives
+      - consent_url
+      title: EntityOnboardingStatusResponse
     StateCode:
       type: string
       enum:
@@ -1925,6 +1763,131 @@ components:
       - WI
       - WY
       - PR
+    SimulatedInboundRail:
+      type: string
+      enum:
+      - ach
+      - wire
+      - rtp
+      - fednow
+      title: SimulatedInboundRail
+      x-enum-varnames:
+      - ach
+      - wire
+      - rtp
+      - fednow
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SimulateApplicationApprovalRequest:
+      properties:
+        banking_account_product_type:
+          $ref: '#/components/schemas/EntityCheckingAccountProduct'
+          description: The checking account product to open once the application is approved. Defaults to `grasshopper`.
+          default: grasshopper
+      type: object
+      title: SimulateApplicationApprovalRequest
+    SimulateFundFinancialAccountRequest:
+      properties:
+        amount:
+          anyOf:
+          - type: number
+            maximum: 20000000.0
+            exclusiveMinimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+          description: Amount to fund the account with, in dollars.
+      type: object
+      required:
+      - amount
+      title: SimulateFundFinancialAccountRequest
+    SimulateCardAuthorizationRequest:
+      properties:
+        card_id:
+          type: string
+          format: uuid
+          title: Card Id
+          description: The card to authorize against, as returned by Create Card.
+        amount:
+          anyOf:
+          - type: number
+            maximum: 20000000.0
+            exclusiveMinimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+          description: The authorization amount, in dollars.
+        currency:
+          $ref: '#/components/schemas/Iso4217Code'
+          description: The ISO 4217 currency of the authorization.
+          default: USD
+        merchant:
+          $ref: '#/components/schemas/SimulatedCardMerchant'
+          description: The merchant presenting the authorization.
+        is_amount_controllable:
+          type: boolean
+          title: Is Amount Controllable
+          description: Whether the final captured amount may differ from the requested amount (for example, partial captures or added tips).
+          default: true
+        authorization_method:
+          anyOf:
+          - $ref: '#/components/schemas/SimulatedCardAuthorizationMethod'
+          - type: 'null'
+          description: How the card was presented for the authorization.
+        wallet:
+          anyOf:
+          - $ref: '#/components/schemas/SimulatedCardWallet'
+          - type: 'null'
+          description: The digital wallet used, if any.
+      type: object
+      required:
+      - card_id
+      - amount
+      - merchant
+      title: SimulateCardAuthorizationRequest
+    SimulateInboundTransferRequest:
+      properties:
+        account_id:
+          type: string
+          title: Account Id
+          description: The cash account ID, exactly as returned by the list accounts endpoint (for example, `cash_account_<uuid>`).
+        rail:
+          $ref: '#/components/schemas/SimulatedInboundRail'
+          description: The payment rail to simulate the inbound transfer over.
+        amount:
+          anyOf:
+          - type: number
+            maximum: 20000000.0
+            exclusiveMinimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          title: Amount
+          description: The transfer amount, in dollars.
+      type: object
+      required:
+      - account_id
+      - rail
+      - amount
+      title: SimulateInboundTransferRequest
     OnboardingPhase:
       type: string
       enum:
@@ -1932,6 +1895,43 @@ components:
       - ready_to_submit
       - submitted
       title: OnboardingPhase
+    OnboardingApplicationStatus:
+      type: string
+      enum:
+      - pending_document_upload
+      - pending_user_action
+      - submitted
+      - under_review
+      - approved
+      - rejected
+      title: OnboardingApplicationStatus
+    SimulateCardRefundRequest:
+      properties:
+        refund_amount:
+          anyOf:
+          - type: number
+            maximum: 20000000.0
+            exclusiveMinimum: 0.0
+          - type: string
+            pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d{0,2}0*$
+          - type: 'null'
+          title: Refund Amount
+          description: Amount to refund, in dollars. Defaults to the full transaction amount.
+      type: object
+      title: SimulateCardRefundRequest
+    PublicOnboardingType:
+      type: string
+      enum:
+      - api
+      - smb
+      - mcp
+      - partner
+      title: PublicOnboardingType
+      x-enum-varnames:
+      - api
+      - smb
+      - mcp
+      - partner
   parameters:
     EntityIdHeader:
       name: x-entity-id

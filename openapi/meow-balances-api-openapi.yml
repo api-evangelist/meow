@@ -92,6 +92,18 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    Balances:
+      properties:
+        balances:
+          items:
+            $ref: '#/components/schemas/Balance'
+          type: array
+          title: Balances
+          description: An array of balances.
+      type: object
+      required:
+      - balances
+      title: Balances
     Balance:
       properties:
         balance:
@@ -130,18 +142,6 @@ components:
       - msg
       - type
       title: ValidationError
-    Balances:
-      properties:
-        balances:
-          items:
-            $ref: '#/components/schemas/Balance'
-          type: array
-          title: Balances
-          description: An array of balances.
-      type: object
-      required:
-      - balances
-      title: Balances
   parameters:
     EntityIdHeader:
       name: x-entity-id

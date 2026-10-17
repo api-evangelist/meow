@@ -45,22 +45,6 @@ paths:
       - $ref: '#/components/parameters/EntityIdHeader'
 components:
   schemas:
-    BillingAccounts:
-      properties:
-        accounts:
-          items:
-            $ref: '#/components/schemas/BillingAccount'
-          type: array
-          title: Accounts
-          description: List of available collection accounts for invoices.
-      type: object
-      required:
-      - accounts
-      title: BillingAccounts
-      description: 'List of billing accounts available for invoice collection.
-
-
-        Accounts are sorted with primary accounts first, then by display name.'
     BillingAccount:
       properties:
         id:
@@ -106,6 +90,22 @@ components:
 
 
         Only includes accounts that are open and not locked.'
+    BillingAccounts:
+      properties:
+        accounts:
+          items:
+            $ref: '#/components/schemas/BillingAccount'
+          type: array
+          title: Accounts
+          description: List of available collection accounts for invoices.
+      type: object
+      required:
+      - accounts
+      title: BillingAccounts
+      description: 'List of billing accounts available for invoice collection.
+
+
+        Accounts are sorted with primary accounts first, then by display name.'
   parameters:
     EntityIdHeader:
       name: x-entity-id

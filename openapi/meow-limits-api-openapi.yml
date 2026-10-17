@@ -74,6 +74,15 @@ paths:
       - $ref: '#/components/parameters/EntityIdHeader'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     DailyWithdrawalLimitResponse:
       properties:
         daily_withdrawal_limit:
@@ -131,15 +140,6 @@ components:
       required:
       - daily_withdrawal_limit
       title: UpdateDailyWithdrawalLimitRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
