@@ -66,4 +66,171 @@
 
 Meow is a company surfaced as a portfolio company of qed-investors and added to the API Evangelist network as a stub for enrichment. Sector: banking. This profile is a lead awaiting the enrichment pipeline.
 
-Backed by: qed-investors — http://www.meow.com
+**Areas:** Company · Banking · A2A
+
+## Meow on APIs.io
+
+Everything profiled for Meow is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/meow/](https://apis.io/providers/meow/)** — or go straight to one of the APIs or properties below.
+
+### APIs (26)
+
+- [Meow Accounts API](https://apis.io/apis/meow/meow-accounts-api/) — Access and manage accounts.
+- [Meow API Keys API](https://apis.io/apis/meow/meow-api-keys-api/) — Retrieve metadata about API keys and their accessible entities.
+- [Meow Approvals API](https://apis.io/apis/meow/meow-approvals-api/) — The Approvals API from Meow — 1 operation(s) for approvals.
+- [Meow Balances API](https://apis.io/apis/meow/meow-balances-api/) — Retrieve account balances and available funds.
+- [Meow Bills API](https://apis.io/apis/meow/meow-bills-api/) — View and manage bills for vendor payments.
+- [Meow Cards API](https://apis.io/apis/meow/meow-cards-api/) — Manage virtual and physical cards, and view transactions and insights.
+- [Meow Collection Accounts API](https://apis.io/apis/meow/meow-collection-accounts-api/) — Manage accounts for payment collection.
+- [Meow Contacts API](https://apis.io/apis/meow/meow-contacts-api/) — Manage contacts for crypto and USDC transfers.
+- [Meow Customers API](https://apis.io/apis/meow/meow-customers-api/) — Manage invoicing customers and their details.
+- [Meow Entities API](https://apis.io/apis/meow/meow-entities-api/) — The Entities API from Meow — 12 operation(s) for entities.
+- [Meow Health API](https://apis.io/apis/meow/meow-health-api/) — The Health API from Meow — 1 operation(s) for health.
+- [Meow Invoices API](https://apis.io/apis/meow/meow-invoices-api/) — Create and manage invoices.
+- [Meow Limits API](https://apis.io/apis/meow/meow-limits-api/) — The Limits API from Meow — 1 operation(s) for limits.
+- [Meow Line Items API](https://apis.io/apis/meow/meow-line-items-api/) — Manage invoice line items.
+- [Meow Partner Onboarding API](https://apis.io/apis/meow/meow-partner-onboarding-api/) — Onboard entities using your partner API key.
+- [Meow Partner Webhooks API](https://apis.io/apis/meow/meow-partner-webhooks-api/) — The Partner Webhooks API from Meow — 6 operation(s) for partner webhooks.
+- [Meow Payment Methods API](https://apis.io/apis/meow/meow-payment-methods-api/) — View available payment method types.
+- [Meow Payment Networks API](https://apis.io/apis/meow/meow-payment-networks-api/) — Manage payment networks and routing information.
+- [Meow Products API](https://apis.io/apis/meow/meow-products-api/) — Manage products and pricing for invoicing.
+- [Meow Routing Numbers API](https://apis.io/apis/meow/meow-routing-numbers-api/) — Validate routing numbers and retrieve bank information.
+- [Meow Security Policies API](https://apis.io/apis/meow/meow-security-policies-api/) — The Security Policies API from Meow — 1 operation(s) for security policies.
+- [Meow Simulations API](https://apis.io/apis/meow/meow-simulations-api/) — Trigger simulated events — inbound transfers, card authorizations, application approval — to test integrations end-to-end without real money movement. **Not…
+- [Meow Tax Forms API](https://apis.io/apis/meow/meow-tax-forms-api/) — Retrieve IRS tax forms (1099 family) issued for accounts.
+- [Meow Transactions API](https://apis.io/apis/meow/meow-transactions-api/) — Retrieve account transaction history and details.
+- [Meow Transfers API](https://apis.io/apis/meow/meow-transfers-api/) — Initiate ACH, wire, book, and crypto transfers, and retrieve transfer details.
+- [Meow Webhooks API](https://apis.io/apis/meow/meow-webhooks-api/) — Manage webhook subscriptions and inspect delivery history.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Meow Webhooks](https://apis.io/asyncapis/meow/meow-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [meow](https://apis.io/servers/meow/meow/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Meow Agentic Access](https://apis.io/agentic-access/meow/meow-agentic-access/)
+
+#### Collections (26)
+
+Postman and Open Collection request collections.
+
+- [Meow Accounts API](https://apis.io/collections/meow/open-meow-accounts-api/)
+- [Meow Accounts API Keys API](https://apis.io/collections/meow/open-meow-api-keys-api/)
+- [Meow Accounts Approvals API](https://apis.io/collections/meow/open-meow-approvals-api/)
+- [Meow Accounts Balances API](https://apis.io/collections/meow/open-meow-balances-api/)
+- [Meow Accounts Bills API](https://apis.io/collections/meow/open-meow-bills-api/)
+- [Meow Accounts Cards API](https://apis.io/collections/meow/open-meow-cards-api/)
+- [Meow Accounts Collection Accounts API](https://apis.io/collections/meow/open-meow-collection-accounts-api/)
+- [Meow Accounts Contacts API](https://apis.io/collections/meow/open-meow-contacts-api/)
+- [Meow Accounts Customers API](https://apis.io/collections/meow/open-meow-customers-api/)
+- [Meow Accounts Entities API](https://apis.io/collections/meow/open-meow-entities-api/)
+- [Meow Accounts Health API](https://apis.io/collections/meow/open-meow-health-api/)
+- [Meow Accounts Invoices API](https://apis.io/collections/meow/open-meow-invoices-api/)
+- [Meow Accounts Limits API](https://apis.io/collections/meow/open-meow-limits-api/)
+- [Meow Accounts Line Items API](https://apis.io/collections/meow/open-meow-line-items-api/)
+- [Meow Accounts Partner Onboarding API](https://apis.io/collections/meow/open-meow-partner-onboarding-api/)
+- [Meow Accounts Partner Webhooks API](https://apis.io/collections/meow/open-meow-partner-webhooks-api/)
+- [Meow Accounts Payment Methods API](https://apis.io/collections/meow/open-meow-payment-methods-api/)
+- [Meow Accounts Payment Networks API](https://apis.io/collections/meow/open-meow-payment-networks-api/)
+- [Meow Accounts Products API](https://apis.io/collections/meow/open-meow-products-api/)
+- [Meow Accounts Routing Numbers API](https://apis.io/collections/meow/open-meow-routing-numbers-api/)
+- [Meow Accounts Security Policies API](https://apis.io/collections/meow/open-meow-security-policies-api/)
+- [Meow Accounts Simulations API](https://apis.io/collections/meow/open-meow-simulations-api/)
+- [Meow Accounts Tax Forms API](https://apis.io/collections/meow/open-meow-tax-forms-api/)
+- [Meow Accounts Transactions API](https://apis.io/collections/meow/open-meow-transactions-api/)
+- [Meow Accounts Transfers API](https://apis.io/collections/meow/open-meow-transfers-api/)
+- …and 1 more published on APIs.io
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Meow Openapi Overlay](https://apis.io/overlays/meow/meow-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Meow Authentication](https://apis.io/security/meow/meow-authentication/)
+- [Meow Domain Security](https://apis.io/security/meow/meow-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Meow Scopes](https://apis.io/scopes/meow/meow-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](http://www.meow.com)
+- [Blog](https://www.meow.com/blog)
+
+## API Evangelist rating
+
+**Kin Score 24.7** — emerging · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 46.7 |
+| Contract quality | 62.9 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 5.4 |
+| Access clarity | 0.0 |
+
+**Agent readiness 65.4** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | verified |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | flavored (partial credit) |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 24.4** — Banking & Open Finance
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/meow/](https://apis.io/providers/meow/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Meow: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/meow/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
